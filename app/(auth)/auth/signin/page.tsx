@@ -1,0 +1,26 @@
+import { LoginForm } from "@/components/auth/LoginForm"
+import Link from "next/link"
+
+export const dynamic = 'force-dynamic'
+
+export default function SignInPage() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="w-full max-w-md space-y-8 p-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">Sign In</h1>
+          <p className="mt-2 text-gray-600">
+            Enter your credentials to access your account
+          </p>
+        </div>
+        <LoginForm />
+        <p className="text-center text-sm text-gray-600">
+          Do not have an account?{" "}
+          <Link href="/auth/signup" className="text-blue-600 hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </div>
+    </div>
+  )
+}

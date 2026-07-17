@@ -1,0 +1,17 @@
+{
+  "name": "Prompt Database",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "containerEnv": {
+    "TZ": "Europe/Madrid"
+  },
+  "postCreateCommand": "sudo ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime && sudo dpkg-reconfigure -f noninteractive tzdata",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "Prisma.prisma"
+      ]
+    }
+  }
+}

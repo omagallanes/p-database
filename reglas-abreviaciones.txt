@@ -1,0 +1,155 @@
+0.15
+
+TEN PRESENTA ESTAS REGLAS-INSTRUCCIONES GENERALES SIEMPRE, EN CADA PROMPT:
+
+* Utiliza exclusivamente el español de España, conforme a las normas de la Real Academia Española, evitando el uso del presente continuo y de vocabulario o expresiones hispanoamericanas.
+* Todas tus respuestas, ayuda o soporte deben basarse en información veraz. No inventes, no rellenes vacíos ni especules.
+* No uses abreviaciones en tus respuestas, interpreta las de usuario y al responder/comunicarte/escribir hazlo con las palabras completas.
+* Las REGLAS-INSTRUCCIONES GENERALES debes tenerlas presentes siempre en TODOS los PROMPT/RESPUESTAS.
+
+---
+## ABREVIACIONES:
+
+### GENERAL:
+AA = Archivo Adjunto
+ACTZ = actuliza, actulizar, actulización, actulizado
+Alt/Alts = Alternativa(s)
+AR/ar = Archivo
+ARS/ars = Archivos
+c/ = con
+CdS = Copia de Seguridad (Backup)
+Clte = Cliente
+cmp / cmps = Campo / Campos
+CNTX = Contexto
+COE = Correo electrónico
+CyP = Copiar y pegar
+DoED = Documento en edición (Documento en Curso)
+DoDP = Documento de Pendientes
+DoPT = Documento de plan de trabajo
+PdT / PdTbjo = Plan de trabajo
+CHKL = Check List
+DESA = desarrollo, desarrollador
+DIR/dir = Directorio/Carpeta
+DIR_PYT = directorio del proyecto/desarrollo
+DP = DIR_PYT
+FUI = Información fuente
+HdC = Hoja de cálculo
+IN = Índice
+Nb = Nombres
+NbRef = Nombre referencia
+pa = para
+Pgta = Pregunta
+ppio = Principio
+ppta = Propuesta
+PYS = Productos y servicios
+PYT = Proyecto
+s/ = según
+SDIR = Subdirectorio/Subcarpeta
+SECC = sección
+Solc = solución, solucionar, solucionado
+SS = sessión
+xEj = por ejemplo
+HGOS = Hallazgos
+XME = Explíca
+
+
+### GENERAL TÉCNICO:
+1PV = uno-paginaviva / uno-paginaviva.top (Svr/VPS)
+PGI = Página de Inicio (home page)
+PWD = Página Dinámica
+PWE = Página Web Estática
+SHS = Shared Hosting Server
+SW = Sitio Web
+SWd = Sitio Web Dinámico
+SWE = Sitio Web Estático
+UV = Última Versión
+WOOC = Woocommerce
+WP = Wordpress
+WA = Web Application
+WF = Workflow/Flujo de trabajo
+VE = Ventana Emergente (modal)
+ETB = Enlace target _blank
+FW = Firewall
+DOM = Dominio
+SDOM = Subdominio
+
+### IA: 
+APYT = Archivos en proyecto ChatGPT
+CTXT = Contexto y Conocimiento adqurido/almacenado
+GPTC = ChatGPT
+GPTP = Custom GPT
+IP = Investigación Profunda
+MP = MultiPrompt
+P = Instrucción/Prompt
+PS = Instrucciones/Prompts
+AGTP = Agentes Ppales
+AGTS = SubAgentes
+APIO = API/OpenAI
+DESE = DeepSeek
+GEM = Gemini
+
+### HERRAMIENTAS/PLATAFORMAS:
+DIRS = Directorist
+ELEF = Elementor Free
+ELEP = Elementor Pro
+GHA = GitHub Actions
+GHC = GitHub Copilot
+GHCS = GitHub Codespaces
+GHCSC = GitHub Codespaces + Copilot
+GHP = GitHub Pages
+JENG = JetEngine
+JFB = JetFormBuilder
+PB = Profile Builder
+CFKV - Cloudflare Key-Value Database
+CFDO = Cloudflare Durable Objetcs
+CFWR = Cloudflare Wrangler
+CFWF = Cloudflare Workflow
+CFPG = Cloudflare Pages
+CFWK = Cloudflare Workers
+CFD1 = Cloudflare D1
+CFER = Cloudflare Email Routing
+NXJS = Next.js
+PMRK = postmark
+SCMS = Sveltia CMS
+DOCK = Docker
+HECP = Hestia CP
+FITM = FreeITSM (Free IT Service Management, Gestión de Servicios de TI)
+
+### EnDES:
+CMD = Comando
+BD = Base de Datos
+FK = Foreign Key
+PK = Primary Key
+OC = OpenCode
+OCA = OpenAgent
+OCC = OpenCoder
+OCW = OpenCopywriter
+OAC = OpenAgentControl (https://github.com/darrenhinde/OpenAgentsControl)
+SC7 = Skill Context7
+WFCH = webfetch
+ASSH = https://agentskill.sh/
+
+### CLTES/PYT/PROVE:
+CLUZ = Centro Luz
+MMBR = Miembros del Portal Centro Luz
+PCLZ = Portal Centro Luz
+PVIVA = PáginaVIVA
+DDOM = DonDominio
+SHIP = Spaceship
+HZNR = Hetzner
+CROC = Crocoblock
+GH = GitHub
+CF = Cloudflare
+
+### PROYECTO Y SISTEMA:
+PPFW = PipeFlow
+SPER = Stages Personalizados (stages hechos a medida para el proyecto)
+13SpI o SpI = 13 Stages Pre-Incluidos de PipeFlow
+SdLT = Sistema de Log y Trazabilidad / logging-tracking-errores
+stg_config = Stage configuration (campo JSON en tabla pwf_stg_stages)
+RCP = run-command.php (script remoto en public/temp/)
+PRO = Proceso en un flujo de trabajo
+INST = Instancia (ejecución de un proceso-PRO)
+PAI = Protección Activa de Incendios
+RCP = run-command.php
+BdE = Barra de Estado

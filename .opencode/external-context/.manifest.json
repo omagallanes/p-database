@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-07-17T14:20:00Z",
+  "libraries": {
+    "opencode-tui": {
+      "files": [
+        {
+          "filename": "tui-copy-paste-issues.md",
+          "topic": "TUI copy/paste issues (Windows/Codespaces)",
+          "tech_stack": "Windows, Codespaces, SSH",
+          "fetched": "2026-07-16T15:39:00Z",
+          "source": "GitHub Issues + Official Docs"
+        }
+      ]
+    },
+    "vercel": {
+      "files": [
+        {
+          "filename": "cli-authentication-tokens.md",
+          "topic": "CLI Authentication & Tokens",
+          "tech_stack": "Vercel CLI",
+          "fetched": "2026-07-17T14:20:00Z",
+          "source": "Context7 API + Official Docs"
+        },
+        {
+          "filename": "deployment-workflow.md",
+          "topic": "CLI Deployment Workflow",
+          "tech_stack": "Vercel CLI",
+          "fetched": "2026-07-17T14:20:00Z",
+          "source": "Context7 API + Official Docs"
+        },
+        {
+          "filename": "project-linking-and-setup.md",
+          "topic": "Project Linking & Setup",
+          "tech_stack": "Vercel CLI",
+          "fetched": "2026-07-17T14:20:00Z",
+          "source": "Context7 API + Official Docs"
+        },
+        {
+          "filename": "troubleshooting.md",
+          "topic": "Troubleshooting Token & Deployment Issues",
+          "tech_stack": "Vercel CLI",
+          "fetched": "2026-07-17T14:20:00Z",
+          "source": "Context7 API + Official Docs"
+        }
+      ]
+    }
+  }
+}

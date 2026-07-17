@@ -1,0 +1,74 @@
+# ============================================================================
+# .gitignore — Prompt Database
+# ============================================================================
+# Next.js 14 + Prisma + TypeScript + OpenCode/OAC
+# ============================================================================
+
+# ── SISTEMA / EDITOR ───────────────────────────────────────────────────────
+.DS_Store
+*.swp
+*.swo
+*~
+
+# ── DEPENDENCIAS ───────────────────────────────────────────────────────────
+/node_modules
+/.pnp
+.pnp.js
+
+# ── TESTING ─────────────────────────────────────────────────────────────────
+/coverage
+
+# ── BUILD / COMPILACIÓN ─────────────────────────────────────────────────────
+/.next/
+/out/
+/build
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# ── ENTORNO / SECRETOS ──────────────────────────────────────────────────────
+# Archivo .env local (contiene tokens reales, NO versionar)
+.env
+# Variantes de entorno (desarrollo, producción, staging, etc.)
+.env.*
+# Variantes locales (sufijo .local)
+.env*.local
+
+# Vercel (configuración local de proyecto vinculado)
+.vercel
+
+# ── BASE DE DATOS ───────────────────────────────────────────────────────────
+# Archivos de base de datos locales (SQLite)
+*.db
+*.db-journal
+/data
+
+# Migraciones de Prisma (regenerables)
+/prisma/migrations
+
+# ── SEGURIDAD ───────────────────────────────────────────────────────────────
+# Claves privadas, certificados, pares SSH
+.ssh/
+*.pem
+*_key
+*_key.pub
+cop-seg-selectiva/
+
+# ── LOGS / DEBUG ────────────────────────────────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── DATOS DE PRODUCCIÓN ─────────────────────────────────────────────────────
+# Dumps SQL, backups, exportaciones de BD (contienen datos reales)
+/docs/reservas/
+
+# ── HERRAMIENTAS / CACHÉ ────────────────────────────────────────────────────
+# OpenCode / OAC: sesiones temporales de trabajo
+.opencode/
+.tmp/
+session-*
+
+# ── DIRECTORIOS TEMPORALES ──────────────────────────────────────────────────
+temp/
