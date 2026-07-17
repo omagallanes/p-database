@@ -62,7 +62,7 @@ yarn-error.log*
 
 # ── DATOS DE PRODUCCIÓN ─────────────────────────────────────────────────────
 # Dumps SQL, backups, exportaciones de BD (contienen datos reales)
-/docs/reservas/
+docs/
 
 # ── HERRAMIENTAS / CACHÉ ────────────────────────────────────────────────────
 # OpenCode / OAC: sesiones temporales de trabajo
