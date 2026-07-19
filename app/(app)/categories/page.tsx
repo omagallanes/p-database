@@ -85,7 +85,7 @@ class CategoryErrorBoundary extends React.Component<
   }
 }
 
-export default function CategoriesPage() {
+function CategoriesPage() {
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
@@ -234,8 +234,8 @@ export default function CategoriesPage() {
             <div className="flex-1">
               <div className="font-semibold">{category.name}</div>
               <div className="text-sm text-muted-foreground">
-                {category.slug} • {category._count.prompts} prompt
-                {category._count.prompts !== 1 ? "s" : ""}
+                {category.slug} • {category._count?.prompts ?? 0} prompt
+                {(category._count?.prompts ?? 0) !== 1 ? "s" : ""}
               </div>
             </div>
             <div className="flex gap-2">
@@ -263,14 +263,15 @@ export default function CategoriesPage() {
     )
   }
 
-  const topLevelCategories = categories.filter((cat) => !cat.parentId)
+  const topLevelCategories = Array.isArray(categories)
+    ? categories.filter((cat) => !cat.parentId)
+    : []
 
   if (loading && categories.length === 0) {
     return <div>Loading...</div>
   }
 
   return (
-    <CategoryErrorBoundary>
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -385,6 +386,14 @@ export default function CategoriesPage() {
         )}
       </div>
     </div>
+  )
+}
+
+// Wrap with ErrorBoundary to catch rendering errors
+export default function CategoriesPageWithErrorBoundary() {
+  return (
+    <CategoryErrorBoundary>
+      <CategoriesPage />
     </CategoryErrorBoundary>
   )
 }
