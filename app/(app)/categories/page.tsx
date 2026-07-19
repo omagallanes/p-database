@@ -258,7 +258,7 @@ function CategoriesPage() {
             </div>
           </CardContent>
         </Card>
-        {category.children.map((child) => renderCategory(child, level + 1))}
+        {category.children?.map((child) => renderCategory(child, level + 1))}
       </div>
     )
   }
