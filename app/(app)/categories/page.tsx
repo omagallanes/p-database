@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Edit, Trash2 } from "lucide-react"
+import { Plus, Edit, Trash2, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
 
 interface Category {
@@ -34,6 +34,54 @@ interface Category {
   children: Category[]
   _count: {
     prompts: number
+  }
+}
+
+// Error boundary to prevent page crashes from rendering errors
+class CategoryErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error }
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error("Category page error:", error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex flex-col items-center justify-center p-12">
+          <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Something went wrong
+          </h2>
+          <p className="text-gray-600 mb-4">
+            An error occurred while loading categories.
+          </p>
+          <pre className="text-sm text-red-600 bg-red-50 p-4 rounded-lg max-w-lg overflow-auto mb-4">
+            {this.state.error?.message}
+          </pre>
+          <button
+            onClick={() => {
+              this.setState({ hasError: false, error: null })
+              window.location.reload()
+            }}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Reload page
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
   }
 }
 
@@ -64,9 +112,16 @@ export default function CategoriesPage() {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
       const res = await fetch(`${basePath}/api/categories`)
       const data = await res.json()
-      setCategories(data)
+      // Validate response is an array before setting state
+      if (Array.isArray(data)) {
+        setCategories(data)
+      } else {
+        console.error("API returned non-array response:", data)
+        setCategories([])
+      }
     } catch (error) {
       console.error("Error fetching categories:", error)
+      setCategories([])
     } finally {
       setLoading(false)
     }
@@ -160,7 +215,7 @@ export default function CategoriesPage() {
 
   const handleNew = () => {
     setEditingCategory(null)
-    setFormData({ name: "", slug: "", parentId: "", sortOrder: 0 })
+    setFormData({ name: "", slug: "", parentId: null, sortOrder: 0 })
     setDialogOpen(true)
   }
 
@@ -215,6 +270,7 @@ export default function CategoriesPage() {
   }
 
   return (
+    <CategoryErrorBoundary>
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
@@ -329,6 +385,7 @@ export default function CategoriesPage() {
         )}
       </div>
     </div>
+    </CategoryErrorBoundary>
   )
 }
 

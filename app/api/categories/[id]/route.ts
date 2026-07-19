@@ -27,7 +27,29 @@ export async function PUT(
     const body = await request.json()
     const data = updateCategorySchema.parse(body)
 
-    // Convert null parentId to undefined (set to null in database)
+    // Validate: prevent self-reference (category cannot be its own parent)
+    if (data.parentId === params.id) {
+      return NextResponse.json(
+        { error: "A category cannot be its own parent" },
+        { status: 400 }
+      )
+    }
+
+    // Validate: if parentId provided, verify it exists
+    if (data.parentId) {
+      const parentExists = await prisma.category.findUnique({
+        where: { id: data.parentId },
+        select: { id: true },
+      })
+      if (!parentExists) {
+        return NextResponse.json(
+          { error: "Parent category not found" },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Build update payload
     const updateData: {
       name?: string
       slug?: string
