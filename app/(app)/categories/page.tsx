@@ -181,7 +181,12 @@ function CategoriesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this category?")) return
+    const category = categories.find((cat) => cat.id === id)
+    const hasChildren = category && category.children && category.children.length > 0
+    const message = hasChildren
+      ? `Are you sure you want to delete "${category.name}"? All its subcategories will also be deleted.`
+      : "Are you sure you want to delete this category?"
+    if (!confirm(message)) return
 
     try {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -342,6 +347,7 @@ function CategoriesPage() {
                     <SelectItem value="none">None</SelectItem>
                     {categories
                       .filter((cat) => cat.id !== editingCategory?.id)
+                      .filter((cat) => !cat.parentId)
                       .map((cat) => (
                         <SelectItem key={cat.id} value={cat.id}>
                           {cat.name}

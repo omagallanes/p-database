@@ -52,6 +52,26 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const data = createCategorySchema.parse(body)
 
+    // Validate depth: parent must be a level-1 category (no parent itself)
+    if (data.parentId) {
+      const parentCategory = await prisma.category.findUnique({
+        where: { id: data.parentId },
+        select: { parentId: true },
+      })
+      if (!parentCategory) {
+        return NextResponse.json(
+          { error: "Parent category not found" },
+          { status: 400 }
+        )
+      }
+      if (parentCategory.parentId !== null) {
+        return NextResponse.json(
+          { error: "Cannot nest categories deeper than 2 levels. Select a top-level category as parent." },
+          { status: 400 }
+        )
+      }
+    }
+
     // Convert null parentId to undefined (don't include in data)
     const createData: {
       name: string

@@ -35,15 +35,21 @@ export async function PUT(
       )
     }
 
-    // Validate: if parentId provided, verify it exists
+    // Validate: if parentId provided, verify it exists and is level-1
     if (data.parentId) {
-      const parentExists = await prisma.category.findUnique({
+      const parentCategory = await prisma.category.findUnique({
         where: { id: data.parentId },
-        select: { id: true },
+        select: { parentId: true },
       })
-      if (!parentExists) {
+      if (!parentCategory) {
         return NextResponse.json(
           { error: "Parent category not found" },
+          { status: 400 }
+        )
+      }
+      if (parentCategory.parentId !== null) {
+        return NextResponse.json(
+          { error: "Cannot nest categories deeper than 2 levels. Select a top-level category as parent." },
           { status: 400 }
         )
       }
