@@ -184,8 +184,8 @@ function CategoriesPage() {
     const category = categories.find((cat) => cat.id === id)
     const hasChildren = category && category.children && category.children.length > 0
     const message = hasChildren
-      ? `Are you sure you want to delete "${category.name}"? All its subcategories will also be deleted.`
-      : "Are you sure you want to delete this category?"
+      ? `Are you sure you want to delete "${category.name}" and all its subcategories? Prompts linked to them will NOT be affected.`
+      : "Are you sure you want to delete this category? Prompts linked to it will NOT be affected."
     if (!confirm(message)) return
 
     try {
