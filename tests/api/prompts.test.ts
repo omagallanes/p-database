@@ -47,6 +47,9 @@ jest.mock("@/lib/prisma", () => ({
     promptModelHint: {
       deleteMany: jest.fn(),
     },
+    category: {
+      findMany: jest.fn().mockResolvedValue([]),
+    },
     $transaction: jest.fn(async (fn) => {
       // Mock transaction by just executing the function
       return await fn({

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma, PROMPT_INCLUDES } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { enrichWithParentCategories } from "@/lib/category-utils"
 
 const updatePromptSchema = z.object({
   title: z.string().min(1).optional(),
@@ -104,6 +105,9 @@ export async function PUT(
 
     const { tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds, modelHintIds, ...promptData } = data
 
+    // Auto-add parent categories when a child is selected without its parent
+    const enrichedCategoryIds = await enrichWithParentCategories(categoryIds)
+
     // Use explicit transaction for atomic update of all relations (D-07)
     const prompt = await prisma.$transaction(async (tx) => {
       // Delete existing relations for all N:M tables
@@ -124,9 +128,9 @@ export async function PUT(
                 create: tagIds.map((tagId) => ({ tagId })),
               }
             : undefined,
-          categories: categoryIds?.length
+          categories: enrichedCategoryIds?.length
             ? {
-                create: categoryIds.map((categoryId) => ({ categoryId })),
+                create: enrichedCategoryIds.map((categoryId) => ({ categoryId })),
               }
             : undefined,
           platforms: platformIds?.length

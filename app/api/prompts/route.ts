@@ -3,6 +3,7 @@ import { prisma, PROMPT_INCLUDES } from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { enrichWithParentCategories } from "@/lib/category-utils"
 
 const createPromptSchema = z.object({
   title: z.string().min(1),
@@ -174,6 +175,9 @@ export async function POST(request: NextRequest) {
 
     const { tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds, modelHintIds, ...promptData } = data
 
+    // Auto-add parent categories when a child is selected without its parent
+    const enrichedCategoryIds = await enrichWithParentCategories(categoryIds)
+
     const prompt = await prisma.prompt.create({
       data: {
         ...promptData,
@@ -185,9 +189,9 @@ export async function POST(request: NextRequest) {
               })),
             }
           : undefined,
-        categories: categoryIds?.length
+        categories: enrichedCategoryIds?.length
           ? {
-              create: categoryIds.map((categoryId) => ({
+              create: enrichedCategoryIds.map((categoryId) => ({
                 categoryId,
               })),
             }
