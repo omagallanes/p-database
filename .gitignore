@@ -66,7 +66,9 @@ docs/
 
 # ── HERRAMIENTAS / CACHÉ ────────────────────────────────────────────────────
 # OpenCode / OAC: sesiones temporales de trabajo
-.opencode/
+# Solo el conocimiento e inteligencia del proyecto (sistema de contextos) se versiona
+.opencode/*
+!.opencode/context/
 .tmp/
 session-*
 

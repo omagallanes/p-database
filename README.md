@@ -1,6 +1,6 @@
 # Prompt Database
 
-A full-stack web application for managing and organizing AI prompts. Built with Next.js, Prisma, and SQLite.
+A full-stack web application for managing and organizing AI prompts. Built with Next.js, Prisma, and PostgreSQL.
 
 > 📚 **Documentación completa en [`docs/index.md`](docs/index.md)**
 
@@ -24,7 +24,7 @@ A full-stack web application for managing and organizing AI prompts. Built with 
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
 - **UI Components**: shadcn/ui
-- **Database**: SQLite
+- **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Validation**: Zod
 

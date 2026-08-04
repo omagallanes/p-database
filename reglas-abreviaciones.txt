@@ -1,8 +1,9 @@
-0.15
+E
 
 TEN PRESENTA ESTAS REGLAS-INSTRUCCIONES GENERALES SIEMPRE, EN CADA PROMPT:
 
-* Utiliza exclusivamente el español de España, conforme a las normas de la Real Academia Española, evitando el uso del presente continuo y de vocabulario o expresiones hispanoamericanas.
+* Utiliza exclusivamente el español de España (es-ES), conforme a las normas de la Real Academia Española, evitando el uso del presente continuo y de vocabulario o expresiones hispanoamericanas.
+* No asumas conocimiento previo o preconcebido. Todas tus acciones/respuestas deben ser verídicas y confirmadas.
 * Todas tus respuestas, ayuda o soporte deben basarse en información veraz. No inventes, no rellenes vacíos ni especules.
 * No uses abreviaciones en tus respuestas, interpreta las de usuario y al responder/comunicarte/escribir hazlo con las palabras completas.
 * Las REGLAS-INSTRUCCIONES GENERALES debes tenerlas presentes siempre en TODOS los PROMPT/RESPUESTAS.
@@ -30,8 +31,11 @@ PdT / PdTbjo = Plan de trabajo
 CHKL = Check List
 DESA = desarrollo, desarrollador
 DIR/dir = Directorio/Carpeta
-DIR_PYT = directorio del proyecto/desarrollo
-DP = DIR_PYT
+SDIR = Subdirectorio/Subcarpeta
+DIR_PYT = directorio (contenedor) del proyecto
+DIR_ENDES = directorio de desarrollo/trabajo/ejección del proyecto
+DIR_FIN = directorio histótico/Archivo del proyecto (acciones finalizadas)
+DIR_DOC = directorio de documentación del proyecto
 FUI = Información fuente
 HdC = Hoja de cálculo
 IN = Índice
@@ -44,13 +48,13 @@ ppta = Propuesta
 PYS = Productos y servicios
 PYT = Proyecto
 s/ = según
-SDIR = Subdirectorio/Subcarpeta
 SECC = sección
 Solc = solución, solucionar, solucionado
 SS = sessión
 xEj = por ejemplo
 HGOS = Hallazgos
 XME = Explíca
+LSTN = Lista numerada
 
 
 ### GENERAL TÉCNICO:
@@ -62,6 +66,7 @@ SHS = Shared Hosting Server
 SW = Sitio Web
 SWd = Sitio Web Dinámico
 SWE = Sitio Web Estático
+SWH = Sitio Web HUGO
 UV = Última Versión
 WOOC = Woocommerce
 WP = Wordpress
@@ -72,6 +77,7 @@ ETB = Enlace target _blank
 FW = Firewall
 DOM = Dominio
 SDOM = Subdominio
+RME = README
 
 ### IA: 
 APYT = Archivos en proyecto ChatGPT
@@ -109,11 +115,20 @@ CFWK = Cloudflare Workers
 CFD1 = Cloudflare D1
 CFER = Cloudflare Email Routing
 NXJS = Next.js
-PMRK = postmark
+PMRK = Postmark
 SCMS = Sveltia CMS
 DOCK = Docker
 HECP = Hestia CP
 FITM = FreeITSM (Free IT Service Management, Gestión de Servicios de TI)
+SCdS = Sistema de CdS
+ASSH = https://agentskill.sh/
+BRGM = Borgmatic (BorgBackup)
+BRBS = https://borgbase.com
+GSC = Google Search Console
+GA = Google Analytics
+BWMT = Bing Webmaster Tools
+CLTY = Clarity
+GIA = Google Index API
 
 ### EnDES:
 CMD = Comando
@@ -121,13 +136,19 @@ BD = Base de Datos
 FK = Foreign Key
 PK = Primary Key
 OC = OpenCode
+OAC = OpenAgentControl (https://github.com/darrenhinde/OpenAgentsControl)
 OCA = OpenAgent
 OCC = OpenCoder
 OCW = OpenCopywriter
-OAC = OpenAgentControl (https://github.com/darrenhinde/OpenAgentsControl)
+ORM = OpenRepoManager
+ODS = OpenDevopsSpecialist
+OSB = OpenSystemBuilder
+OTW = OpenTechnicalWriter
+DOCW = DocWriter
+TSKM = TaskManager
 SC7 = Skill Context7
 WFCH = webfetch
-ASSH = https://agentskill.sh/
+
 
 ### CLTES/PYT/PROVE:
 CLUZ = Centro Luz
