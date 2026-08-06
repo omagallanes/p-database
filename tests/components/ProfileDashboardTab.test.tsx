@@ -55,7 +55,7 @@ describe("ProfileDashboardTab", () => {
     jest.restoreAllMocks()
   })
 
-  it("renders theme buttons, 8 accent presets, 7 filter boxes and 8 column checkboxes", () => {
+  it("renders theme buttons, 8 accent presets, 8 filter boxes and 8 column checkboxes", () => {
     // Arrange & Act
     renderDashboardTab()
 
@@ -63,7 +63,7 @@ describe("ProfileDashboardTab", () => {
     expect(screen.getByRole("button", { name: "Light" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Dark" })).toBeInTheDocument()
     expect(screen.getAllByRole("button", { name: /^Interface color #/ })).toHaveLength(8)
-    expect(within(sectionByHeading("Filter boxes order")).getAllByRole("listitem")).toHaveLength(7)
+    expect(within(sectionByHeading("Filter boxes order")).getAllByRole("listitem")).toHaveLength(8)
     expect(within(sectionByHeading("List and card columns")).getAllByRole("checkbox")).toHaveLength(8)
   })
 
@@ -134,6 +134,7 @@ describe("ProfileDashboardTab", () => {
               "category",
               "platform",
               "status",
+              "type",
               "language",
               "clientProject",
               "useCase",

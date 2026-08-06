@@ -107,7 +107,7 @@ describe("PromptForm shared switch", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({ data: { id: "p1" } }),
-    } as Response) as typeof fetch
+    } as unknown as Response) as typeof fetch
   })
 
   afterEach(() => {

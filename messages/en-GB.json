@@ -246,7 +246,12 @@
     "signUpTitle": "Sign Up",
     "signUpSubtitle": "Create a new account to get started",
     "haveAccount": "Already have an account?",
-    "signInLink": "Sign in"
+    "signInLink": "Sign in",
+    "errorTitle": "Authentication error",
+    "errorSubtitle": "Something went wrong while signing you in.",
+    "errorGeneric": "An unexpected error occurred.",
+    "tryAgain": "Try again",
+    "backToSignIn": "Back to sign in"
   },
   "LoginForm": {
     "email": "Email",
@@ -437,6 +442,7 @@
     "failedToUpdateName": "Failed to update name",
     "failedToChangePassword": "Failed to change password",
     "accountLocked": "Account temporarily locked. Try again later.",
+    "tooManyAttempts": "Too many attempts. Try again later.",
     "wrongCurrentPassword": "Current password is incorrect",
     "passwordChanged": "Password changed successfully",
     "cannotDeleteOwnAccount": "Cannot delete your own account",

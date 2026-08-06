@@ -148,7 +148,7 @@ describe("parseUIPreferences", () => {
     const order = ALL_COLUMN_KEYS.length
 
     // Assert
-    expect(filterOrder).toBe(7)
+    expect(filterOrder).toBe(8)
     expect(visible).toBe(5)
     expect(order).toBe(8)
   })

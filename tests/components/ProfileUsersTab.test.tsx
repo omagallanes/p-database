@@ -67,7 +67,7 @@ const regularUser = {
 }
 
 function jsonResponse(body: unknown): Response {
-  return { ok: true, json: jest.fn().mockResolvedValue(body) } as Response
+  return { ok: true, json: jest.fn().mockResolvedValue(body) } as unknown as Response
 }
 
 function mockSession(role: "admin" | "user" = "admin") {
@@ -143,7 +143,7 @@ describe("ProfileUsersTab", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({}),
-    } as Response) as typeof fetch
+    } as unknown as Response) as typeof fetch
   })
 
   afterEach(() => {
@@ -336,7 +336,7 @@ describe("UserProfile users tab trigger", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({}),
-    } as Response) as typeof fetch
+    } as unknown as Response) as typeof fetch
   })
 
   afterEach(() => {

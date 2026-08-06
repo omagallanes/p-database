@@ -5,7 +5,15 @@ import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { getTranslations } from "next-intl/server"
 import { getLocaleFromRequest } from "@/lib/locale"
-import { failedAttemptUpdate, isAccountLocked } from "@/lib/auth-security"
+import {
+  extractClientIp,
+  failedAttemptUpdate,
+  fetchIpAttempt,
+  isAccountLocked,
+  isIpLocked,
+  registerIpFailure,
+  resetIpAttempt,
+} from "@/lib/auth-security"
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1),
@@ -25,6 +33,11 @@ export async function PATCH(request: NextRequest) {
         { status: 401 }
       )
     }
+
+    // Normalized client IP for the per-IP attempt limit. The lookup below is
+    // fail-open on DB errors (availability), while a successfully loaded
+    // locked IP fails closed.
+    const ip = extractClientIp(request.headers)
 
     const body = await request.json().catch(() => null)
     if (!body) {
@@ -62,6 +75,17 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
+    // IP-based brute-force protection: reject attempts while the IP is
+    // locked. A dedicated message (not accountLocked) keeps the reason
+    // honest — the account itself may be perfectly fine.
+    const ipAttempt = await fetchIpAttempt(ip)
+    if (isIpLocked(ipAttempt?.lockoutUntil)) {
+      return NextResponse.json(
+        { error: t("tooManyAttempts") },
+        { status: 400 }
+      )
+    }
+
     const passwordsMatch = await bcrypt.compare(data.currentPassword, user.password)
     if (!passwordsMatch) {
       // Count the failed attempt and lock the account at the threshold.
@@ -69,6 +93,8 @@ export async function PATCH(request: NextRequest) {
         where: { id: session.user.id },
         data: failedAttemptUpdate(user.failedLoginAttempts),
       })
+      // Count the failed attempt for the IP too (fail-open on DB errors).
+      await registerIpFailure(ip, ipAttempt?.failedAttempts ?? 0)
       return NextResponse.json(
         { error: t("wrongCurrentPassword") },
         { status: 400 }
@@ -88,6 +114,8 @@ export async function PATCH(request: NextRequest) {
         lockoutUntil: null,
       },
     })
+    // Successful change: clear the IP attempt state too (fail-open).
+    await resetIpAttempt(ip)
 
     return NextResponse.json({
       data: { message: t("passwordChanged") },

@@ -39,6 +39,11 @@ jest.mock("@/lib/prisma", () => ({
       findUnique: jest.fn(),
       update: jest.fn(),
     },
+    ipAttempt: {
+      findUnique: jest.fn(),
+      upsert: jest.fn(),
+      updateMany: jest.fn(),
+    },
   },
 }))
 
@@ -56,6 +61,9 @@ describe("PATCH /api/user/password", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
     })
+    ;(prisma.ipAttempt.findUnique as jest.Mock).mockResolvedValue(null)
+    ;(prisma.ipAttempt.upsert as jest.Mock).mockResolvedValue({})
+    ;(prisma.ipAttempt.updateMany as jest.Mock).mockResolvedValue({ count: 1 })
   })
 
   it("returns 401 unauthorized when there is no session", async () => {
@@ -246,5 +254,36 @@ describe("PATCH /api/user/password", () => {
     expect(data.error).toBe("Current password is incorrect")
     expect(bcrypt.compare).not.toHaveBeenCalled()
     expect(prisma.user.update).not.toHaveBeenCalled()
+  })
+
+  it("returns 400 tooManyAttempts without checking the password while the IP is locked", async () => {
+    // Arrange — IP is locked for another minute (request carries the header)
+    ;(prisma.ipAttempt.findUnique as jest.Mock).mockResolvedValue({
+      failedAttempts: 0,
+      lockoutUntil: new Date(Date.now() + 60_000),
+    })
+    const request = new NextRequest("http://localhost:3000/api/user/password", {
+      method: "PATCH",
+      headers: { "x-forwarded-for": "203.0.113.9" },
+      body: JSON.stringify({
+        currentPassword: "old-password",
+        newPassword: "new-password123",
+      }),
+    })
+
+    // Act
+    const response = await PATCH(request)
+    const data = await response.json()
+
+    // Assert — IP lockout is checked before bcrypt.compare, nothing is mutated
+    expect(response.status).toBe(400)
+    expect(data.error).toBe("Too many attempts. Try again later.")
+    expect(prisma.ipAttempt.findUnique).toHaveBeenCalledWith({
+      where: { ip: "203.0.113.9" },
+      select: { failedAttempts: true, lockoutUntil: true },
+    })
+    expect(bcrypt.compare).not.toHaveBeenCalled()
+    expect(prisma.user.update).not.toHaveBeenCalled()
+    expect(prisma.ipAttempt.upsert).not.toHaveBeenCalled()
   })
 })

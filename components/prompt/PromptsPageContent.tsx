@@ -42,6 +42,7 @@ export interface PromptFiltersParams {
   platform?: string
   platformIds?: string | string[]
   status?: string | string[]
+  type?: string | string[]
   isFavorite?: string
   language?: string | string[]
   clientProjectIds?: string | string[]
@@ -55,6 +56,7 @@ interface PromptsPageContentProps {
   platforms: Array<{ id: string; name: string; slug: string }>
   clients: Array<{ id: string; name: string; slug: string }>
   useCases: Array<{ id: string; name: string; slug: string }>
+  optionsType?: Array<{ name: string; slug: string }>
   optionsStatus?: Array<{ name: string; slug: string }>
   optionsLanguage?: Array<{ name: string; slug: string }>
   initialFilters: PromptFiltersParams
@@ -68,6 +70,7 @@ const ACTIVE_FILTER_KEYS = [
   "platform",
   "platformIds",
   "status",
+  "type",
   "language",
   "clientProjectIds",
   "useCaseIds",
@@ -90,6 +93,7 @@ export function PromptsPageContent({
   platforms,
   clients,
   useCases,
+  optionsType,
   optionsStatus,
   optionsLanguage,
   initialFilters,
@@ -116,6 +120,7 @@ export function PromptsPageContent({
             platforms={platforms}
             clients={clients}
             useCases={useCases}
+            optionsType={optionsType}
             optionsStatus={optionsStatus}
             optionsLanguage={optionsLanguage}
             initialFilters={initialFilters}

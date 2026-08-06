@@ -16,6 +16,7 @@ async function getPrompts(searchParams: {
   platform?: string
   platformIds?: string[]
   status?: string | string[]
+  type?: string | string[]
   isFavorite?: string
   language?: string | string[]
   clientProjectIds?: string[]
@@ -103,6 +104,15 @@ async function getPrompts(searchParams: {
     if (statuses.length > 0) {
       where.status = {
         in: statuses,
+      }
+    }
+  }
+
+  if (searchParams.type) {
+    const types = Array.isArray(searchParams.type) ? searchParams.type : [searchParams.type]
+    if (types.length > 0) {
+      where.type = {
+        in: types,
       }
     }
   }
@@ -300,6 +310,22 @@ async function getPlatforms() {
   }))
 }
 
+async function getCatalogTypes(): Promise<Array<{ name: string; slug: string }>> {
+  try {
+    const types = await prisma.type.findMany({
+      orderBy: { sortOrder: "asc" },
+    })
+
+    return types.map((type) => ({
+      name: type.name,
+      slug: type.slug,
+    }))
+  } catch {
+    // Catalog unavailable → empty array; the filters fall back to fixed values.
+    return []
+  }
+}
+
 async function getCatalogStatuses(): Promise<Array<{ name: string; slug: string }>> {
   try {
     const statuses = await prisma.status.findMany({
@@ -380,6 +406,7 @@ export default async function PromptsPage({
     platform?: string
     platformIds?: string | string[]
     status?: string | string[]
+    type?: string | string[]
     isFavorite?: string
     language?: string | string[]
     clientProjectIds?: string | string[]
@@ -433,7 +460,7 @@ export default async function PromptsPage({
     ? [searchParams.language]
     : []
 
-  const [prompts, categories, tags, platforms, clients, useCases, viewMode, catalogStatuses, catalogLanguages] = await Promise.all([
+  const [prompts, categories, tags, platforms, clients, useCases, viewMode, catalogTypes, catalogStatuses, catalogLanguages] = await Promise.all([
     getPrompts({ ...searchParams, tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds }, userId),
     getCategories(userId),
     getTags(userId),
@@ -441,6 +468,7 @@ export default async function PromptsPage({
     getClientProjects(),
     getUseCases(),
     getUserViewPreference(userId),
+    getCatalogTypes(),
     getCatalogStatuses(),
     getCatalogLanguages(),
   ])
@@ -465,6 +493,7 @@ export default async function PromptsPage({
         platforms={platforms}
         clients={clients}
         useCases={useCases}
+        optionsType={catalogTypes}
         optionsStatus={catalogStatuses}
         optionsLanguage={catalogLanguages}
         initialFilters={{ ...searchParams, categoryIds, platformIds, clientProjectIds, useCaseIds, status, language }}

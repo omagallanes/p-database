@@ -14,6 +14,7 @@ interface PromptFiltersProps {
   platforms: Array<{ id: string; name: string; slug: string }>
   clients: Array<{ id: string; name: string; slug: string }>
   useCases: Array<{ id: string; name: string; slug: string }>
+  optionsType?: Array<{ name: string; slug: string }>
   optionsStatus?: Array<{ name: string; slug: string }>
   optionsLanguage?: Array<{ name: string; slug: string }>
   initialFilters: {
@@ -23,6 +24,7 @@ interface PromptFiltersProps {
     platform?: string
     platformIds?: string | string[]
     status?: string | string[]
+    type?: string | string[]
     language?: string | string[]
     clientProjectIds?: string | string[]
     useCaseIds?: string | string[]
@@ -49,6 +51,20 @@ const STATUSES = [
   { value: "TESTED", labelKey: "statusTested" },
   { value: "PRODUCTION", labelKey: "statusProduction" },
 ] as const
+
+// Type values are stored UPPERCASE in prompts; the catalog slugs are
+// lowercase, so option values are uppercased to match (same as status).
+const TYPES = [
+  { value: "SYSTEM", labelKey: "system" },
+  { value: "USER", labelKey: "user" },
+  { value: "TOOL", labelKey: "tool" },
+] as const
+
+const TYPE_LABEL_KEYS: Record<string, string> = {
+  system: "system",
+  user: "user",
+  tool: "tool",
+}
 
 // Slug → translation key for the known catalog values. Catalog names come
 // from the DB seed (English); the existing keys keep localized labels for
@@ -80,6 +96,7 @@ export function PromptFilters({
   platforms,
   clients,
   useCases,
+  optionsType,
   optionsStatus,
   optionsLanguage,
   initialFilters,
@@ -88,6 +105,7 @@ export function PromptFilters({
   const router = useRouter()
   const searchParams = useSearchParams()
   const t = useTranslations("PromptFilters")
+  const tMetadata = useTranslations("MetadataSegment")
 
   const toggleFilter = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -131,6 +149,12 @@ export function PromptFilters({
     ? [initialFilters.status]
     : []
 
+  const selectedTypes = Array.isArray(initialFilters.type)
+    ? initialFilters.type
+    : initialFilters.type
+    ? [initialFilters.type]
+    : []
+
   const selectedLanguages = Array.isArray(initialFilters.language)
     ? initialFilters.language
     : initialFilters.language
@@ -155,6 +179,7 @@ export function PromptFilters({
       tagIds: selectedTagIds,
       platformIds: selectedPlatformIds,
       status: selectedStatuses,
+      type: selectedTypes,
       language: selectedLanguages,
       clientProjectIds: selectedClientProjectIds,
       useCaseIds: selectedUseCaseIds,
@@ -164,6 +189,7 @@ export function PromptFilters({
       selectedTagIds,
       selectedPlatformIds,
       selectedStatuses,
+      selectedTypes,
       selectedLanguages,
       selectedClientProjectIds,
       selectedUseCaseIds,
@@ -187,7 +213,20 @@ export function PromptFilters({
 
   // Status/language options come from the catalog (server loaded) when
   // available; the fixed arrays are the fallback. Filter values must match
-  // what prompts store: status is UPPERCASE, language is lowercase.
+  // what prompts store: type/status are UPPERCASE, language is lowercase.
+  const typeOptions =
+    optionsType && optionsType.length > 0
+      ? optionsType.map((option) => ({
+          value: option.slug.toUpperCase(),
+          label: TYPE_LABEL_KEYS[option.slug]
+            ? tMetadata(TYPE_LABEL_KEYS[option.slug])
+            : option.name,
+        }))
+      : TYPES.map((typeOption) => ({
+          value: typeOption.value,
+          label: tMetadata(typeOption.labelKey),
+        }))
+
   const statusOptions =
     optionsStatus && optionsStatus.length > 0
       ? optionsStatus.map((option) => ({
@@ -304,6 +343,28 @@ export function PromptFilters({
         </CardContent>
       </Card>
     ),
+    type: () => (
+      <Card className="gradient-card shadow-glow border-accent">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-semibold text-foreground">{tMetadata("type")}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {typeOptions.map((option) => {
+            return (
+              <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isSelected("type", option.value)}
+                  onChange={() => toggleFilter("type", option.value)}
+                  className="h-4 w-4 rounded border-input"
+                />
+                <span className="text-sm">{option.label}</span>
+              </label>
+            )
+          })}
+        </CardContent>
+      </Card>
+    ),
     language: () => (
       <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
@@ -382,6 +443,7 @@ export function PromptFilters({
           selectedTagIds.length > 0 ||
           initialFilters.platform ||
           selectedStatuses.length > 0 ||
+          selectedTypes.length > 0 ||
           selectedLanguages.length > 0 ||
           selectedClientProjectIds.length > 0 ||
           selectedUseCaseIds.length > 0) && (

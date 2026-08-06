@@ -246,7 +246,12 @@
     "signUpTitle": "Registrarse",
     "signUpSubtitle": "Crea una cuenta nueva para empezar",
     "haveAccount": "¿Ya tienes cuenta?",
-    "signInLink": "Inicia sesión"
+    "signInLink": "Inicia sesión",
+    "errorTitle": "Error de autenticación",
+    "errorSubtitle": "Algo salió mal al iniciar sesión.",
+    "errorGeneric": "Se produjo un error inesperado.",
+    "tryAgain": "Intentarlo de nuevo",
+    "backToSignIn": "Volver a iniciar sesión"
   },
   "LoginForm": {
     "email": "Correo electrónico",
@@ -437,6 +442,7 @@
     "failedToUpdateName": "No se pudo actualizar el nombre",
     "failedToChangePassword": "No se pudo cambiar la contraseña",
     "accountLocked": "Cuenta bloqueada temporalmente. Inténtalo de nuevo más tarde.",
+    "tooManyAttempts": "Demasiados intentos. Inténtalo de nuevo más tarde.",
     "wrongCurrentPassword": "La contraseña actual no es correcta",
     "passwordChanged": "Contraseña cambiada correctamente",
     "cannotDeleteOwnAccount": "No se puede eliminar tu propia cuenta",

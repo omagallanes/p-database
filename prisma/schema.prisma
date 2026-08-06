@@ -30,6 +30,22 @@ model User {
   sessions                 Session[]
 }
 
+// Per-IP failed attempt tracking (brute-force mitigation complementing the
+// per-account lockout on User). Keyed by normalized IP only — deliberately
+// decoupled from any account so a locked IP cannot be used to deliberately
+// lock out other users' accounts.
+model IpAttempt {
+  id             String    @id @default(cuid())
+  ip             String
+  failedAttempts Int       @default(0)
+  lockoutUntil   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([ip])
+  @@index([lockoutUntil])
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String

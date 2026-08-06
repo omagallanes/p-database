@@ -17,8 +17,8 @@ function renderWithI18n(ui: React.ReactElement) {
 
 // Mock next/navigation
 const mockPush = jest.fn()
-const mockGetAll = jest.fn(() => [])
-const mockToString = jest.fn(() => "")
+const mockGetAll = jest.fn<string[], []>(() => [])
+const mockToString = jest.fn<string, []>(() => "")
 const mockDelete = jest.fn()
 const mockAppend = jest.fn()
 const mockSet = jest.fn()
@@ -42,7 +42,6 @@ global.URLSearchParams = jest.fn(() => ({
   delete: mockDelete,
   append: mockAppend,
   set: mockSet,
-  toString: mockToString,
 })) as any
 
 describe("PromptFilters", () => {

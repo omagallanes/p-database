@@ -14,7 +14,7 @@
 | ORM | Prisma | ^5.19.1 · schema-first, `prisma/schema.prisma` |
 | Auth | NextAuth.js (v5 beta) | JWT · Prisma adapter · credentials · bcryptjs |
 | Validation | Zod | ^3.23.8 |
-| Testing | Jest + React Testing Library | ^29.7.0 · **275 tests, 33 suites, 100% passing** |
+| Testing | Jest + React Testing Library | ^29.7.0 · **338 tests, 34 suites, 100% passing** |
 | Styling | TailwindCSS + shadcn/ui | + lucide-react, cva, tailwind-merge, clsx |
 | Linting | ESLint + eslint-config-next | ^8.57.1 |
 | Deployment | Vercel (Hobby) + Neon PostgreSQL | **Completado** (ya no pendiente) |
@@ -136,7 +136,7 @@ middleware.ts
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` / `build` / `start` / `lint` | Desarrollo, build standalone, producción, ESLint |
-| `npm test` / `test:watch` | Jest — **275 tests, 33 suites, 100% passing** |
+| `npm test` / `test:watch` | Jest — **338 tests, 34 suites, 100% passing** |
 | `npx tsc --noEmit` | TypeScript check rápido |
 | `npm run db:*` | push · migrate · seed · generate · migrate-data |
 | `npx prisma studio` / `migrate dev` | UI BD / migración en dev |
@@ -155,7 +155,7 @@ middleware.ts
 - Jest 29.7 + next/jest + jest-environment-jsdom; **12 archivos** (5 API + 3 componentes + 4 i18n)
 - **81 pruebas, todas superadas** (conteo previo de 60/56 obsoleto)
 - Mocks: next-auth, @auth/prisma-adapter, next/navigation, prisma ($transaction), next-intl/server (con catálogos reales)
-- Cobertura actual ≥ 60%; detalle en `errors/tech-knowledge.md` (§7)
+- Cobertura actual 73.48% de líneas (75.29% funciones); objetivo ≥70%; informe en `docs/informe-cobertura.md`
 
 ## Docker
 

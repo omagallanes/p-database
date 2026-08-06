@@ -37,7 +37,7 @@ export interface TaxonomyItem {
   _count?: { prompts: number } | null
 }
 
-interface TaxonomyManagerProps {
+export interface TaxonomyManagerProps {
   /** Base API path, e.g. "/api/types" (GET list, POST create, PUT/DELETE with [id]). */
   apiPath: string
   /** Taxonomy namespace key used for the page heading. */

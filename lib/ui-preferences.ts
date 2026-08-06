@@ -10,6 +10,7 @@ export const DEFAULT_FILTER_ORDER = [
   "tags",
   "platform",
   "status",
+  "type",
   "language",
   "clientProject",
   "useCase",

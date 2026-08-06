@@ -51,7 +51,7 @@ describe("ProfileAccountTab", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: jest.fn().mockResolvedValue({}),
-    } as Response) as typeof fetch
+    } as unknown as Response) as typeof fetch
     const { useSession } = require("next-auth/react") as { useSession: jest.Mock }
     useSession.mockReturnValue({
       data: {
