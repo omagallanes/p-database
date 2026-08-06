@@ -152,6 +152,57 @@ describe("/api/prompts", () => {
       expect(prisma.prompt.create).toHaveBeenCalledTimes(1)
     })
 
+    it("should accept isShared flag when creating a prompt", async () => {
+      const mockPrompt = {
+        id: "test-id",
+        title: "Test Prompt",
+        body: "Test body",
+        type: "USER",
+        language: "en",
+        status: "DRAFT",
+        isFavorite: false,
+        isShared: true,
+        version: 1,
+        usageCount: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        platforms: [],
+        categories: [],
+        tags: [],
+        user: {
+          id: "test-user-id",
+          name: "Test User",
+          email: "test@example.com",
+        },
+      }
+
+      ;(prisma.prompt.create as jest.Mock).mockResolvedValue(mockPrompt)
+
+      const request = new NextRequest("http://localhost:3000/api/prompts", {
+        method: "POST",
+        body: JSON.stringify({
+          title: "Test Prompt",
+          body: "Test body",
+          type: "USER",
+          language: "en",
+          isShared: true,
+        }),
+      })
+
+      const response = await POST(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(201)
+      expect(data.data.isShared).toBe(true)
+      expect(prisma.prompt.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            isShared: true,
+          }),
+        })
+      )
+    })
+
     it("should return 400 for invalid input", async () => {
       const request = new NextRequest("http://localhost:3000/api/prompts", {
         method: "POST",

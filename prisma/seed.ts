@@ -55,6 +55,56 @@ async function main() {
     },
   })
 
+  // Catalog entities (taxonomy): type, status and language values used by
+  // the prompt form and filters. Upsert so the seed is idempotent.
+  const typeValues = [
+    { name: "System", slug: "system", sortOrder: 0 },
+    { name: "User", slug: "user", sortOrder: 1 },
+    { name: "Tool", slug: "tool", sortOrder: 2 },
+  ]
+  for (const value of typeValues) {
+    await prisma.type.upsert({
+      where: { slug: value.slug },
+      update: {},
+      create: value,
+    })
+  }
+
+  const statusValues = [
+    { name: "Draft", slug: "draft", sortOrder: 0 },
+    { name: "Tested", slug: "tested", sortOrder: 1 },
+    { name: "Production", slug: "production", sortOrder: 2 },
+  ]
+  for (const value of statusValues) {
+    await prisma.status.upsert({
+      where: { slug: value.slug },
+      update: {},
+      create: value,
+    })
+  }
+
+  const languageValues = [
+    { name: "English", slug: "en", sortOrder: 0 },
+    { name: "Spanish", slug: "es", sortOrder: 1 },
+    { name: "French", slug: "fr", sortOrder: 2 },
+    { name: "German", slug: "de", sortOrder: 3 },
+    { name: "Italian", slug: "it", sortOrder: 4 },
+    { name: "Portuguese", slug: "pt", sortOrder: 5 },
+    { name: "Dutch", slug: "nl", sortOrder: 6 },
+    { name: "Polish", slug: "pl", sortOrder: 7 },
+    { name: "Russian", slug: "ru", sortOrder: 8 },
+    { name: "Japanese", slug: "ja", sortOrder: 9 },
+    { name: "Chinese", slug: "zh", sortOrder: 10 },
+    { name: "Korean", slug: "ko", sortOrder: 11 },
+  ]
+  for (const value of languageValues) {
+    await prisma.language.upsert({
+      where: { slug: value.slug },
+      update: {},
+      create: value,
+    })
+  }
+
   console.log("✅ Users created/updated:", { admin: admin.id, user: user.id })
   console.log("✅ Seed data completed successfully!")
 }

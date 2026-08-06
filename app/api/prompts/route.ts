@@ -23,6 +23,7 @@ const createPromptSchema = z.object({
   clientProjectIds: z.array(z.string()).optional(),
   status: z.enum(["DRAFT", "TESTED", "PRODUCTION"]).default("DRAFT"),
   isFavorite: z.boolean().default(false),
+  isShared: z.boolean().optional(),
   version: z.number().default(1),
   changelog: z.string().optional(),
   notes: z.string().optional(),
@@ -256,7 +257,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({ data: prompt }, { status: 201 })
+    return NextResponse.json({ data: prompt, success: true }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

@@ -22,6 +22,7 @@ const updatePromptSchema = z.object({
   clientProjectIds: z.array(z.string()).optional(),
   status: z.enum(["DRAFT", "TESTED", "PRODUCTION"]).optional(),
   isFavorite: z.boolean().optional(),
+  isShared: z.boolean().optional(),
   version: z.number().optional(),
   changelog: z.string().optional(),
   notes: z.string().optional(),
@@ -76,10 +77,19 @@ export async function GET(
 
     // Ownership filter: each user (admin included) can only fetch their own prompts.
     // Returns 404 (not 403) to avoid revealing the existence of other users' prompts.
-    const prompt = await prisma.prompt.findUnique({
+    let prompt = await prisma.prompt.findUnique({
       where: { id: params.id, userId: session.user.id },
       include: PROMPT_INCLUDES,
     })
+
+    // Shared prompts by OTHER users are readable (read-only access). The
+    // PUT/DELETE handlers still enforce ownership via checkOwnership.
+    if (!prompt) {
+      prompt = await prisma.prompt.findUnique({
+        where: { id: params.id, isShared: true },
+        include: PROMPT_INCLUDES,
+      })
+    }
 
     if (!prompt) {
       return NextResponse.json({ error: t("promptNotFound") }, { status: 404 })

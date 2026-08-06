@@ -77,6 +77,7 @@ model Prompt {
   clientOrProject String?
   status          String                @default("DRAFT")
   isFavorite      Boolean               @default(false)
+  isShared        Boolean               @default(false)
   version         Int                   @default(1)
   changelog       String?
   notes           String?
@@ -98,6 +99,7 @@ model Prompt {
   @@index([status])
   @@index([platform])
   @@index([isFavorite])
+  @@index([isShared])
   @@index([language])
   @@index([userId])
 }
@@ -241,4 +243,41 @@ model PromptCategory {
   @@id([promptId, categoryId])
   @@index([promptId])
   @@index([categoryId])
+}
+
+// Catalog entities for the taxonomy management pages (admin CRUD).
+// Prompts keep their type/status/language as plain strings; these catalogs
+// define the allowed values used by the form and filters. Deleting a catalog
+// value never touches existing prompts (simple unlinking).
+model Type {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model Status {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+}
+
+model Language {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
 }

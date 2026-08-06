@@ -55,6 +55,8 @@ interface PromptsPageContentProps {
   platforms: Array<{ id: string; name: string; slug: string }>
   clients: Array<{ id: string; name: string; slug: string }>
   useCases: Array<{ id: string; name: string; slug: string }>
+  optionsStatus?: Array<{ name: string; slug: string }>
+  optionsLanguage?: Array<{ name: string; slug: string }>
   initialFilters: PromptFiltersParams
 }
 
@@ -88,6 +90,8 @@ export function PromptsPageContent({
   platforms,
   clients,
   useCases,
+  optionsStatus,
+  optionsLanguage,
   initialFilters,
 }: PromptsPageContentProps) {
   const { filtersVisible, setActiveFilterCount, filterOrder, columns } = useUIContext()
@@ -112,6 +116,8 @@ export function PromptsPageContent({
             platforms={platforms}
             clients={clients}
             useCases={useCases}
+            optionsStatus={optionsStatus}
+            optionsLanguage={optionsLanguage}
             initialFilters={initialFilters}
             filterOrder={filterOrder}
           />

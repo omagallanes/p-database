@@ -3,17 +3,62 @@
 import { useTranslations } from "next-intl"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+
+export interface CatalogOption {
+  name: string
+  slug: string
+}
 
 interface MetadataSegmentProps {
   type: string
   status: string
   language: string
   isFavorite: boolean
+  isShared: boolean
   onTypeChange: (value: string) => void
   onStatusChange: (value: string) => void
   onLanguageChange: (value: string) => void
   onFavoriteChange: (value: boolean) => void
+  onSharedChange: (value: boolean) => void
+  optionsType?: CatalogOption[]
+  optionsStatus?: CatalogOption[]
+  optionsLanguage?: CatalogOption[]
   errors?: Record<string, string | undefined>
+}
+
+// Slug → translation key for the known catalog values. Catalog names come
+// from the DB seed (English); the existing keys keep the localized labels
+// for known values, and unknown slugs fall back to the catalog name.
+const TYPE_LABEL_KEYS: Record<string, string> = {
+  system: "system",
+  user: "user",
+  tool: "tool",
+}
+
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  draft: "draft",
+  tested: "tested",
+  production: "production",
+}
+
+const LANGUAGE_LABEL_KEYS: Record<string, string> = {
+  "catalán/valenciano": "languageCatalan",
+  "catalan/valenciano": "languageCatalan",
+  de: "languageDeutsch",
+  en: "languageEnglish",
+  es: "languageSpanish",
+  vasco: "languageEuskara",
+  fr: "languageFrench",
+  gallego: "languageGalician",
+  it: "languageItalian",
+  nl: "languageDutch",
+  pl: "languagePolish",
+  pt: "languagePortuguese",
+  ru: "languageRussian",
+  ja: "languageJapanese",
+  zh: "languageChinese",
+  ko: "languageKorean",
 }
 
 export default function MetadataSegment({
@@ -21,13 +66,86 @@ export default function MetadataSegment({
   status,
   language,
   isFavorite,
+  isShared,
   onTypeChange,
   onStatusChange,
   onLanguageChange,
   onFavoriteChange,
+  onSharedChange,
+  optionsType,
+  optionsStatus,
+  optionsLanguage,
   errors,
 }: MetadataSegmentProps) {
   const t = useTranslations("MetadataSegment")
+  const tForm = useTranslations("PromptForm")
+
+  // Catalog options win when the server provides them. Prompts store type
+  // and status in UPPERCASE and language in lowercase, so option values are
+  // normalized to match the stored values (Radix Select matches item value
+  // against the controlled `value`). Without options the fixed lists keep
+  // working (tests, renders without catalog data).
+  const typeItems =
+    optionsType && optionsType.length > 0
+      ? optionsType.map((option) => ({
+          value: option.slug.toUpperCase(),
+          label: TYPE_LABEL_KEYS[option.slug] ? t(TYPE_LABEL_KEYS[option.slug]) : option.name,
+        }))
+      : [
+          { value: "SYSTEM", label: t("system") },
+          { value: "USER", label: t("user") },
+          { value: "TOOL", label: t("tool") },
+        ]
+
+  const statusItems =
+    optionsStatus && optionsStatus.length > 0
+      ? optionsStatus.map((option) => ({
+          value: option.slug.toUpperCase(),
+          label: STATUS_LABEL_KEYS[option.slug] ? t(STATUS_LABEL_KEYS[option.slug]) : option.name,
+        }))
+      : [
+          { value: "DRAFT", label: t("draft") },
+          { value: "TESTED", label: t("tested") },
+          { value: "PRODUCTION", label: t("production") },
+        ]
+
+  const languageItems =
+    optionsLanguage && optionsLanguage.length > 0
+      ? optionsLanguage.map((option) => ({
+          value: option.slug,
+          label: LANGUAGE_LABEL_KEYS[option.slug] ? t(LANGUAGE_LABEL_KEYS[option.slug]) : option.name,
+        }))
+      : [
+          { value: "catalán/valenciano", label: t("languageCatalan") },
+          { value: "de", label: t("languageDeutsch") },
+          { value: "en", label: t("languageEnglish") },
+          { value: "es", label: t("languageSpanish") },
+          { value: "vasco", label: t("languageEuskara") },
+          { value: "fr", label: t("languageFrench") },
+          { value: "gallego", label: t("languageGalician") },
+          { value: "it", label: t("languageItalian") },
+          { value: "nl", label: t("languageDutch") },
+          { value: "pt", label: t("languagePortuguese") },
+        ]
+
+  // Keep the currently stored value selectable even when it is not in the
+  // catalog (legacy values like "vasco"): a controlled Radix Select shows an
+  // empty trigger when no item matches the value, which would silently let
+  // users overwrite the original language on save.
+  const languageValuePresent = languageItems.some((item) => item.value === language)
+  const displayLanguageItems =
+    languageValuePresent || language === ""
+      ? languageItems
+      : [{ value: language, label: language }, ...languageItems]
+
+  const typeValuePresent = typeItems.some((item) => item.value === type)
+  const displayTypeItems = typeValuePresent || type === "" ? typeItems : [{ value: type, label: type }, ...typeItems]
+
+  const statusValuePresent = statusItems.some((item) => item.value === status)
+  const displayStatusItems =
+    statusValuePresent || status === ""
+      ? statusItems
+      : [{ value: status, label: status }, ...statusItems]
 
   return (
     <div className="space-y-4">
@@ -38,9 +156,11 @@ export default function MetadataSegment({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SYSTEM">{t("system")}</SelectItem>
-            <SelectItem value="USER">{t("user")}</SelectItem>
-            <SelectItem value="TOOL">{t("tool")}</SelectItem>
+            {displayTypeItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         {errors?.type && <p className="mt-1 text-sm text-red-500">{errors.type}</p>}
@@ -52,9 +172,11 @@ export default function MetadataSegment({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="DRAFT">{t("draft")}</SelectItem>
-            <SelectItem value="TESTED">{t("tested")}</SelectItem>
-            <SelectItem value="PRODUCTION">{t("production")}</SelectItem>
+            {displayStatusItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         {errors?.status && <p className="mt-1 text-sm text-red-500">{errors.status}</p>}
@@ -66,16 +188,11 @@ export default function MetadataSegment({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="catalan/valenciano">{t("languageCatalan")}</SelectItem>
-            <SelectItem value="de">{t("languageDeutsch")}</SelectItem>
-            <SelectItem value="en">{t("languageEnglish")}</SelectItem>
-            <SelectItem value="es">{t("languageSpanish")}</SelectItem>
-            <SelectItem value="vasco">{t("languageEuskara")}</SelectItem>
-            <SelectItem value="fr">{t("languageFrench")}</SelectItem>
-            <SelectItem value="gallego">{t("languageGalician")}</SelectItem>
-            <SelectItem value="it">{t("languageItalian")}</SelectItem>
-            <SelectItem value="nl">{t("languageDutch")}</SelectItem>
-            <SelectItem value="pt">{t("languagePortuguese")}</SelectItem>
+            {displayLanguageItems.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         {errors?.language && <p className="mt-1 text-sm text-red-500">{errors.language}</p>}
@@ -93,6 +210,13 @@ export default function MetadataSegment({
         </Label>
       </div>
       {errors?.isFavorite && <p className="mt-1 text-sm text-red-500">{errors.isFavorite}</p>}
+      <div className="flex items-center space-x-2 pt-1">
+        <Switch id="isShared" checked={isShared} onCheckedChange={onSharedChange} />
+        <Label htmlFor="isShared" className="cursor-pointer">
+          {tForm("sharedLabel")}
+        </Label>
+      </div>
+      <p className="text-sm text-muted-foreground">{tForm("sharedHint")}</p>
     </div>
   )
 }

@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Plus, Edit, Trash2, AlertTriangle } from "lucide-react"
+import { Plus, Edit, Trash2, AlertTriangle, Search } from "lucide-react"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
 
@@ -100,8 +100,10 @@ function CategoriesPage() {
   const router = useRouter()
   const t = useTranslations("CategoriesPage")
   const tCommon = useTranslations("Common")
+  const tTaxonomy = useTranslations("TaxonomyPage")
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
   const [formData, setFormData] = useState<{
@@ -244,6 +246,19 @@ function CategoriesPage() {
       .replace(/(^-|-$)/g, "")
   }
 
+  // Client-side name filter that keeps a node when its own name matches or
+  // when any descendant matches, so searching for a subcategory still shows
+  // its ancestors (pure recursion, no mutation).
+  const filterCategories = (cats: Category[]): Category[] => {
+    const query = search.trim().toLowerCase()
+    if (!query) return cats
+    return cats
+      .map((cat) => ({ ...cat, children: filterCategories(cat.children ?? []) }))
+      .filter(
+        (cat) => cat.name.toLowerCase().includes(query) || cat.children.length > 0
+      )
+  }
+
   const renderCategory = (category: Category, level = 0) => {
     return (
       <div key={category.id} className="ml-4">
@@ -280,9 +295,9 @@ function CategoriesPage() {
     )
   }
 
-  const topLevelCategories = Array.isArray(categories)
-    ? categories.filter((cat) => !cat.parentId)
-    : []
+  const topLevelCategories = filterCategories(
+    Array.isArray(categories) ? categories.filter((cat) => !cat.parentId) : []
+  )
 
   if (loading && categories.length === 0) {
     return <div>{tCommon("loading")}</div>
@@ -390,6 +405,17 @@ function CategoriesPage() {
             </form>
           </DialogContent>
         </Dialog>
+      </div>
+
+      <div className="relative mb-6 max-w-sm">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-accent" />
+        <Input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={tTaxonomy("searchPlaceholder")}
+          className="pl-10"
+        />
       </div>
 
       <div>

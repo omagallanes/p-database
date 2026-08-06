@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Copy, Plus } from "lucide-react"
 import { toast } from "sonner"
 import BasicInfoSegment from "./BasicInfoSegment"
-import MetadataSegment from "./MetadataSegment"
+import MetadataSegment, { type CatalogOption } from "./MetadataSegment"
 import AdvancedSegment from "./AdvancedSegment"
 import TaxonomyMultiSelect from "./TaxonomyMultiSelect"
 
@@ -67,6 +67,7 @@ interface PromptFormProps {
     clientOrProject: string | null
     status: string
     isFavorite: boolean
+    isShared: boolean
     version: number
     changelog: string | null
     notes: string | null
@@ -87,9 +88,12 @@ interface PromptFormProps {
   clientProjects: ClientProject[]
   useCases: UseCase[]
   modelHints: ModelHint[]
+  optionsType?: CatalogOption[]
+  optionsStatus?: CatalogOption[]
+  optionsLanguage?: CatalogOption[]
 }
 
-export function PromptForm({ prompt, categories, tags, platforms, clientProjects, useCases, modelHints }: PromptFormProps) {
+export function PromptForm({ prompt, categories, tags, platforms, clientProjects, useCases, modelHints, optionsType, optionsStatus, optionsLanguage }: PromptFormProps) {
   useSession()
   const router = useRouter()
   const t = useTranslations("PromptForm")
@@ -104,6 +108,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
     language: string
     status: string
     isFavorite: boolean
+    isShared: boolean
     version: number
     changelog: string
     notes: string
@@ -123,6 +128,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
     language: prompt?.language || "es",
     status: prompt?.status || "DRAFT",
     isFavorite: prompt?.isFavorite || false,
+    isShared: prompt?.isShared || false,
     version: prompt?.version || 1,
     changelog: prompt?.changelog || "",
     notes: prompt?.notes || "",
@@ -648,10 +654,15 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
               status={formData.status}
               language={formData.language}
               isFavorite={formData.isFavorite}
+              isShared={formData.isShared}
               onTypeChange={(v) => setFormData({ ...formData, type: v })}
               onStatusChange={(v) => setFormData({ ...formData, status: v })}
               onLanguageChange={(v) => setFormData({ ...formData, language: v })}
               onFavoriteChange={(v) => setFormData({ ...formData, isFavorite: v })}
+              onSharedChange={(v) => setFormData({ ...formData, isShared: v })}
+              optionsType={optionsType}
+              optionsStatus={optionsStatus}
+              optionsLanguage={optionsLanguage}
             />
 
             <TaxonomyMultiSelect

@@ -27,78 +27,90 @@ jest.mock("@/lib/auth", () => ({
 }))
 
 import { GET, PUT, DELETE } from "@/app/api/prompts/[id]/route"
-import { prisma } from "@/lib/prisma"
+import { prisma, PROMPT_INCLUDES } from "@/lib/prisma"
 import { NextRequest } from "next/server"
 
 // Mock Prisma
-jest.mock("@/lib/prisma", () => ({
-  prisma: {
-    prompt: {
-      findUnique: jest.fn(),
-      update: jest.fn(),
-      delete: jest.fn(),
+jest.mock("@/lib/prisma", () => {
+  // Mirror of the real PROMPT_INCLUDES so GET calls can be asserted exactly.
+  const PROMPT_INCLUDES = {
+    categories: { include: { category: true } },
+    tags: { include: { tag: true } },
+    platforms: { include: { platform: true } },
+    clientProjects: { include: { clientProject: true } },
+    useCases: { include: { useCase: true } },
+    modelHints: { include: { modelHint: true } },
+  }
+  return {
+    prisma: {
+      prompt: {
+        findUnique: jest.fn(),
+        update: jest.fn(),
+        delete: jest.fn(),
+      },
+      promptTag: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      promptCategory: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      promptPlatform: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      promptClientProject: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      promptUseCase: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      promptModelHint: {
+        deleteMany: jest.fn(),
+        create: jest.fn(),
+      },
+      category: {
+        findMany: jest.fn().mockResolvedValue([]),
+      },
+      $transaction: jest.fn(async (fn) => {
+        // Mock transaction by just executing the function
+        return await fn({
+          prompt: {
+            update: jest.fn(),
+          },
+          promptTag: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+          promptCategory: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+          promptPlatform: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+          promptClientProject: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+          promptUseCase: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+          promptModelHint: {
+            deleteMany: jest.fn(),
+            create: jest.fn(),
+          },
+        })
+      }),
     },
-    promptTag: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    promptCategory: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    promptPlatform: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    promptClientProject: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    promptUseCase: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    promptModelHint: {
-      deleteMany: jest.fn(),
-      create: jest.fn(),
-    },
-    category: {
-      findMany: jest.fn().mockResolvedValue([]),
-    },
-    $transaction: jest.fn(async (fn) => {
-      // Mock transaction by just executing the function
-      return await fn({
-        prompt: {
-          update: jest.fn(),
-        },
-        promptTag: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-        promptCategory: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-        promptPlatform: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-        promptClientProject: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-        promptUseCase: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-        promptModelHint: {
-          deleteMany: jest.fn(),
-          create: jest.fn(),
-        },
-      })
-    }),
-  },
-}))
+    PROMPT_INCLUDES,
+  }
+})
 
 describe("/api/prompts/[id]", () => {
   beforeEach(() => {
@@ -203,6 +215,68 @@ describe("/api/prompts/[id]", () => {
       expect(data.data).toHaveProperty("id", "prompt-1")
       expect(data.data).toHaveProperty("platforms")
       expect(data.data).toHaveProperty("categories")
+    })
+
+    it("should return 200 read-only when the prompt is shared by another user", async () => {
+      // Mock authenticated session (not the owner)
+      mockAuth.mockResolvedValue({
+        user: {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          role: "user",
+        },
+      })
+
+      // The ownership-filtered lookup misses; the shared fallback matches
+      ;(prisma.prompt.findUnique as jest.Mock)
+        .mockResolvedValueOnce(null)
+        .mockResolvedValueOnce({
+          id: "prompt-1",
+          title: "Shared Prompt",
+          userId: "owner-456",
+          isShared: true,
+        })
+
+      const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1")
+      const response = await GET(request, { params: { id: "prompt-1" } })
+
+      // Assert — read-only access is granted to shared prompts of other users
+      expect(response.status).toBe(200)
+      const data = await response.json()
+      expect(data.data.id).toBe("prompt-1")
+      expect(prisma.prompt.findUnique).toHaveBeenNthCalledWith(1, {
+        where: { id: "prompt-1", userId: "user-123" },
+        include: PROMPT_INCLUDES,
+      })
+      expect(prisma.prompt.findUnique).toHaveBeenNthCalledWith(2, {
+        where: { id: "prompt-1", isShared: true },
+        include: PROMPT_INCLUDES,
+      })
+    })
+
+    it("should return 404 after checking both ownership and shared fallback", async () => {
+      // Mock authenticated session (not the owner)
+      mockAuth.mockResolvedValue({
+        user: {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          role: "user",
+        },
+      })
+
+      // Neither the ownership filter nor the shared fallback match
+      ;(prisma.prompt.findUnique as jest.Mock).mockResolvedValue(null)
+
+      const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1")
+      const response = await GET(request, { params: { id: "prompt-1" } })
+
+      // Assert — a non-shared prompt of another user stays hidden (404)
+      expect(response.status).toBe(404)
+      const data = await response.json()
+      expect(data.error).toBe("Prompt not found")
+      expect(prisma.prompt.findUnique).toHaveBeenCalledTimes(2)
     })
   })
 

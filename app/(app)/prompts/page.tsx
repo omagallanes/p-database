@@ -300,6 +300,38 @@ async function getPlatforms() {
   }))
 }
 
+async function getCatalogStatuses(): Promise<Array<{ name: string; slug: string }>> {
+  try {
+    const statuses = await prisma.status.findMany({
+      orderBy: { sortOrder: "asc" },
+    })
+
+    return statuses.map((status) => ({
+      name: status.name,
+      slug: status.slug,
+    }))
+  } catch {
+    // Catalog unavailable → empty array; the filters fall back to fixed values.
+    return []
+  }
+}
+
+async function getCatalogLanguages(): Promise<Array<{ name: string; slug: string }>> {
+  try {
+    const languages = await prisma.language.findMany({
+      orderBy: { sortOrder: "asc" },
+    })
+
+    return languages.map((language) => ({
+      name: language.name,
+      slug: language.slug,
+    }))
+  } catch {
+    // Catalog unavailable → empty array; the filters fall back to fixed values.
+    return []
+  }
+}
+
 async function getClientProjects() {
   const clientProjects = await prisma.clientProject.findMany({
     orderBy: { name: "asc" },
@@ -401,7 +433,7 @@ export default async function PromptsPage({
     ? [searchParams.language]
     : []
 
-  const [prompts, categories, tags, platforms, clients, useCases, viewMode] = await Promise.all([
+  const [prompts, categories, tags, platforms, clients, useCases, viewMode, catalogStatuses, catalogLanguages] = await Promise.all([
     getPrompts({ ...searchParams, tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds }, userId),
     getCategories(userId),
     getTags(userId),
@@ -409,6 +441,8 @@ export default async function PromptsPage({
     getClientProjects(),
     getUseCases(),
     getUserViewPreference(userId),
+    getCatalogStatuses(),
+    getCatalogLanguages(),
   ])
 
   return (
@@ -431,6 +465,8 @@ export default async function PromptsPage({
         platforms={platforms}
         clients={clients}
         useCases={useCases}
+        optionsStatus={catalogStatuses}
+        optionsLanguage={catalogLanguages}
         initialFilters={{ ...searchParams, categoryIds, platformIds, clientProjectIds, useCaseIds, status, language }}
       />
     </ViewModeProvider>

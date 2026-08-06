@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { getTranslations } from "next-intl/server"
 import { getLocaleFromRequest } from "@/lib/locale"
+import { slugify } from "@/lib/slug"
 
 const createModelHintSchema = z.object({
   name: z.string().min(1),
@@ -23,7 +24,12 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    const search = request.nextUrl.searchParams.get("search")
+
     const modelHints = await prisma.modelHint.findMany({
+      where: search
+        ? { name: { contains: search, mode: "insensitive" } }
+        : undefined,
       include: {
         _count: {
           select: {
@@ -55,7 +61,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     
-    if (!session?.user) {
+    if (!session?.user || session.user.role !== "admin") {
       return NextResponse.json(
         { error: t("unauthorized") },
         { status: 401 }
@@ -67,19 +73,28 @@ export async function POST(request: NextRequest) {
 
     // Normalización: trim + uppercase (D-06)
     const normalizedName = data.name.trim().toUpperCase()
-    const normalizedSlug = normalizedName.toLowerCase()
+    const normalizedSlug = slugify(data.name)
 
-    // Upsert para evitar duplicados (unicidad por slug)
-    const modelHint = await prisma.modelHint.upsert({
+    // Slug duplicado → 409 (no upsert silencioso)
+    const existing = await prisma.modelHint.findUnique({
       where: { slug: normalizedSlug },
-      update: {},
-      create: {
+      select: { id: true },
+    })
+    if (existing) {
+      return NextResponse.json(
+        { error: t("slugAlreadyExists") },
+        { status: 409 }
+      )
+    }
+
+    const modelHint = await prisma.modelHint.create({
+      data: {
         name: normalizedName,
         slug: normalizedSlug,
       },
     })
 
-    return NextResponse.json({ data: modelHint }, { status: 201 })
+    return NextResponse.json({ data: modelHint, success: true }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

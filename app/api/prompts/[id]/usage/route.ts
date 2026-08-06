@@ -22,10 +22,17 @@ export async function PATCH(
       )
     }
 
-    // Ownership check: prompt must exist AND belong to the authenticated user.
-    // Returns 404 (not 403) to avoid revealing the existence of other users' prompts.
+    // Access check: the prompt must exist AND belong to the authenticated
+    // user OR be shared by another user (copying a shared prompt also counts
+    // as a use). Returns 404 (not 403) to avoid revealing the existence of
+    // other users' prompts.
     const prompt = await prisma.prompt.findFirst({
-      where: { id: params.id, userId: session.user.id },
+      where: {
+        OR: [
+          { id: params.id, userId: session.user.id },
+          { id: params.id, isShared: true },
+        ],
+      },
       select: { id: true },
     })
 

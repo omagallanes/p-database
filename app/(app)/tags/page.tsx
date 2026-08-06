@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
-import { Plus, Edit, Trash2 } from "lucide-react"
+import { Plus, Edit, Trash2, Search } from "lucide-react"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
 
@@ -32,8 +32,10 @@ export default function TagsPage() {
   const router = useRouter()
   const t = useTranslations("TagsPage")
   const tCommon = useTranslations("Common")
+  const tTaxonomy = useTranslations("TaxonomyPage")
   const [tags, setTags] = useState<Tag[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingTag, setEditingTag] = useState<Tag | null>(null)
   const [formData, setFormData] = useState({
@@ -137,6 +139,11 @@ export default function TagsPage() {
       .replace(/(^-|-$)/g, "")
   }
 
+  const query = search.trim().toLowerCase()
+  const filteredTags = query
+    ? tags.filter((tag) => tag.name.toLowerCase().includes(query))
+    : tags
+
   if (loading && tags.length === 0) {
     return <div>{tCommon("loading")}</div>
   }
@@ -201,15 +208,26 @@ export default function TagsPage() {
         </Dialog>
       </div>
 
+      <div className="relative mb-6 max-w-sm">
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-accent" />
+        <Input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={tTaxonomy("searchPlaceholder")}
+          className="pl-10"
+        />
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {tags.length === 0 ? (
+        {filteredTags.length === 0 ? (
           <Card>
             <CardContent className="p-6 text-center text-muted-foreground">
               {t("noTags")}
             </CardContent>
           </Card>
         ) : (
-          tags.map((tag) => (
+          filteredTags.map((tag) => (
             <Card key={tag.id}>
               <CardContent className="flex items-center justify-between p-4">
                 <div className="flex-1">

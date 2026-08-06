@@ -9,13 +9,21 @@ import { UIContextProvider } from "@/contexts/UIContext"
 import messages from "../../messages/en-GB.json"
 
 jest.mock("next-auth/react", () => ({
-  useSession: () => ({ data: { user: { name: "Test User" } }, status: "authenticated" }),
+  useSession: jest.fn(),
   signOut: jest.fn(),
 }))
 
 jest.mock("next/navigation", () => ({
   usePathname: () => "/prompts",
 }))
+
+function mockSession(role?: "admin" | "user") {
+  const { useSession } = require("next-auth/react") as { useSession: jest.Mock }
+  useSession.mockReturnValue({
+    data: { user: { name: "Test User", role } },
+    status: "authenticated",
+  })
+}
 
 function renderSidebar(initialSidebarCollapsed = false) {
   return render(
@@ -29,6 +37,8 @@ function renderSidebar(initialSidebarCollapsed = false) {
 
 describe("Sidebar", () => {
   beforeEach(() => {
+    jest.clearAllMocks()
+    mockSession("user")
     // jsdom does not expose fetch; provide it for the PATCH calls
     global.fetch = jest.fn().mockResolvedValue({ ok: true } as Response) as typeof fetch
   })
@@ -41,11 +51,13 @@ describe("Sidebar", () => {
     // Arrange & Act
     const { container } = renderSidebar()
 
-    // Assert
+    // Assert — the base links (Prompts, Categories, Tags, Shared) and the
+    // profile are rendered; the admin-only Taxonomy dropdown is not.
     expect(screen.getByText("Prompt DB")).toBeInTheDocument()
     expect(screen.getByText("Prompts")).toBeInTheDocument()
     expect(screen.getByText("Categories")).toBeInTheDocument()
     expect(screen.getByText("Tags")).toBeInTheDocument()
+    expect(screen.getByText("Shared")).toBeInTheDocument()
     expect(screen.getByText("Test User")).toBeInTheDocument()
     expect(container.firstChild).toHaveClass("w-64")
   })
@@ -77,5 +89,37 @@ describe("Sidebar", () => {
         body: JSON.stringify({ uiPreferences: { sidebarCollapsed: true } }),
       })
     )
+  })
+
+  it("shows the Taxonomy dropdown with its submenu only for admin users", () => {
+    // Arrange
+    mockSession("admin")
+    renderSidebar()
+
+    // Act — expand the dropdown.
+    fireEvent.click(screen.getByRole("button", { name: "Taxonomy" }))
+
+    // Assert — the submenu lists the seven managed elements.
+    expect(screen.getByRole("link", { name: "Type" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Status" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Language" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Platforms" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Client / Projects" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Use Cases" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Model Hints" })).toBeInTheDocument()
+  })
+
+  it("hides the Taxonomy dropdown for non-admin users while keeping the Shared link", () => {
+    // Arrange — default session role is "user"
+    mockSession("user")
+    renderSidebar()
+
+    // Act & Assert — Shared is available to every authenticated user but the
+    // admin-only Taxonomy dropdown (and its submenu) is absent.
+    expect(screen.getByText("Shared")).toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", { name: "Taxonomy" })
+    ).not.toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "Type" })).not.toBeInTheDocument()
   })
 })

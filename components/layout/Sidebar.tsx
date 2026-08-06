@@ -1,11 +1,31 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
-import { FileText, FolderTree, Home, PanelLeftClose, PanelLeftOpen, Tag, User } from "lucide-react"
+import {
+  Boxes,
+  Briefcase,
+  ChevronDown,
+  ChevronRight,
+  CircleDot,
+  Cpu,
+  FileText,
+  FolderTree,
+  Home,
+  Languages,
+  Library,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Puzzle,
+  Share2,
+  Tag,
+  Type,
+  User,
+} from "lucide-react"
 import { useUIContext } from "@/contexts/UIContext"
 
 const TOOLTIP_CLASSES =
@@ -15,12 +35,32 @@ export function Sidebar() {
   const pathname = usePathname()
   const { data: session, status } = useSession()
   const t = useTranslations("Sidebar")
+  const tTaxonomy = useTranslations("Taxonomy")
   const { sidebarCollapsed, setSidebarCollapsed } = useUIContext()
+  const isAdmin = session?.user?.role === "admin"
+  const [isTaxonomyOpen, setIsTaxonomyOpen] = useState(() => pathname.startsWith("/taxonomy"))
+
+  // Keep the submenu open when navigating to any taxonomy route from
+  // outside the sidebar (client-side navigation).
+  useEffect(() => {
+    setIsTaxonomyOpen(pathname.startsWith("/taxonomy"))
+  }, [pathname])
 
   const navigation = [
     { name: t("prompts"), href: "/prompts", icon: FileText },
     { name: t("categories"), href: "/categories", icon: FolderTree },
     { name: t("tags"), href: "/tags", icon: Tag },
+    { name: t("shared"), href: "/shared", icon: Share2 },
+  ]
+
+  const taxonomyItems = [
+    { name: tTaxonomy("type"), href: "/taxonomy/type", icon: Type },
+    { name: tTaxonomy("status"), href: "/taxonomy/status", icon: CircleDot },
+    { name: tTaxonomy("language"), href: "/taxonomy/language", icon: Languages },
+    { name: tTaxonomy("platforms"), href: "/taxonomy/platforms", icon: Boxes },
+    { name: tTaxonomy("clientProjects"), href: "/taxonomy/client-projects", icon: Briefcase },
+    { name: tTaxonomy("useCases"), href: "/taxonomy/use-cases", icon: Puzzle },
+    { name: tTaxonomy("modelHints"), href: "/taxonomy/model-hints", icon: Cpu },
   ]
 
   return (
@@ -83,6 +123,65 @@ export function Sidebar() {
             </span>
           )
         })}
+        {isAdmin && (
+          <span className={cn("group relative", sidebarCollapsed && "flex justify-center")}>
+            <button
+              type="button"
+              onClick={() => setIsTaxonomyOpen((open) => !open)}
+              aria-label={sidebarCollapsed ? t("taxonomy") : undefined}
+              aria-expanded={isTaxonomyOpen}
+              aria-controls="taxonomy-submenu"
+              className={cn(
+                "flex w-full items-center rounded-lg py-2.5 text-sm font-medium transition-all duration-200",
+                sidebarCollapsed ? "justify-center px-2" : "gap-3 px-3",
+                pathname.startsWith("/taxonomy")
+                  ? "bg-white/20 text-white shadow-md backdrop-blur-sm"
+                  : "text-white/80 hover:bg-white/10 hover:text-white"
+              )}
+            >
+              <Library className="h-5 w-5 shrink-0" />
+              {!sidebarCollapsed && (
+                <>
+                  <span className="flex-1 text-left">{t("taxonomy")}</span>
+                  {isTaxonomyOpen ? (
+                    <ChevronDown className="h-4 w-4 shrink-0 text-white/70" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4 shrink-0 text-white/70" />
+                  )}
+                </>
+              )}
+            </button>
+            {sidebarCollapsed && <span className={TOOLTIP_CLASSES}>{t("taxonomy")}</span>}
+            {!sidebarCollapsed && isTaxonomyOpen && (
+              <div
+                id="taxonomy-submenu"
+                role="group"
+                aria-label={t("taxonomy")}
+                className="mt-1 flex flex-col space-y-1"
+              >
+                {taxonomyItems.map((item) => {
+                  const SubIcon = item.icon
+                  const isSubActive = pathname.startsWith(item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg py-2 pl-10 pr-3 text-sm font-medium transition-all duration-200",
+                        isSubActive
+                          ? "bg-white/20 text-white shadow-md backdrop-blur-sm"
+                          : "text-white/80 hover:bg-white/10 hover:text-white"
+                      )}
+                    >
+                      <SubIcon className="h-4 w-4 shrink-0" />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+          </span>
+        )}
       </nav>
       {status === "authenticated" && session?.user && (
         <div className="border-t border-white/20 p-4">

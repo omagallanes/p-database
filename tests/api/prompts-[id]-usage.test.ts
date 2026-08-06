@@ -84,7 +84,7 @@ describe("/api/prompts/[id]/usage", () => {
     expect(prisma.prompt.update).not.toHaveBeenCalled()
   })
 
-  it("should check ownership with id + userId before updating usage", async () => {
+  it("should check access with id + (userId OR isShared) before updating usage", async () => {
     ;(prisma.prompt.findFirst as jest.Mock).mockResolvedValue({ id: "prompt-1" })
     ;(prisma.prompt.update as jest.Mock).mockResolvedValue({
       id: "prompt-1",
@@ -99,9 +99,41 @@ describe("/api/prompts/[id]/usage", () => {
 
     expect(response.status).toBe(200)
     expect(prisma.prompt.findFirst).toHaveBeenCalledWith({
-      where: { id: "prompt-1", userId: "test-user-id" },
+      where: {
+        OR: [
+          { id: "prompt-1", userId: "test-user-id" },
+          { id: "prompt-1", isShared: true },
+        ],
+      },
       select: { id: true },
     })
+  })
+
+  it("should allow incrementing usage of a shared prompt by another user", async () => {
+    // Prompt exists and is shared (not owned): the OR access check matches
+    ;(prisma.prompt.findFirst as jest.Mock).mockResolvedValue({ id: "prompt-1" })
+    ;(prisma.prompt.update as jest.Mock).mockResolvedValue({
+      id: "prompt-1",
+      usageCount: 5,
+      lastUsedAt: new Date(),
+    })
+
+    const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1/usage", {
+      method: "PATCH",
+    })
+    const response = await PATCH(request, { params: { id: "prompt-1" } })
+
+    expect(response.status).toBe(200)
+    const data = await response.json()
+    expect(data.usageCount).toBe(5)
+    expect(prisma.prompt.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "prompt-1" },
+        data: expect.objectContaining({
+          usageCount: { increment: 1 },
+        }),
+      })
+    )
   })
 
   it("should increment usageCount and set lastUsedAt when user owns the prompt", async () => {

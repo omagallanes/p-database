@@ -14,6 +14,8 @@ interface PromptFiltersProps {
   platforms: Array<{ id: string; name: string; slug: string }>
   clients: Array<{ id: string; name: string; slug: string }>
   useCases: Array<{ id: string; name: string; slug: string }>
+  optionsStatus?: Array<{ name: string; slug: string }>
+  optionsLanguage?: Array<{ name: string; slug: string }>
   initialFilters: {
     categoryId?: string
     categoryIds?: string | string[]
@@ -48,12 +50,38 @@ const STATUSES = [
   { value: "PRODUCTION", labelKey: "statusProduction" },
 ] as const
 
+// Slug → translation key for the known catalog values. Catalog names come
+// from the DB seed (English); the existing keys keep localized labels for
+// known values, and unknown slugs fall back to the catalog name.
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  draft: "statusDraft",
+  tested: "statusTested",
+  production: "statusProduction",
+}
+
+const LANGUAGE_LABEL_KEYS: Record<string, string> = {
+  en: "languageEnglish",
+  es: "languageSpanish",
+  fr: "languageFrench",
+  de: "languageGerman",
+  it: "languageItalian",
+  pt: "languagePortuguese",
+  nl: "languageDutch",
+  pl: "languagePolish",
+  ru: "languageRussian",
+  ja: "languageJapanese",
+  zh: "languageChinese",
+  ko: "languageKorean",
+}
+
 export function PromptFilters({
   categories,
   tags,
   platforms,
   clients,
   useCases,
+  optionsStatus,
+  optionsLanguage,
   initialFilters,
   filterOrder = DEFAULT_FILTER_ORDER,
 }: PromptFiltersProps & { filterOrder?: readonly string[] }) {
@@ -157,6 +185,31 @@ export function PromptFilters({
       ? filterOrder
       : DEFAULT_FILTER_ORDER
 
+  // Status/language options come from the catalog (server loaded) when
+  // available; the fixed arrays are the fallback. Filter values must match
+  // what prompts store: status is UPPERCASE, language is lowercase.
+  const statusOptions =
+    optionsStatus && optionsStatus.length > 0
+      ? optionsStatus.map((option) => ({
+          value: option.slug.toUpperCase(),
+          label: STATUS_LABEL_KEYS[option.slug] ? t(STATUS_LABEL_KEYS[option.slug]) : option.name,
+        }))
+      : STATUSES.map((statusOption) => ({
+          value: statusOption.value,
+          label: t(statusOption.labelKey),
+        }))
+
+  const languageOptions =
+    optionsLanguage && optionsLanguage.length > 0
+      ? optionsLanguage.map((option) => ({
+          value: option.slug,
+          label: LANGUAGE_LABEL_KEYS[option.slug] ? t(LANGUAGE_LABEL_KEYS[option.slug]) : option.name,
+        }))
+      : LANGUAGES.map((languageOption) => ({
+          value: languageOption.code,
+          label: t(languageOption.nameKey),
+        }))
+
   // Key → card map. Cards are functions so unknown filterOrder keys resolve
   // to nothing (optional chaining) instead of breaking the render.
   const FILTER_CARDS: Record<string, () => ReactNode> = {
@@ -235,16 +288,16 @@ export function PromptFilters({
           <CardTitle className="text-sm font-semibold text-foreground">{t("status")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {STATUSES.map((statusOption) => {
+          {statusOptions.map((option) => {
             return (
-              <label key={statusOption.value} className="flex items-center space-x-2 cursor-pointer">
+              <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={isSelected("status", statusOption.value)}
-                  onChange={() => toggleFilter("status", statusOption.value)}
+                  checked={isSelected("status", option.value)}
+                  onChange={() => toggleFilter("status", option.value)}
                   className="h-4 w-4 rounded border-input"
                 />
-                <span className="text-sm">{t(statusOption.labelKey)}</span>
+                <span className="text-sm">{option.label}</span>
               </label>
             )
           })}
@@ -257,16 +310,16 @@ export function PromptFilters({
           <CardTitle className="text-sm font-semibold text-foreground">{t("language")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          {LANGUAGES.map((languageOption) => {
+          {languageOptions.map((option) => {
             return (
-              <label key={languageOption.code} className="flex items-center space-x-2 cursor-pointer">
+              <label key={option.value} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={isSelected("language", languageOption.code)}
-                  onChange={() => toggleFilter("language", languageOption.code)}
+                  checked={isSelected("language", option.value)}
+                  onChange={() => toggleFilter("language", option.value)}
                   className="h-4 w-4 rounded border-input"
                 />
-                <span className="text-sm">{t(languageOption.nameKey)}</span>
+                <span className="text-sm">{option.label}</span>
               </label>
             )
           })}
