@@ -51,13 +51,14 @@ describe("Sidebar", () => {
     // Arrange & Act
     const { container } = renderSidebar()
 
-    // Assert — the base links (Prompts, Categories, Tags, Shared) and the
-    // profile are rendered; the admin-only Taxonomy dropdown is not.
+    // Assert — the base links (Prompts, Shared) and the profile are
+    // rendered; Categories/Tags moved under the admin-only Taxonomy
+    // dropdown, so they are absent for a regular user.
     expect(screen.getByText("Prompt DB")).toBeInTheDocument()
     expect(screen.getByText("Prompts")).toBeInTheDocument()
-    expect(screen.getByText("Categories")).toBeInTheDocument()
-    expect(screen.getByText("Tags")).toBeInTheDocument()
     expect(screen.getByText("Shared")).toBeInTheDocument()
+    expect(screen.queryByText("Categories")).not.toBeInTheDocument()
+    expect(screen.queryByText("Tags")).not.toBeInTheDocument()
     expect(screen.getByText("Test User")).toBeInTheDocument()
     expect(container.firstChild).toHaveClass("w-64")
   })
@@ -99,7 +100,10 @@ describe("Sidebar", () => {
     // Act — expand the dropdown.
     fireEvent.click(screen.getByRole("button", { name: "Taxonomy" }))
 
-    // Assert — the submenu lists the seven managed elements.
+    // Assert — the submenu lists Categories and Tags first, then the seven
+    // managed elements.
+    expect(screen.getByRole("link", { name: "Categories" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Tags" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Type" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Status" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Language" })).toBeInTheDocument()

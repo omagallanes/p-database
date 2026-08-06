@@ -38,22 +38,28 @@ export function Sidebar() {
   const tTaxonomy = useTranslations("Taxonomy")
   const { sidebarCollapsed, setSidebarCollapsed } = useUIContext()
   const isAdmin = session?.user?.role === "admin"
-  const [isTaxonomyOpen, setIsTaxonomyOpen] = useState(() => pathname.startsWith("/taxonomy"))
+  // The taxonomy submenu also covers /categories and /tags (they moved under
+  // the Taxonomy section), so it opens on any of those routes.
+  const isOnTaxonomyRoute =
+    pathname.startsWith("/taxonomy") ||
+    pathname.startsWith("/categories") ||
+    pathname.startsWith("/tags")
+  const [isTaxonomyOpen, setIsTaxonomyOpen] = useState(() => isOnTaxonomyRoute)
 
   // Keep the submenu open when navigating to any taxonomy route from
   // outside the sidebar (client-side navigation).
   useEffect(() => {
-    setIsTaxonomyOpen(pathname.startsWith("/taxonomy"))
-  }, [pathname])
+    setIsTaxonomyOpen(isOnTaxonomyRoute)
+  }, [isOnTaxonomyRoute])
 
   const navigation = [
     { name: t("prompts"), href: "/prompts", icon: FileText },
-    { name: t("categories"), href: "/categories", icon: FolderTree },
-    { name: t("tags"), href: "/tags", icon: Tag },
     { name: t("shared"), href: "/shared", icon: Share2 },
   ]
 
   const taxonomyItems = [
+    { name: tTaxonomy("categories"), href: "/categories", icon: FolderTree },
+    { name: tTaxonomy("tags"), href: "/tags", icon: Tag },
     { name: tTaxonomy("type"), href: "/taxonomy/type", icon: Type },
     { name: tTaxonomy("status"), href: "/taxonomy/status", icon: CircleDot },
     { name: tTaxonomy("language"), href: "/taxonomy/language", icon: Languages },
@@ -134,7 +140,7 @@ export function Sidebar() {
               className={cn(
                 "flex w-full items-center rounded-lg py-2.5 text-sm font-medium transition-all duration-200",
                 sidebarCollapsed ? "justify-center px-2" : "gap-3 px-3",
-                pathname.startsWith("/taxonomy")
+                isOnTaxonomyRoute
                   ? "bg-white/20 text-white shadow-md backdrop-blur-sm"
                   : "text-white/80 hover:bg-white/10 hover:text-white"
               )}

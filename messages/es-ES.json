@@ -27,6 +27,8 @@
     "expandSidebar": "Expandir menú"
   },
   "Taxonomy": {
+    "categories": "Categorías",
+    "tags": "Etiquetas",
     "type": "Tipo",
     "status": "Estado",
     "language": "Idioma",
