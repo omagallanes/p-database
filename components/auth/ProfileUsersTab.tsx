@@ -50,6 +50,7 @@ interface UserFormState {
   name: string
   email: string
   password: string
+  confirmPassword: string
   role: UserRole
 }
 
@@ -57,6 +58,7 @@ const EMPTY_FORM: UserFormState = {
   name: "",
   email: "",
   password: "",
+  confirmPassword: "",
   role: "user",
 }
 
@@ -144,6 +146,11 @@ export function ProfileUsersTab() {
   }
 
   const handleCreate = async () => {
+    // The confirmation field must match the new password before sending.
+    if (form.password !== form.confirmPassword) {
+      toast.error(t("passwordMismatch"))
+      return
+    }
     setSaving(true)
     try {
       const response = await fetch(apiUrl("/api/users"), {
@@ -176,6 +183,11 @@ export function ProfileUsersTab() {
 
   const handleEdit = async () => {
     if (!editingUser) return
+    // If a new password is set, the confirmation field must match it.
+    if (form.password !== form.confirmPassword) {
+      toast.error(t("passwordMismatch"))
+      return
+    }
     setSaving(true)
     try {
       const payload: {
@@ -311,7 +323,7 @@ export function ProfileUsersTab() {
           {t("empty")}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-md border">
+        <div className="rounded-md border">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50 text-left text-xs uppercase tracking-wide text-muted-foreground">
@@ -456,6 +468,22 @@ export function ProfileUsersTab() {
                   setForm((prev) => ({
                     ...prev,
                     password: event.target.value,
+                  }))
+                }
+                required={!editingUser}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="user-confirm-password">{t("confirmPassword")}</Label>
+              <Input
+                id="user-confirm-password"
+                type="password"
+                minLength={6}
+                value={form.confirmPassword}
+                onChange={(event) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    confirmPassword: event.target.value,
                   }))
                 }
                 required={!editingUser}

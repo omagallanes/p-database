@@ -257,7 +257,9 @@
     "columnsLabel": "Columnas de lista y tarjetas",
     "columnsHint": "Elige qué campos mostrar y su orden (aplica a lista y tarjetas)",
     "moveUp": "Subir",
-    "moveDown": "Bajar"
+    "moveDown": "Bajar",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden"
   },
   "Users": {
     "title": "Gestión de usuarios",
@@ -283,7 +285,9 @@
     "loading": "Cargando usuarios...",
     "activateConfirm": "Se restaurarán todas las sesiones de este usuario. ¿Continuar?",
     "deactivateConfirm": "Se cerrarán todas las sesiones abiertas y el usuario no podrá iniciar sesión. ¿Continuar?",
-    "createdAt": "Fecha de alta"
+    "createdAt": "Fecha de alta",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden"
   },
   "Columns": {
     "status": "Estado",

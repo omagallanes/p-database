@@ -257,7 +257,9 @@
     "columnsLabel": "List and card columns",
     "columnsHint": "Choose which fields to show and their order (applies to list and cards)",
     "moveUp": "Move up",
-    "moveDown": "Move down"
+    "moveDown": "Move down",
+    "confirmPassword": "Confirm new password",
+    "passwordMismatch": "The passwords do not match"
   },
   "Users": {
     "title": "User management",
@@ -283,7 +285,9 @@
     "loading": "Loading users...",
     "activateConfirm": "All sessions will be restored for this user. Continue?",
     "deactivateConfirm": "All open sessions will be closed and the user will not be able to log in. Continue?",
-    "createdAt": "Created"
+    "createdAt": "Created",
+    "confirmPassword": "Confirm new password",
+    "passwordMismatch": "The passwords do not match"
   },
   "Columns": {
     "status": "Status",

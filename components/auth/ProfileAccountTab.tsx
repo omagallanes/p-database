@@ -76,6 +76,7 @@ export function ProfileAccountTab({ initialLanguage }: ProfileAccountTabProps) {
   const [savingName, setSavingName] = useState(false)
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
+  const [confirmNewPassword, setConfirmNewPassword] = useState("")
   const [changingPassword, setChangingPassword] = useState(false)
 
   // Keep the name input in sync with the session (initial load and after
@@ -137,6 +138,11 @@ export function ProfileAccountTab({ initialLanguage }: ProfileAccountTabProps) {
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || changingPassword) return
+    // The confirmation field must match the new password before sending.
+    if (newPassword !== confirmNewPassword) {
+      toast.error(t("passwordMismatch"))
+      return
+    }
     setChangingPassword(true)
     try {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
@@ -156,6 +162,7 @@ export function ProfileAccountTab({ initialLanguage }: ProfileAccountTabProps) {
       toast.success(data?.data?.message ?? tApi("passwordChanged"))
       setCurrentPassword("")
       setNewPassword("")
+      setConfirmNewPassword("")
     } catch (error) {
       console.error("Failed to change password:", error)
       toast.error(tApi("failedToChangePassword"))
@@ -254,9 +261,24 @@ export function ProfileAccountTab({ initialLanguage }: ProfileAccountTabProps) {
               className="mt-1"
             />
           </div>
+          <div>
+            <Label htmlFor="confirm-new-password">{t("confirmPassword")}</Label>
+            <Input
+              id="confirm-new-password"
+              type="password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+              className="mt-1"
+            />
+          </div>
           <Button
             onClick={handleChangePassword}
-            disabled={!currentPassword || !newPassword || changingPassword}
+            disabled={
+              !currentPassword ||
+              !newPassword ||
+              !confirmNewPassword ||
+              changingPassword
+            }
           >
             {t("changePasswordButton")}
           </Button>

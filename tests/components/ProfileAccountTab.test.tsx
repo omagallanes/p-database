@@ -81,6 +81,7 @@ describe("ProfileAccountTab", () => {
     expect(screen.getByLabelText("Name")).toBeInTheDocument()
     expect(screen.getByLabelText("Current password")).toBeInTheDocument()
     expect(screen.getByLabelText("New password")).toBeInTheDocument()
+    expect(screen.getByLabelText("Confirm new password")).toBeInTheDocument()
   })
 
   it("persists the selected language via PATCH and refreshes the session", async () => {
@@ -143,6 +144,10 @@ describe("ProfileAccountTab", () => {
     // Act
     await user.type(screen.getByLabelText("Current password"), "old-password")
     await user.type(screen.getByLabelText("New password"), "new-password")
+    await user.type(
+      screen.getByLabelText("Confirm new password"),
+      "new-password"
+    )
     await user.click(screen.getByRole("button", { name: "Change password" }))
 
     // Assert

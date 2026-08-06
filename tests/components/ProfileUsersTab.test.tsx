@@ -216,6 +216,7 @@ describe("ProfileUsersTab", () => {
     await user.type(await screen.findByLabelText("Name"), "New Person")
     await user.type(screen.getByLabelText("Email"), "new@example.com")
     await user.type(screen.getByLabelText("Password"), "secret123")
+    await user.type(screen.getByLabelText("Confirm new password"), "secret123")
     await user.click(screen.getByRole("button", { name: "Save" }))
 
     // Assert

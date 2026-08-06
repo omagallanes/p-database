@@ -25,7 +25,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <UserProfile
           initialLanguage={initialLanguage}
           initialPreferences={initialPreferences}
