@@ -69,6 +69,8 @@
 | Fase B — Perfil en pestañas + personalización (idioma, tema, color, orden filtros, columnas) | Implementado 2026-08-06 — ver `development/frontend/concepts/theme-accent-pattern.md` | Done |
 | Pulido — Seguridad (rate limiting, revocación tokenVersion, anti-FOUC, seed seguro) | Implementado 2026-08-06 — ver `development/backend/concepts/auth-hardening-pattern.md` | Done |
 | Fase D — Aislamiento por usuario (row-level ownership) | Implementado en código 2026-08-06 — ver `development/backend/concepts/row-level-isolation-pattern.md`. ⚠️ Validación final (test/tsc/lint/build) + deploy sin confirmar | En curso |
+| Fase C — Pestaña Usuarios (admin) | Implementado en código 2026-08-06 — isActive, protección último admin, borrado transaccional. ⚠️ Validación final + deploy sin confirmar | En curso |
+| Etapa final — Taxonomía + Compartir | Implementado en código 2026-08-06 — 3 catálogos, /taxonomy/*, /shared. ⚠️ Validación final + deploy sin confirmar | En curso |
 
 ## What Works Well
 

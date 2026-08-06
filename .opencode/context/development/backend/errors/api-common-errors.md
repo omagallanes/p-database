@@ -54,5 +54,6 @@
 |-------|-------|-----|
 | `onDelete: Cascade` surprise | Deleting a Prompt removes all junction records | Documented behavior — cascade on both FKs for all 6 junction tables |
 | Junction table FK violation | Referencing non-existent entity ID | All relations use `connect` or `create` within Prisma transactions |
+| DELETE user fails (FK) | User has prompts → FK constraint blocks `user.delete` | `prisma.$transaction([prisma.prompt.deleteMany({ where: { userId } }), prisma.user.delete({ where: { id } })])` (Fase C) |
 
 **Reference**: `project-intelligence/living-notes.md`, `project-intelligence/technical-domain.md` Known Pitfalls

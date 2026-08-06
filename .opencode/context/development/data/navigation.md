@@ -1,4 +1,4 @@
-<!-- Context: development/data/nav | Priority: high | Version: 1.1 | Updated: 2026-07-14 -->
+<!-- Context: development/data/nav | Priority: high | Version: 1.2 | Updated: 2026-08-06 -->
 
 # Data Layer
 
@@ -13,7 +13,8 @@ data/
 ├── navigation.md
 ├── concepts/
 │   ├── prisma-patterns.md       # Client setup, queries, transactions
-│   └── prisma-junction-tables.md # N:M with compound keys + Cascade
+│   ├── prisma-junction-tables.md # N:M with compound keys + Cascade
+│   └── catalog-pattern.md       # Lookup tables (Type/Status/Language) + admin CRUD
 ├── lookup/
 │   └── prisma-cheatsheet.md     # Quick Prisma query reference
 └── errors/
@@ -28,6 +29,7 @@ data/
 |------|------|
 | **Prisma client & queries** | `concepts/prisma-patterns.md` |
 | **Junction tables pattern** | `concepts/prisma-junction-tables.md` |
+| **Catalog/lookup tables** | `concepts/catalog-pattern.md` |
 | **Quick query reference** | `lookup/prisma-cheatsheet.md` |
 | **Common errors** | `errors/prisma-gotchas.md` |
 

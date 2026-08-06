@@ -1,4 +1,4 @@
-<!-- Context: development/backend/concepts | Priority: high | Version: 1.0 | Updated: 2026-08-06 -->
+<!-- Context: development/backend/concepts | Priority: high | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Concept: Row-Level Isolation Pattern
 
@@ -10,6 +10,7 @@
 - **Escrituras**: `update`/`delete`/`findUnique` filtran `where: { id, userId }` (o `checkOwnership`). Si el registro no existe o no es del usuario → **404** (`promptNotFound`), no 403: no revelar existencia de recursos ajenos.
 - **Import/Export**: la importación asigna `userId` del importador; la exportación filtra por `userId` (ya implementado así).
 - **Semántica**: el 404 es deliberado (previene enumeración); el 401 en GET protege datos antes de cualquier filtrado.
+- **Excepción "compartidos" (isShared)**: el GET `[id]` permite acceso si `userId === session.user.id` **OR** (`prompt.isShared === true` — solo lectura, el cliente no muestra edición); el PATCH usage permite incrementar si el prompt es propio OR compartido; el PUT/DELETE **siguen exigiendo propiedad** (checkOwnership). La lista `/shared` usa `where: { isShared: true, userId: { not: session.user.id } }` (solo prompts de OTROS).
 
 **Quick example**:
 ```ts
