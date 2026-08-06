@@ -170,6 +170,19 @@ describe("/api/prompts", () => {
   })
 
   describe("GET", () => {
+    it("should return 401 without authentication", async () => {
+      mockAuth.mockResolvedValue(null)
+
+      const request = new NextRequest("http://localhost:3000/api/prompts")
+
+      const response = await GET(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(401)
+      expect(data.error).toBe("Unauthorized")
+      expect(prisma.prompt.findMany).not.toHaveBeenCalled()
+    })
+
     it("should return prompts", async () => {
       const mockPrompts = [
         {
@@ -190,6 +203,22 @@ describe("/api/prompts", () => {
       expect(response.status).toBe(200)
       expect(data.items).toHaveLength(1)
       expect(prisma.prompt.findMany).toHaveBeenCalledTimes(1)
+    })
+
+    it("should only fetch prompts belonging to the authenticated user", async () => {
+      ;(prisma.prompt.findMany as jest.Mock).mockResolvedValue([])
+
+      const request = new NextRequest("http://localhost:3000/api/prompts")
+
+      await GET(request)
+
+      expect(prisma.prompt.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            userId: "test-user-id",
+          }),
+        })
+      )
     })
 
     it("should filter by search query", async () => {

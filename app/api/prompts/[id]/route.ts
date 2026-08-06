@@ -36,24 +36,21 @@ type OwnershipResult =
   | { authorized: true }
   | { authorized: false; errorKey: "promptNotFound" | "forbidden"; status: 404 | 403 }
 
-// Helper function to check ownership
+// Helper function to check ownership. Per the product decision (Fase D),
+// EVERY user — including admins — can only modify their own prompts.
+// Returns 404 (not 403) so the API never reveals whether another user's
+// prompt exists.
 async function checkOwnership(
   promptId: string,
-  userId: string,
-  isAdmin: boolean
+  userId: string
 ): Promise<OwnershipResult> {
   const prompt = await prisma.prompt.findUnique({
     where: { id: promptId },
     select: { userId: true }
   })
 
-  if (!prompt) {
+  if (!prompt || prompt.userId !== userId) {
     return { authorized: false, errorKey: "promptNotFound", status: 404 }
-  }
-
-  // Admins can edit any prompt, users can only edit their own
-  if (!isAdmin && prompt.userId !== userId) {
-    return { authorized: false, errorKey: "forbidden", status: 403 }
   }
 
   return { authorized: true }
@@ -67,8 +64,20 @@ export async function GET(
   const t = await getTranslations({ locale, namespace: "Api" })
 
   try {
+    // Auth check as FIRST operation (Fase D isolation)
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: t("unauthorized") },
+        { status: 401 }
+      )
+    }
+
+    // Ownership filter: each user (admin included) can only fetch their own prompts.
+    // Returns 404 (not 403) to avoid revealing the existence of other users' prompts.
     const prompt = await prisma.prompt.findUnique({
-      where: { id: params.id },
+      where: { id: params.id, userId: session.user.id },
       include: PROMPT_INCLUDES,
     })
 
@@ -105,8 +114,7 @@ export async function PUT(
 
     const ownership = await checkOwnership(
       params.id,
-      session.user.id,
-      session.user.role === "admin"
+      session.user.id
     )
 
     if (!ownership.authorized) {
@@ -218,8 +226,7 @@ export async function DELETE(
 
     const ownership = await checkOwnership(
       params.id,
-      session.user.id,
-      session.user.role === "admin"
+      session.user.id
     )
 
     if (!ownership.authorized) {

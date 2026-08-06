@@ -106,6 +106,66 @@ describe("/api/prompts/[id]", () => {
   })
 
   describe("GET", () => {
+    it("should return 401 without authentication", async () => {
+      // Mock unauthenticated session
+      mockAuth.mockResolvedValue(null)
+
+      const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1")
+      const response = await GET(request, { params: { id: "prompt-1" } })
+
+      expect(response.status).toBe(401)
+      expect(prisma.prompt.findUnique).not.toHaveBeenCalled()
+    })
+
+    it("should return 404 when prompt belongs to another user", async () => {
+      // Mock authenticated session (not the owner)
+      mockAuth.mockResolvedValue({
+        user: {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          role: "user",
+        },
+      })
+
+      // Ownership-filtered findUnique returns null (prompt exists but is not theirs)
+      ;(prisma.prompt.findUnique as jest.Mock).mockResolvedValue(null)
+
+      const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1")
+      const response = await GET(request, { params: { id: "prompt-1" } })
+
+      expect(response.status).toBe(404)
+      const data = await response.json()
+      expect(data.error).toBe("Prompt not found")
+    })
+
+    it("should fetch only prompts owned by the authenticated user", async () => {
+      // Mock authenticated session
+      mockAuth.mockResolvedValue({
+        user: {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          role: "user",
+        },
+      })
+
+      ;(prisma.prompt.findUnique as jest.Mock).mockResolvedValue({
+        id: "prompt-1",
+        title: "Test Prompt",
+        userId: "user-123",
+      })
+
+      const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1")
+      await GET(request, { params: { id: "prompt-1" } })
+
+      expect(prisma.prompt.findUnique).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { id: "prompt-1", userId: "user-123" },
+        })
+      )
+    })
+
     it("should return 200 with prompt and N:M relations", async () => {
       // Mock authenticated session
       mockAuth.mockResolvedValue({
@@ -195,7 +255,7 @@ describe("/api/prompts/[id]", () => {
       expect(data.success).toBe(true)
     })
 
-    it("should return 403 when user is not owner", async () => {
+    it("should return 404 when user is not owner (no existence oracle)", async () => {
       // Mock authenticated session (not owner)
       mockAuth.mockResolvedValue({
         user: {
@@ -218,12 +278,12 @@ describe("/api/prompts/[id]", () => {
       })
       const response = await PUT(request, { params: { id: "prompt-1" } })
 
-      expect(response.status).toBe(403)
+      expect(response.status).toBe(404)
       const data = await response.json()
-      expect(data).toEqual({ error: "Forbidden" })
+      expect(data).toEqual({ error: "Prompt not found" })
     })
 
-    it("should allow admin to update any prompt (admin bypass)", async () => {
+    it("should NOT allow admin to update another user's prompt (Fase D isolation)", async () => {
       // Mock authenticated session (admin)
       mockAuth.mockResolvedValue({
         user: {
@@ -240,22 +300,16 @@ describe("/api/prompts/[id]", () => {
         userId: "other-user",
       })
 
-      // Mock prompt update
-      ;(prisma.prompt.update as jest.Mock).mockResolvedValue({
-        id: "prompt-1",
-        title: "Admin Updated",
-        userId: "other-user",
-      })
-
       const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1", {
         method: "PUT",
         body: JSON.stringify({ title: "Admin Updated" }),
       })
       const response = await PUT(request, { params: { id: "prompt-1" } })
 
-      expect(response.status).toBe(200)
+      // Isolation rule: every user (admin included) only touches their own prompts
+      expect(response.status).toBe(404)
       const data = await response.json()
-      expect(data.success).toBe(true)
+      expect(data.error).toBe("Prompt not found")
     })
 
     it("should update N:M relations with $transaction", async () => {
@@ -342,7 +396,7 @@ describe("/api/prompts/[id]", () => {
       expect(data.success).toBe(true)
     })
 
-    it("should return 403 when user is not owner", async () => {
+    it("should return 404 when user is not owner (no existence oracle)", async () => {
       // Mock authenticated session (not owner)
       mockAuth.mockResolvedValue({
         user: {
@@ -364,12 +418,12 @@ describe("/api/prompts/[id]", () => {
       })
       const response = await DELETE(request, { params: { id: "prompt-1" } })
 
-      expect(response.status).toBe(403)
+      expect(response.status).toBe(404)
       const data = await response.json()
-      expect(data).toEqual({ error: "Forbidden" })
+      expect(data).toEqual({ error: "Prompt not found" })
     })
 
-    it("should allow admin to delete any prompt (admin bypass)", async () => {
+    it("should NOT allow admin to delete another user's prompt (Fase D isolation)", async () => {
       // Mock authenticated session (admin)
       mockAuth.mockResolvedValue({
         user: {
@@ -386,19 +440,15 @@ describe("/api/prompts/[id]", () => {
         userId: "other-user",
       })
 
-      // Mock prompt delete
-      ;(prisma.prompt.delete as jest.Mock).mockResolvedValue({
-        id: "prompt-1",
-      })
-
       const request = new NextRequest("http://localhost:3000/api/prompts/prompt-1", {
         method: "DELETE",
       })
       const response = await DELETE(request, { params: { id: "prompt-1" } })
 
-      expect(response.status).toBe(200)
+      // Isolation rule: every user (admin included) only touches their own prompts
+      expect(response.status).toBe(404)
       const data = await response.json()
-      expect(data.success).toBe(true)
+      expect(data).toEqual({ error: "Prompt not found" })
     })
   })
 })

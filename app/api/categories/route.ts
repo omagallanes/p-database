@@ -17,13 +17,24 @@ export async function GET(request: NextRequest) {
   const t = await getTranslations({ locale, namespace: "Api" })
 
   try {
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: t("unauthorized") },
+        { status: 401 }
+      )
+    }
+
     const categories = await prisma.category.findMany({
       include: {
         parent: true,
         children: true,
         _count: {
           select: {
-            prompts: true,
+            prompts: {
+              where: { prompt: { userId: session.user.id } },
+            },
           },
         },
       },

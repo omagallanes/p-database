@@ -20,8 +20,9 @@ async function getPrompts(searchParams: {
   language?: string | string[]
   clientProjectIds?: string[]
   useCaseIds?: string[]
-}) {
-  const where: Prisma.PromptWhereInput = {}
+}, userId: string) {
+  // Isolation: each user only sees their own prompts (Fase D)
+  const where: Prisma.PromptWhereInput = { userId }
 
   if (searchParams.search) {
     const searchWords = searchParams.search.trim().split(/\s+/).filter((word) => word.length > 0)
@@ -218,14 +219,17 @@ async function getPrompts(searchParams: {
     return { items: transformedPrompts, total: transformedPrompts.length }
 }
 
-async function getCategories() {
+async function getCategories(userId: string) {
   const categories = await prisma.category.findMany({
     include: {
       parent: true,
       children: true,
       _count: {
         select: {
-          prompts: true,
+          // Filtered relation count: only count prompts owned by this user
+          prompts: {
+            where: { prompt: { userId } },
+          },
         },
       },
     },
@@ -259,12 +263,15 @@ async function getCategories() {
   }))
 }
 
-async function getTags() {
+async function getTags(userId: string) {
   const tags = await prisma.tag.findMany({
     include: {
       _count: {
         select: {
-          prompts: true,
+          // Filtered relation count: only count prompts owned by this user
+          prompts: {
+            where: { prompt: { userId } },
+          },
         },
       },
     },
@@ -348,7 +355,8 @@ export default async function PromptsPage({
   }
 }) {
   const session = await auth()
-  const userId = session?.user?.id
+  // Isolation: empty string (no session) returns 0 prompts — safe by design
+  const userId = session?.user?.id ?? ""
   const t = await getTranslations("PromptsPage")
   
   const tagIds = Array.isArray(searchParams.tagIds)
@@ -394,9 +402,9 @@ export default async function PromptsPage({
     : []
 
   const [prompts, categories, tags, platforms, clients, useCases, viewMode] = await Promise.all([
-    getPrompts({ ...searchParams, tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds }),
-    getCategories(),
-    getTags(),
+    getPrompts({ ...searchParams, tagIds, categoryIds, platformIds, clientProjectIds, useCaseIds }, userId),
+    getCategories(userId),
+    getTags(userId),
     getPlatforms(),
     getClientProjects(),
     getUseCases(),

@@ -38,6 +38,16 @@ export async function GET(request: NextRequest) {
   const t = await getTranslations({ locale, namespace: "Api" })
 
   try {
+    // Auth check as FIRST operation (Fase D isolation)
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: t("unauthorized") },
+        { status: 401 }
+      )
+    }
+
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get("search")
     const categoryId = searchParams.get("categoryId")
@@ -51,7 +61,8 @@ export async function GET(request: NextRequest) {
     const clientProjectIds = searchParams.getAll("clientProjectIds")
     const useCaseIds = searchParams.getAll("useCaseIds")
 
-    const where: Prisma.PromptWhereInput = {}
+    // Isolation: each user only sees their own prompts (admin included)
+    const where: Prisma.PromptWhereInput = { userId: session.user.id }
 
     if (search) {
       // Split search into individual words and require ALL words to match (AND logic)

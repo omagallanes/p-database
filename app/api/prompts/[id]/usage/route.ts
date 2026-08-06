@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { auth } from "@/lib/auth"
 import { getTranslations } from "next-intl/server"
 import { getLocaleFromRequest } from "@/lib/locale"
 
@@ -11,7 +12,31 @@ export async function PATCH(
   const t = await getTranslations({ locale, namespace: "Api" })
 
   try {
-    const prompt = await prisma.prompt.update({
+    // Auth check as FIRST operation (Fase D isolation)
+    const session = await auth()
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: t("unauthorized") },
+        { status: 401 }
+      )
+    }
+
+    // Ownership check: prompt must exist AND belong to the authenticated user.
+    // Returns 404 (not 403) to avoid revealing the existence of other users' prompts.
+    const prompt = await prisma.prompt.findFirst({
+      where: { id: params.id, userId: session.user.id },
+      select: { id: true },
+    })
+
+    if (!prompt) {
+      return NextResponse.json(
+        { error: t("promptNotFound") },
+        { status: 404 }
+      )
+    }
+
+    const updatedPrompt = await prisma.prompt.update({
       where: { id: params.id },
       data: {
         usageCount: {
@@ -29,7 +54,7 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json(prompt)
+    return NextResponse.json(updatedPrompt)
   } catch (error) {
     console.error("Error updating prompt usage:", error)
     return NextResponse.json(
