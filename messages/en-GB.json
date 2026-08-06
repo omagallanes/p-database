@@ -235,6 +235,7 @@
     "signOut": "Sign Out",
     "accountTab": "Account",
     "dashboardTab": "Dashboard",
+    "usersTab": "Users",
     "languageLabel": "Language",
     "languageNote": "More languages coming soon",
     "autoLanguage": "Auto (browser)",
@@ -257,6 +258,32 @@
     "columnsHint": "Choose which fields to show and their order (applies to list and cards)",
     "moveUp": "Move up",
     "moveDown": "Move down"
+  },
+  "Users": {
+    "title": "User management",
+    "subtitle": "Create, deactivate or delete accounts",
+    "newUser": "New user",
+    "editUser": "Edit user",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "roleUser": "User",
+    "roleAdmin": "Administrator",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "deleteUser": "Delete user",
+    "deleteConfirm": "This will permanently delete the user and all their prompts. This action cannot be undone.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "empty": "No users found",
+    "loading": "Loading users...",
+    "activateConfirm": "All sessions will be restored for this user. Continue?",
+    "deactivateConfirm": "All open sessions will be closed and the user will not be able to log in. Continue?",
+    "createdAt": "Created"
   },
   "Columns": {
     "status": "Status",
@@ -331,6 +358,15 @@
     "wrongCurrentPassword": "Current password is incorrect",
     "passwordChanged": "Password changed successfully",
     "cannotDeleteOwnAccount": "Cannot delete your own account",
-    "userDeleted": "User deleted successfully"
+    "userDeleted": "User deleted successfully",
+    "cannotDeactivateLastAdmin": "Cannot deactivate the last active administrator",
+    "cannotDeleteLastAdmin": "Cannot delete the last active administrator",
+    "cannotDeactivateOwnAccount": "You cannot deactivate your own account",
+    "cannotDemoteLastAdmin": "Cannot demote the last active administrator",
+    "userNotFound": "User not found",
+    "userActivated": "User activated successfully",
+    "userDeactivated": "User deactivated successfully",
+    "userCreated": "User created successfully",
+    "userUpdated": "User updated successfully"
   }
 }

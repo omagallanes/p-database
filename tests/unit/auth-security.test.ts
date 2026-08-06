@@ -89,15 +89,27 @@ describe("auth-security", () => {
       await expect(isSessionRevoked("u1", 3)).resolves.toBe(false)
     })
 
-    it("queries only the tokenVersion field", async () => {
-      ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({ tokenVersion: 3 })
+    it("queries tokenVersion and isActive in a single request", async () => {
+      ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+        tokenVersion: 3,
+        isActive: true,
+      })
 
       await isSessionRevoked("u1", 3)
 
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { id: "u1" },
-        select: { tokenVersion: true },
+        select: { tokenVersion: true, isActive: true },
       })
+    })
+
+    it("revokes sessions of deactivated users (isActive false)", async () => {
+      ;(prisma.user.findUnique as jest.Mock).mockResolvedValue({
+        tokenVersion: 3,
+        isActive: false,
+      })
+
+      await expect(isSessionRevoked("u1", 3)).resolves.toBe(true)
     })
   })
 

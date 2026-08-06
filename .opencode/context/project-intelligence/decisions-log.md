@@ -1,8 +1,6 @@
-<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.4 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.5 | Updated: 2026-08-06 (14 entradas; deprecated en lookup/decision-details.md) -->
 
 # Decisions Log
-
-**Updated**: 2026-08-06 | **Status**: Decided items, deprecated list at bottom. Details + alternatives en `lookup/decision-details.md`.
 
 ---
 
@@ -169,9 +167,7 @@
 
 ## 12. Perfil con pestañas + personalización del escritorio (Fase B, 2026-08-06)
 
-**Context**: El perfil (MLI + Topbar) necesitaba gestión de cuenta (idioma, nombre, contraseña) y personalización del escritorio (tema, color, orden de filtros, columnas), todo persistido en la cuenta.
-
-**Decision**: Perfil en pestañas Cuenta/Escritorio (`components/ui/tabs.tsx` shadcn + Radix). **Idioma de la cuenta con prioridad sobre `accept-language`** (visitantes sin sesión → cabecera; solo 2 locales activos). Tema y color de acento con variables CSS semánticas, clase `dark` **server-side** en el root layout (anti-FOUC) + toggle idempotente en cliente. Columnas configurables con fijas siempre ★/Copiar/Editar/Título (mínimo 1); reorden con flechas, sin drag & drop ni dependencias nuevas; `filterOrder` para las cajas de filtros. Preferencias del usuario; simplicidad (flechas) sobre drag & drop.
+**Decision**: Perfil (MLI + Topbar) en pestañas Cuenta/Escritorio (`components/ui/tabs.tsx` shadcn + Radix), todo persistido en la cuenta. **Idioma de la cuenta con prioridad sobre `accept-language`** (visitantes sin sesión → cabecera; solo 2 locales activos). Tema y color de acento con variables CSS semánticas, clase `dark` **server-side** en el root layout (anti-FOUC) + toggle idempotente en cliente. Columnas configurables con fijas siempre ★/Copiar/Editar/Título (mínimo 1); reorden con flechas, sin drag & drop ni dependencias nuevas; `filterOrder` para las cajas de filtros. Preferencias del usuario; simplicidad (flechas) sobre drag & drop.
 
 **Impact**: ✅ 13 subtareas, tests 97→147 verdes, deploy PROD verificado (preferencias persisten tras recargar). ❌ Dos lecturas de BD por request (root + layout). Risk: restos de colores fijos tras el barrido (verificado visualmente).
 
@@ -181,18 +177,23 @@
 
 ## 13. Seed sin credenciales reales + hardening de autenticación (Pulido, 2026-08-06)
 
-**Context**: `prisma/seed.ts:12,30` con contraseñas reales en texto plano (expuestas en git history). Sin protección contra fuerza bruta (`UPSTASH_ENABLED=false`, sin Upstash) y sesiones JWT no revocables al cambiar la contraseña.
-
-**Decision**: Seed con `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil). **Rate limiting sin dependencias**: `failedLoginAttempts` + `lockoutUntil` en `User` (5 fallos → 15 min, errores genéricos que no revelan bloqueo). **Revocación de sesiones**: `tokenVersion Int @default(0)` en `User` y JWT, verificado con `findUnique` ligero en el callback `jwt` con política **fail-open** (BD caída → sesión sigue válida). Anti-FOUC: clase `dark` server-side. Sin Upstash: seguridad básica no merece dependencia; fail-open para no tumbar la app.
+**Decision**: Contraseñas reales en `prisma/seed.ts:12,30` (expuestas en git history) y sin protección contra fuerza bruta (`UPSTASH_ENABLED=false`, sin Upstash) ni sesiones revocables → Seed con `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil). **Rate limiting sin dependencias**: `failedLoginAttempts` + `lockoutUntil` en `User` (5 fallos → 15 min, errores genéricos que no revelan bloqueo). **Revocación de sesiones**: `tokenVersion Int @default(0)` en `User` y JWT, verificado con `findUnique` ligero en el callback `jwt` con política **fail-open** (BD caída → sesión sigue válida). Anti-FOUC: clase `dark` server-side. Sin Upstash: seguridad básica no merece dependencia; fail-open para no tumbar la app.
 
 **Impact**: ✅ Implementado y verificado (lib/auth.ts, PATCH /api/user/password incrementa `tokenVersion` y revoca todos los JWT previos); debt de living-notes resuelto. ❌ Query extra por request en el callback jwt (select ligero por PK, aceptado).
 
-**Related**: `development/backend/concepts/auth-hardening-pattern.md`, `project-intelligence/living-notes.md`
+---
+
+## 14. Aislamiento por usuario — row-level ownership (Fase D, 2026-08-06)
+
+**Decision**: El usuario "chamed" veía TODOS los prompts (lista, API GET, usage y detalle sin filtrar por propietario) → cada usuario ve SOLO sus prompts (lista, buscador, filtros, detalle, uso, exportación, importación); el admin ve solo los suyos (los 39 actuales, todos suyos — verificado, sin migración de datos). Sin diálogo de alcance en exportación. `where.userId` en toda query (findMany/update/findUnique); las APIs de prompts exigen sesión (401); prompts ajenos → 404 (no revelar existencia); contadores `_count` por usuario.
+
+**Impact**: ✅ Implementado y verificado en código (getPrompts(userId), GET /api/prompts con auth+401, usage con ownership, detalle filtrado, tests nuevos). ⚠️ Validación final (test/tsc/lint/build) y deploy sin documentar.
+
+**Related**: `development/backend/concepts/row-level-isolation-pattern.md`, `backend/errors/api-common-errors.md`
 
 ---
 
 ## Reference
 
 - `lookup/decision-details.md` — Full alternatives tables, deprecated decisions + related commits
-- `technical-domain.md` — Technical implementation
-- `business-tech-bridge.md` — Business impact of decisions
+- `technical-domain.md` — Technical implementation · `business-tech-bridge.md` — Business impact

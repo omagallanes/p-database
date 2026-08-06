@@ -37,7 +37,7 @@
 | Code standards | `technical-domain.md` → Code Standards | Strict TS, Prisma, Server Components |
 | Security requirements | `technical-domain.md` → Security Requirements | Auth, Zod, Prisma, env vars |
 | See the connection | `business-tech-bridge.md` | Business → technical mapping |
-| Know the context | `decisions-log.md` | Why decisions were made (13 entries, 2026-08-06) |
+| Know the context | `decisions-log.md` | Why decisions were made (14 entries, 2026-08-06) |
 | Current state | `living-notes.md` | Active issues and open questions |
 | Error catalog | `errors/tech-knowledge.md` | Known errors with code examples and prevention |
 | Pitfalls quick-ref | `technical-domain.md` → Known Pitfalls | High-level gotchas organized by domain |

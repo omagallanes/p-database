@@ -14,7 +14,8 @@ backend/
 ├── concepts/
 │   ├── nextjs-api-patterns.md         # Auth→Zod→Prisma→Response pattern
 │   ├── nextauth-setup.md              # NextAuth configuration + JWT
-│   └── auth-hardening-pattern.md      # Rate limiting BD + revocación tokenVersion
+│   ├── auth-hardening-pattern.md      # Rate limiting BD + revocación tokenVersion
+│   └── row-level-isolation-pattern.md # where.userId en toda query (aislamiento)
 ├── examples/
 │   └── temp-admin-bulk-op.md          # Temp admin endpoint for bulk operations
 ├── guides/
@@ -35,6 +36,7 @@ backend/
 | **API code pattern** | `concepts/nextjs-api-patterns.md` |
 | **Auth setup** | `concepts/nextauth-setup.md` |
 | **Auth hardening** (rate limit, revocación) | `concepts/auth-hardening-pattern.md` |
+| **Row-level isolation** (userId en queries) | `concepts/row-level-isolation-pattern.md` |
 | **Temp admin bulk endpoint** | `examples/temp-admin-bulk-op.md` |
 | **N:M AND filter guide** | `guides/prisma-nm-and-filters.md` |
 | **Search fields & dimensions** | `lookup/searchable-fields-dimensions.md` |

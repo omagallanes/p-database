@@ -51,6 +51,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             await bcrypt.compare(password, user.password)
             return null
           }
+
+          // Deactivated accounts (admin-managed) are rejected with the same
+          // generic message and timing as a wrong password.
+          if (user.isActive === false) {
+            await bcrypt.compare(password, user.password)
+            return null
+          }
           
           const passwordsMatch = await bcrypt.compare(password, user.password)
           if (passwordsMatch) {
@@ -110,10 +117,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Session revocation: a password change bumps tokenVersion in the DB,
       // so every previously issued JWT (including the current one) becomes
       // stale. On each request without a fresh login, compare versions and
-      // strip the identity when they differ, forcing a re-login. Fail-open:
-      // a DB error keeps the token as-is so the app stays available.
-      if (!user && token.tokenVersion !== undefined && token.id) {
-        if (await isSessionRevoked(token.id, token.tokenVersion)) {
+      // strip the identity when they differ, forcing a re-login. Tokens
+      // issued before tokenVersion existed (legacy) use -1 so they mismatch
+      // and get revoked once. Fail-open: a DB error keeps the token as-is so
+      // the app stays available.
+      if (!user && token.id) {
+        if (await isSessionRevoked(token.id, token.tokenVersion ?? -1)) {
           return revokeTokenPayload(token)
         }
       }

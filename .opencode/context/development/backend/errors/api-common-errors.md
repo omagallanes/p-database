@@ -1,4 +1,4 @@
-<!-- Context: development/backend/errors | Priority: medium | Version: 1.0 | Updated: 2026-07-14 -->
+<!-- Context: development/backend/errors | Priority: medium | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Errors: Common API Gotchas
 
@@ -13,6 +13,18 @@
 | `MissingSecret` in middleware | `AUTH_SECRET` env var not set or invalid | Generate with `openssl rand -base64 32`, add to `.env` |
 | 401 on every route | `auth()` returns null | Check `auth()` is called at route start; verify middleware isn't blocking |
 | 403 on own resource | Ownership check mismatch | `checkOwnership()` compares `prompt.userId` with `session.user.id` |
+
+---
+
+## Isolation Errors
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| **PATCH usage sin auth** (defecto preexistente, corregido Fase D) | `app/api/prompts/[id]/usage/route.ts` hacía `update` sin `auth()` ni `where.userId` — cualquiera podía incrementar `usageCount` de cualquier prompt | `auth()` → 401; `where: { id, userId }` → 404 `promptNotFound` si no existe o no es suyo |
+| GET devuelve prompts de todos | `findMany` sin `where.userId` (página y API) | Añadir `where.userId = session.user.id`; exigir sesión (401) |
+| Contadores globales | `_count.prompts` cuenta todos los usuarios | `_count: { select: { prompts: { where: { userId } } } }` |
+
+**Reference**: `concepts/row-level-isolation-pattern.md`, `project-intelligence/living-notes.md`, `project-intelligence/technical-domain.md` Known Pitfalls
 
 ---
 

@@ -14,7 +14,7 @@
 | ORM | Prisma | ^5.19.1 · schema-first, `prisma/schema.prisma` |
 | Auth | NextAuth.js (v5 beta) | JWT · Prisma adapter · credentials · bcryptjs |
 | Validation | Zod | ^3.23.8 |
-| Testing | Jest + React Testing Library | ^29.7.0 · **147 tests, 23 suites, 100% passing** |
+| Testing | Jest + React Testing Library | ^29.7.0 · **203 tests, 27 suites, 100% passing** |
 | Styling | TailwindCSS + shadcn/ui | + lucide-react, cva, tailwind-merge, clsx |
 | Linting | ESLint + eslint-config-next | ^8.57.1 |
 | Deployment | Vercel (Hobby) + Neon PostgreSQL | **Completado** (ya no pendiente) |
@@ -34,7 +34,7 @@
 | Perfil con pestañas (Cuenta/Escritorio) | ✅ Completo | Idioma en cuenta con prioridad | ✅ Completo |
 | Tema claro/oscuro + color de acento | ✅ Completo | Orden de filtros y columnas | ✅ Completo |
 | Panel de filtros ocultable + MLI colapsable | ✅ Completo | Favoritos en barra superior | ✅ Completo |
-| Panel de administración | ⚠️ Endpoints sin UI | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
+| Panel de administración (usuarios) | ✅ Completo | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
 
 ## Arquitectura
 
@@ -135,7 +135,7 @@ middleware.ts
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` / `build` / `start` / `lint` | Desarrollo, build standalone, producción, ESLint |
-| `npm test` / `test:watch` | Jest — **147 tests, 23 suites, 100% passing** |
+| `npm test` / `test:watch` | Jest — **203 tests, 27 suites, 100% passing** |
 | `npx tsc --noEmit` | TypeScript check rápido |
 | `npm run db:*` | push · migrate · seed · generate · migrate-data |
 | `npx prisma studio` / `migrate dev` | UI BD / migración en dev |
@@ -176,7 +176,6 @@ middleware.ts
 
 - 🔴 **Credenciales visibles en `prisma/seed.ts` líneas 12 y 30** (deuda técnica de prioridad alta)
 - ⚠️ Página `/auth/error` referenciada pero no creada (ver Autenticación)
-- Panel de administración sin UI (endpoints `/api/users/*` sin frontend)
 - i18n: selector de idioma pendiente (otro plan de trabajo) y 8 idiomas declarados sin traducir (ver `docs/plan-traduccion-i18n.md`)
 
 ## 📂 Codebase References

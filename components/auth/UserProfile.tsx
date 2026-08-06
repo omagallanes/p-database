@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProfileAccountTab } from "@/components/auth/ProfileAccountTab"
 import { ProfileDashboardTab } from "@/components/auth/ProfileDashboardTab"
+import { ProfileUsersTab } from "@/components/auth/ProfileUsersTab"
 import type { UIPreferences } from "@/lib/ui-preferences"
 
 interface UserProfileProps {
@@ -28,6 +29,10 @@ export function UserProfile({
     return null
   }
 
+  // The user management tab is restricted to administrators; the API
+  // enforces the same rule, this only controls what the UI renders.
+  const isAdmin = session.user.role === "admin"
+
   return (
     <div className="space-y-4">
       <div>
@@ -38,6 +43,7 @@ export function UserProfile({
         <TabsList>
           <TabsTrigger value="account">{t("accountTab")}</TabsTrigger>
           <TabsTrigger value="dashboard">{t("dashboardTab")}</TabsTrigger>
+          {isAdmin && <TabsTrigger value="users">{t("usersTab")}</TabsTrigger>}
         </TabsList>
         <TabsContent value="account">
           <ProfileAccountTab initialLanguage={initialLanguage} />
@@ -45,6 +51,11 @@ export function UserProfile({
         <TabsContent value="dashboard">
           <ProfileDashboardTab />
         </TabsContent>
+        {isAdmin && (
+          <TabsContent value="users">
+            <ProfileUsersTab />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   )

@@ -235,6 +235,7 @@
     "signOut": "Cerrar sesión",
     "accountTab": "Cuenta",
     "dashboardTab": "Escritorio",
+    "usersTab": "Usuarios",
     "languageLabel": "Idioma",
     "languageNote": "Próximamente más idiomas",
     "autoLanguage": "Automático (navegador)",
@@ -257,6 +258,32 @@
     "columnsHint": "Elige qué campos mostrar y su orden (aplica a lista y tarjetas)",
     "moveUp": "Subir",
     "moveDown": "Bajar"
+  },
+  "Users": {
+    "title": "Gestión de usuarios",
+    "subtitle": "Crea, desactiva o elimina cuentas",
+    "newUser": "Nuevo usuario",
+    "editUser": "Editar usuario",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "role": "Rol",
+    "roleUser": "Usuario",
+    "roleAdmin": "Administrador",
+    "status": "Estado",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "deleteUser": "Eliminar usuario",
+    "deleteConfirm": "Esto eliminará permanentemente al usuario y todos sus prompts. Esta acción no se puede deshacer.",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "empty": "No se encontraron usuarios",
+    "loading": "Cargando usuarios...",
+    "activateConfirm": "Se restaurarán todas las sesiones de este usuario. ¿Continuar?",
+    "deactivateConfirm": "Se cerrarán todas las sesiones abiertas y el usuario no podrá iniciar sesión. ¿Continuar?",
+    "createdAt": "Fecha de alta"
   },
   "Columns": {
     "status": "Estado",
@@ -331,6 +358,15 @@
     "wrongCurrentPassword": "La contraseña actual no es correcta",
     "passwordChanged": "Contraseña cambiada correctamente",
     "cannotDeleteOwnAccount": "No se puede eliminar tu propia cuenta",
-    "userDeleted": "Usuario eliminado correctamente"
+    "userDeleted": "Usuario eliminado correctamente",
+    "cannotDeactivateLastAdmin": "No se puede desactivar al último administrador activo",
+    "cannotDeleteLastAdmin": "No se puede eliminar al último administrador activo",
+    "cannotDeactivateOwnAccount": "No puedes desactivar tu propia cuenta",
+    "cannotDemoteLastAdmin": "No se puede cambiar el rol del último administrador activo",
+    "userNotFound": "Usuario no encontrado",
+    "userActivated": "Usuario activado correctamente",
+    "userDeactivated": "Usuario desactivado correctamente",
+    "userCreated": "Usuario creado correctamente",
+    "userUpdated": "Usuario actualizado correctamente"
   }
 }
