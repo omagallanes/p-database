@@ -44,7 +44,7 @@ function FavoritesSwitch() {
         checked={isFavorite}
         onCheckedChange={handleToggle}
       />
-      <span className="text-sm text-gray-700">{t("showFavoritesOnly")}</span>
+      <span className="text-sm text-foreground">{t("showFavoritesOnly")}</span>
     </label>
   )
 }
@@ -70,17 +70,17 @@ export function Topbar() {
   }
 
   return (
-    <div className="flex h-16 items-center justify-between border-b border-purple-100 bg-white/80 backdrop-blur-sm px-6 shadow-sm">
+    <div className="flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm px-6 shadow-sm">
       <div className="flex items-center gap-2 flex-1 max-w-md">
         <form onSubmit={handleSearch} className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-accent" />
             <Input
               type="text"
               placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-400"
+              className="pl-10 border-accent focus:border-accent focus:ring-accent"
             />
           </div>
         </form>
@@ -91,7 +91,7 @@ export function Topbar() {
               setSearchQuery("")
               router.push("/prompts")
             }}
-            className="text-sm text-purple-600 hover:text-purple-800 hover:underline px-1 whitespace-nowrap"
+            className="text-sm text-accent hover:text-accent-strong hover:underline px-1 whitespace-nowrap"
           >
             {tCommon("clear")}
           </button>
@@ -100,7 +100,7 @@ export function Topbar() {
 
       <div className="flex items-center gap-2">
         {status === "loading" ? (
-          <div className="text-sm text-gray-500">{tCommon("loading")}</div>
+          <div className="text-sm text-muted-foreground">{tCommon("loading")}</div>
         ) : session?.user ? (
           <>
             <Link href="/prompts/new">
@@ -114,7 +114,7 @@ export function Topbar() {
               variant="outline"
               onClick={() => setFiltersVisible(!filtersVisible)}
               aria-label={filtersVisible ? t("hideFilters") : t("showFilters")}
-              className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+              className="border-accent hover:bg-accent-soft hover:border-accent"
             >
               <span className="relative">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -122,7 +122,7 @@ export function Topbar() {
                   <span
                     role="status"
                     aria-label={t("filtersActive", { count: activeFilterCount })}
-                    className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-purple-600 px-1 text-[10px] font-bold text-white"
+                    className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-white"
                   >
                     {activeFilterCount}
                   </span>
@@ -136,7 +136,7 @@ export function Topbar() {
             </Suspense>
 
             <Link href="/auth/profile">
-              <Button variant="ghost" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
+              <Button variant="ghost" className="border-accent hover:bg-accent-soft hover:border-accent">
                 {session.user.name}
               </Button>
             </Link>
@@ -144,7 +144,7 @@ export function Topbar() {
             <Button
               variant="ghost"
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+              className="border-accent hover:bg-accent-soft hover:border-accent"
             >
               {t("signOut")}
             </Button>
@@ -152,7 +152,7 @@ export function Topbar() {
         ) : (
           <>
             <Link href="/auth/signin">
-              <Button variant="ghost" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
+              <Button variant="ghost" className="border-accent hover:bg-accent-soft hover:border-accent">
                 {t("signIn")}
               </Button>
             </Link>

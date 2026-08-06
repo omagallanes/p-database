@@ -71,13 +71,13 @@ class CategoryErrorBoundary extends React.Component<
       return (
         <div className="flex flex-col items-center justify-center p-12">
           <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <h2 className="text-2xl font-bold text-foreground mb-2">
             {this.props.errorTitle}
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             {this.props.errorMessage}
           </p>
-          <pre className="text-sm text-red-600 bg-red-50 p-4 rounded-lg max-w-lg overflow-auto mb-4">
+          <pre className="text-sm text-red-600 dark:text-red-400 bg-red-500/10 p-4 rounded-lg max-w-lg overflow-auto mb-4">
             {this.state.error?.message}
           </pre>
           <button
@@ -85,7 +85,7 @@ class CategoryErrorBoundary extends React.Component<
               this.setState({ hasError: false, error: null })
               window.location.reload()
             }}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent-strong transition-colors"
           >
             {this.props.reloadPage}
           </button>
@@ -247,7 +247,7 @@ function CategoriesPage() {
   const renderCategory = (category: Category, level = 0) => {
     return (
       <div key={category.id} className="ml-4">
-        <Card className="mb-2 gradient-card shadow-glow hover:shadow-glow-hover transition-all border-purple-100">
+        <Card className="mb-2 gradient-card shadow-glow hover:shadow-glow-hover transition-all border-accent">
           <CardContent className="flex items-center justify-between p-4">
             <div className="flex-1">
               <div className="font-semibold">{category.name}</div>
@@ -260,7 +260,7 @@ function CategoriesPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => handleEdit(category)}
-                className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+                className="border-accent hover:bg-accent-soft hover:border-accent"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -292,10 +292,10 @@ function CategoriesPage() {
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--accent-color)] to-pink-500 bg-clip-text text-transparent mb-2">
             {t("title")}
           </h1>
-          <p className="text-gray-600 font-medium">
+          <p className="text-muted-foreground font-medium">
             {t("subtitle")}
           </p>
         </div>

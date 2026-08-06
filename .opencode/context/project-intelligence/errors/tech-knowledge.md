@@ -116,6 +116,21 @@
 
 ---
 
+### 1.8 NextAuth v5 JWT cachea `name`: cambiar nombre en BD no se refleja en sesión
+
+**Estado:** ✅ Validado (Fase B, 2026-08-06)  
+**Código:** `lib/auth.ts` · `app/api/user/profile/route.ts` · `components/auth/UserProfile.tsx`  
+**Descripción:** Con estrategia JWT, el token cachea `token.name` en login. Si se actualiza el nombre del usuario en BD, la sesión del cliente sigue mostrando el antiguo hasta que el token se refresque. El endpoint de perfil devuelve el nuevo nombre, pero NextAuth v5 no re-lee la BD automáticamente.
+
+**Solución:**
+- El callback `jwt` ya contempla `trigger === "update"` (y ahora también `language`, `tokenVersion`) para reflejar cambios sin re-login.
+- El cliente llama `useSession().update()` (next-auth/react) tras el PATCH de perfil para propagar la nueva sesión (`session.user.name`).
+- No confiar en que `auth()` re-lea la BD: la estrategia JWT cachea hasta expiración o `update()`.
+
+**Cross-ref:** §1.7 (no envolver `auth()` con `cache()`), `development/backend/concepts/auth-hardening-pattern.md` (tokenVersion)
+
+---
+
 ## 2. Prisma y Base de Datos
 
 ### 2.1 IDs Compuestos en Junction Tables para Relaciones N:M

@@ -86,7 +86,7 @@ export default function MetadataSegment({
           id="isFavorite"
           checked={isFavorite}
           onChange={(e) => onFavoriteChange(e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300"
+          className="h-4 w-4 rounded border-input"
         />
         <Label htmlFor="isFavorite" className="cursor-pointer">
           {t("markAsFavorite")}

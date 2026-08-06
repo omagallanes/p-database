@@ -2,7 +2,9 @@ import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server"
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth
+  // A revoked session (password rotated) has no user id — treat it as
+  // logged-out so the user can reach /auth/signin and re-login.
+  const isLoggedIn = !!req.auth?.user?.id
   const { pathname } = req.nextUrl
 
   // Rutas públicas (siempre accesibles sin autenticación)

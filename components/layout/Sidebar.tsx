@@ -32,7 +32,7 @@ export function Sidebar() {
     >
       <div
         className={cn(
-          "flex h-16 shrink-0 items-center border-b border-purple-400/20 transition-all duration-300",
+          "flex h-16 shrink-0 items-center border-b border-white/20 transition-all duration-300",
           sidebarCollapsed ? "justify-center gap-1 px-1" : "px-6"
         )}
       >
@@ -85,7 +85,7 @@ export function Sidebar() {
         })}
       </nav>
       {status === "authenticated" && session?.user && (
-        <div className="border-t border-purple-400/20 p-4">
+        <div className="border-t border-white/20 p-4">
           <span className={cn("group relative", sidebarCollapsed && "flex justify-center")}>
             <Link
               href="/auth/profile"

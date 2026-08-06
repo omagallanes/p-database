@@ -6,13 +6,13 @@ import { getTranslations } from "next-intl/server"
 import { getLocaleFromRequest } from "@/lib/locale"
 import {
   parseUIPreferences,
-  UI_PREFERENCES_DEFAULTS,
-  uiPreferencesSchema,
+  uiPreferencesShapeSchema,
 } from "@/lib/ui-preferences"
 
 const updatePreferencesSchema = z.object({
   promptListViewPreference: z.enum(["cards", "list"]).optional(),
-  uiPreferences: uiPreferencesSchema.optional(),
+  language: z.enum(["en-GB", "es-ES"]).nullable().optional(),
+  uiPreferences: uiPreferencesShapeSchema.optional(),
 })
 
 const PROMPT_LIST_VIEW_DEFAULT = "cards" as const
@@ -58,10 +58,12 @@ export async function PATCH(request: NextRequest) {
         ...(data.promptListViewPreference
           ? { promptListViewPreference: data.promptListViewPreference }
           : {}),
+        ...(data.language !== undefined ? { language: data.language } : {}),
         uiPreferences,
       },
       select: {
         promptListViewPreference: true,
+        language: true,
         uiPreferences: true,
       },
     })
@@ -91,7 +93,7 @@ export async function GET(request: NextRequest) {
     
     if (!session?.user?.id) {
       return NextResponse.json(
-        { data: { promptListViewPreference: PROMPT_LIST_VIEW_DEFAULT, uiPreferences: UI_PREFERENCES_DEFAULTS }, success: true }
+        { data: { promptListViewPreference: PROMPT_LIST_VIEW_DEFAULT, language: null, uiPreferences: parseUIPreferences(null) }, success: true }
       )
     }
 
@@ -99,6 +101,7 @@ export async function GET(request: NextRequest) {
       where: { id: session.user.id },
       select: {
         promptListViewPreference: true,
+        language: true,
         uiPreferences: true,
       },
     })
@@ -106,10 +109,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ 
       data: { 
         promptListViewPreference: user?.promptListViewPreference || PROMPT_LIST_VIEW_DEFAULT,
-        uiPreferences: {
-          ...UI_PREFERENCES_DEFAULTS,
-          ...uiPreferencesSchema.parse(user?.uiPreferences ?? {}),
-        },
+        language: user?.language ?? null,
+        uiPreferences: parseUIPreferences(user?.uiPreferences),
       },
       success: true,
     })

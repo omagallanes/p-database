@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/lookup | Priority: low | Version: 1.1 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/lookup | Priority: low | Version: 1.2 | Updated: 2026-08-06 -->
 
 # Lookup: Decision Details & Alternatives
 
@@ -93,6 +93,18 @@ Related: commit `37bb4b8`, `docker-compose.yml` (retained for local PG), `Docker
 | Cookie de preferencias | Síncrona con la sesión | Tamaño limitado, sin estructura tipada | JSON en BD más simple y escalable |
 
 Related: `contexts/UIContext.tsx`, `lib/ui-preferences.ts`, `app/api/user/preferences/route.ts`
+
+---
+
+## Deprecated Decisions
+
+| Decision | Replaced By | Why |
+|----------|-------------|-----|
+| Railway deployment with Docker | Vercel (D2) | Docker complexity > value |
+| SQLite as primary DB | PostgreSQL (D1) | Unfit for production/serverless |
+| String fields for prompt metadata | N:M junctions (D3) | Needed integrity + multi-value |
+| KILO agent framework | OAC (D6) | Standardization |
+| VPS/Hetzner self-hosting | Vercel (D2) | Eliminated unused infra |
 
 ---
 

@@ -15,7 +15,11 @@ model User {
   emailVerified            DateTime?
   image                    String?
   password                 String?
+  failedLoginAttempts      Int       @default(0)
+  lockoutUntil             DateTime?
+  tokenVersion             Int       @default(0)
   role                     String    @default("user")
+  language                 String?
   promptListViewPreference String    @default("cards")
   uiPreferences            Json      @default("{}")
   createdAt                DateTime  @default(now())

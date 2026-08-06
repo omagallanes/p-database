@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl"
 import { LoginForm } from "@/components/auth/LoginForm"
 import { SignupForm } from "@/components/auth/SignupForm"
 import { UserProfile } from "@/components/auth/UserProfile"
+import { UIContextProvider } from "@/contexts/UIContext"
+import { UI_PREFERENCES_DEFAULTS } from "@/lib/ui-preferences"
 import messages from "../../messages/en-GB.json"
 
 function renderWithI18n(ui: React.ReactElement) {
@@ -68,6 +70,24 @@ describe("Authentication Components", () => {
   })
 
   describe("UserProfile", () => {
+    // UserProfile (Fase B) requires initial props and its Dashboard tab
+    // consumes the UI context — mirror the app layout wiring.
+    function renderProfile() {
+      return renderWithI18n(
+        <UIContextProvider
+          initialTheme={UI_PREFERENCES_DEFAULTS.theme}
+          initialAccentColor={UI_PREFERENCES_DEFAULTS.accentColor}
+          initialFilterOrder={UI_PREFERENCES_DEFAULTS.filterOrder}
+          initialColumns={UI_PREFERENCES_DEFAULTS.columns}
+        >
+          <UserProfile
+            initialLanguage={null}
+            initialPreferences={UI_PREFERENCES_DEFAULTS}
+          />
+        </UIContextProvider>
+      )
+    }
+
     it("should render user profile when authenticated", () => {
       const { useSession } = require("next-auth/react")
       useSession.mockReturnValue({
@@ -82,7 +102,7 @@ describe("Authentication Components", () => {
         status: "authenticated",
       })
 
-      renderWithI18n(<UserProfile />)
+      renderProfile()
 
       expect(screen.getByText(/test user/i)).toBeInTheDocument()
       expect(screen.getByText(/test@example.com/i)).toBeInTheDocument()
@@ -96,7 +116,7 @@ describe("Authentication Components", () => {
         status: "unauthenticated",
       })
 
-      const { container } = renderWithI18n(<UserProfile />)
+      const { container } = renderProfile()
       expect(container.firstChild).toBeNull()
     })
   })

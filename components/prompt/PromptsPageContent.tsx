@@ -28,6 +28,7 @@ export interface TransformedPrompt {
   tags: { tag: { id: string; name: string; slug: string } }[]
   platforms: { platform: { id: string; name: string; slug: string } }[]
   clientProjects: { clientProject: { id: string; name: string; slug: string } }[]
+  useCases: { useCase: { id: string; name: string; slug: string } }[]
   user: { name: string; email: string } | null
   createdAt: string
   updatedAt: string
@@ -89,7 +90,7 @@ export function PromptsPageContent({
   useCases,
   initialFilters,
 }: PromptsPageContentProps) {
-  const { filtersVisible, setActiveFilterCount } = useUIContext()
+  const { filtersVisible, setActiveFilterCount, filterOrder, columns } = useUIContext()
 
   const activeFilterCount = useMemo(
     () => countActiveFilters(initialFilters),
@@ -112,11 +113,12 @@ export function PromptsPageContent({
             clients={clients}
             useCases={useCases}
             initialFilters={initialFilters}
+            filterOrder={filterOrder}
           />
         </div>
       )}
       <div className="flex-1">
-        <PromptList prompts={prompts} />
+        <PromptList prompts={prompts} columns={columns} />
       </div>
     </div>
   )

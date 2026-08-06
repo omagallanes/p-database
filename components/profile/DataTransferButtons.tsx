@@ -85,7 +85,7 @@ export function DataTransferButtons() {
         variant="outline"
         onClick={handleExport}
         disabled={busy}
-        className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+        className="border-accent hover:bg-accent-soft hover:border-accent"
       >
         <Download className="mr-2 h-4 w-4" />
         {t("export")}
@@ -99,7 +99,7 @@ export function DataTransferButtons() {
         }}
       >
         <DialogTrigger asChild>
-          <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
+          <Button variant="outline" className="border-accent hover:bg-accent-soft hover:border-accent">
             <Upload className="mr-2 h-4 w-4" />
             {t("import")}
           </Button>

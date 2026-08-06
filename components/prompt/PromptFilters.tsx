@@ -1,11 +1,12 @@
 "use client"
 
-import { useCallback, useMemo } from "react"
+import { Fragment, useCallback, useMemo, type ReactNode } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
+import { DEFAULT_FILTER_ORDER } from "@/lib/ui-preferences"
 
 interface PromptFiltersProps {
   categories: Array<{ id: string; name: string; slug: string }>
@@ -54,7 +55,8 @@ export function PromptFilters({
   clients,
   useCases,
   initialFilters,
-}: PromptFiltersProps) {
+  filterOrder = DEFAULT_FILTER_ORDER,
+}: PromptFiltersProps & { filterOrder?: readonly string[] }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const t = useTranslations("PromptFilters")
@@ -147,29 +149,21 @@ export function PromptFilters({
     [selectedArrays],
   )
 
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-800">{t("title")}</h2>
-        {(initialFilters.categoryId ||
-          selectedCategoryIds.length > 0 ||
-          selectedPlatformIds.length > 0 ||
-          selectedTagIds.length > 0 ||
-          initialFilters.platform ||
-          selectedStatuses.length > 0 ||
-          selectedLanguages.length > 0 ||
-          selectedClientProjectIds.length > 0 ||
-          selectedUseCaseIds.length > 0) && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} aria-label={t("clearFilters")} className="hover:bg-purple-50 hover:text-purple-700">
-            <X className="h-4 w-4" />
-            <span className="sr-only">{t("clearFilters")}</span>
-          </Button>
-        )}
-      </div>
+  // Only trust filterOrder when it lists every known box. Empty or partial
+  // orders (legacy data, provider-less renders) fall back to the default so
+  // the full panel is always shown; unknown keys are skipped at render time.
+  const order: readonly string[] =
+    DEFAULT_FILTER_ORDER.every((key) => filterOrder.includes(key))
+      ? filterOrder
+      : DEFAULT_FILTER_ORDER
 
-      <Card className="gradient-card shadow-glow border-purple-100">
+  // Key → card map. Cards are functions so unknown filterOrder keys resolve
+  // to nothing (optional chaining) instead of breaking the render.
+  const FILTER_CARDS: Record<string, () => ReactNode> = {
+    category: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("category")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("category")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {categories.map((category) => {
@@ -179,7 +173,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("categoryIds", category.id)}
                   onChange={() => toggleFilter("categoryIds", category.id)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{category.name}</span>
               </label>
@@ -187,10 +181,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    tags: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("tags")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("tags")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {tags.map((tag) => {
@@ -203,7 +198,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("tagIds", tag.id)}
                   onChange={() => toggleFilter("tagIds", tag.id)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{tag.name}</span>
               </label>
@@ -211,10 +206,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    platform: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("platform")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("platform")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {platforms.map((platform) => {
@@ -224,7 +220,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("platformIds", platform.id)}
                   onChange={() => toggleFilter("platformIds", platform.id)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{platform.name}</span>
               </label>
@@ -232,10 +228,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    status: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("status")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("status")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {STATUSES.map((statusOption) => {
@@ -245,7 +242,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("status", statusOption.value)}
                   onChange={() => toggleFilter("status", statusOption.value)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{t(statusOption.labelKey)}</span>
               </label>
@@ -253,10 +250,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    language: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("language")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("language")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {LANGUAGES.map((languageOption) => {
@@ -266,7 +264,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("language", languageOption.code)}
                   onChange={() => toggleFilter("language", languageOption.code)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{t(languageOption.nameKey)}</span>
               </label>
@@ -274,10 +272,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    clientProject: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("clientProject")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("clientProject")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {clients.map((client) => {
@@ -287,7 +286,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("clientProjectIds", client.id)}
                   onChange={() => toggleFilter("clientProjectIds", client.id)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{client.name}</span>
               </label>
@@ -295,10 +294,11 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
+    ),
+    useCase: () => (
+      <Card className="gradient-card shadow-glow border-accent">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">{t("useCase")}</CardTitle>
+          <CardTitle className="text-sm font-semibold text-foreground">{t("useCase")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {useCases.map((useCase) => {
@@ -308,7 +308,7 @@ export function PromptFilters({
                   type="checkbox"
                   checked={isSelected("useCaseIds", useCase.id)}
                   onChange={() => toggleFilter("useCaseIds", useCase.id)}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 rounded border-input"
                 />
                 <span className="text-sm">{useCase.name}</span>
               </label>
@@ -316,6 +316,32 @@ export function PromptFilters({
           })}
         </CardContent>
       </Card>
+    ),
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-foreground">{t("title")}</h2>
+        {(initialFilters.categoryId ||
+          selectedCategoryIds.length > 0 ||
+          selectedPlatformIds.length > 0 ||
+          selectedTagIds.length > 0 ||
+          initialFilters.platform ||
+          selectedStatuses.length > 0 ||
+          selectedLanguages.length > 0 ||
+          selectedClientProjectIds.length > 0 ||
+          selectedUseCaseIds.length > 0) && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} aria-label={t("clearFilters")} className="hover:bg-accent-soft hover:text-accent-strong">
+            <X className="h-4 w-4" />
+            <span className="sr-only">{t("clearFilters")}</span>
+          </Button>
+        )}
+      </div>
+
+      {order.map((key) => (
+        <Fragment key={key}>{FILTER_CARDS[key]?.()}</Fragment>
+      ))}
     </div>
   )
 }

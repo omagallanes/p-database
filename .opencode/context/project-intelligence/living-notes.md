@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/notes | Priority: high | Version: 1.4 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/notes | Priority: high | Version: 1.5 | Updated: 2026-08-06 -->
 
 # Living Notes
 
@@ -8,29 +8,17 @@
 
 | Item | Impact | Priority | Mitigation |
 |------|--------|----------|------------|
-| Hardcoded credentials in seed | Security risk — passwords in plain text in repo | High | Move to env vars with dev fallback |
 | Legacy string fields on Prompt | Data duplication with N:M junction tables | Medium | Remove after confirming no v1.0 imports in production |
-| Rate limiting not implemented | No API abuse protection | Medium | Implement with Upstash Redis when needed |
 
-### Hardcoded Credentials in `prisma/seed.ts`
-**Priority**: High
-**Impact**: Passwords `G4VK2F56FTS96YDG` and `281116pDB` are hardcoded in plain text in the repository (`prisma/seed.ts:12,30`). Any commit exposes them permanently.
-**Root Cause**: Seed file written without env var support.
-**Proposed Solution**: Read admin/user passwords from `process.env` with fallback only in development mode.
-**Status**: Acknowledged
+### Resolved (2026-08-06, Pulido)
+- ~~Hardcoded credentials in seed~~ → `prisma/seed.ts` ahora usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (decisión #13).
+- ~~Rate limiting not implemented~~ → implementado sin Upstash (BD): `failedLoginAttempts` + `lockoutUntil` (5 fallos → 15 min) en login y cambio de contraseña; revocación de sesiones con `tokenVersion`. Ver `development/backend/concepts/auth-hardening-pattern.md`.
 
 ### Legacy String Fields on Prompt Model
 **Priority**: Medium
 **Impact**: `platform`, `useCase`, `clientOrProject`, `modelHint` fields on the `Prompt` model coexist with N:M junction tables (`PromptPlatform`, `PromptClientProject`, `PromptUseCase`, `PromptModelHint`). Data can be duplicated or inconsistent.
 **Root Cause**: Kept for backwards compatibility with v1.0 imports (see `app/api/import/prompts/route.ts:42-50`).
 **Proposed Solution**: Remove fields after confirming no v1.0 imports in production.
-**Status**: Deferred
-
-### Rate Limiting Not Implemented
-**Priority**: Medium
-**Impact**: All API routes are unprotected against abuse. Feature flag `UPSTASH_ENABLED="false"` in both `.env.example` and `.env.production`. Upstash credentials (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) are empty.
-**Root Cause**: Planned but not executed (Fase 4 scope was reduced).
-**Proposed Solution**: Implement with Upstash Redis when rate limiting becomes necessary.
 **Status**: Deferred
 
 ## Known Issues
@@ -62,7 +50,7 @@
 
 ## Gotchas for Maintainers
 
-- **Seed passwords are in plain text** in `prisma/seed.ts` — do NOT deploy to production without addressing this. The passwords `G4VK2F56FTS96YDG` and `281116pDB` will be in your git history.
+- **Seed passwords**: `prisma/seed.ts` usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil) desde el Pulido 2026-08-06 — las contraseñas antiguas siguen expuestas en git history. Ejecutar el seed requiere definir esas env vars.
 - **All 6 junction tables** (`PromptTag`, `PromptPlatform`, `PromptClientProject`, `PromptUseCase`, `PromptModelHint`, `PromptCategory`) use `onDelete: Cascade` on **both** foreign keys — deleting a Prompt automatically removes all its junction records, and deleting a Tag/Platform/etc. removes all its prompt associations.
 - **Export v2.0** transforms N:M relations to arrays of names (e.g., `platforms: ["CURSOR"]`). The **import parser** accepts both v2.0 (arrays) and v1.0 (legacy string fields). Version detection is via `body.version === "2.0"` in `app/api/import/prompts/route.ts:627`.
 - **Middleware** (`middleware.ts`) protects all routes except `/auth/signin`, `/auth/signup`, and `/auth/error` — but `/auth/error` doesn't exist (see Known Issues).
@@ -78,6 +66,8 @@
 |---------|------|----------|
 | Production deployment to Vercel | Deployed (2026-04/07) — smoke tests verified, 22 static pages built | Done |
 | Fase A — Interfaz (sidebar colapsable, filtros ocultables, preferencias en cuenta) | Implementado 2026-08-06 — ver `development/frontend/concepts/ui-preferences-pattern.md` | Done |
+| Fase B — Perfil en pestañas + personalización (idioma, tema, color, orden filtros, columnas) | Implementado 2026-08-06 — ver `development/frontend/concepts/theme-accent-pattern.md` | Done |
+| Pulido — Seguridad (rate limiting, revocación tokenVersion, anti-FOUC, seed seguro) | Implementado 2026-08-06 — ver `development/backend/concepts/auth-hardening-pattern.md` | Done |
 
 ## What Works Well
 

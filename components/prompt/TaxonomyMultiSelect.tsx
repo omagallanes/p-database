@@ -28,15 +28,15 @@ export default function TaxonomyMultiSelect({
   if (items.length === 0) {
     return (
       <fieldset className="space-y-2">
-        <legend className="text-sm font-semibold text-gray-700">{label}</legend>
-        <p className="text-sm text-gray-400">{t("noOptionsAvailable")}</p>
+        <legend className="text-sm font-semibold text-foreground">{label}</legend>
+        <p className="text-sm text-muted-foreground">{t("noOptionsAvailable")}</p>
       </fieldset>
     )
   }
 
   return (
     <fieldset className="space-y-2">
-      <legend className="text-sm font-semibold text-gray-700">{label}</legend>
+      <legend className="text-sm font-semibold text-foreground">{label}</legend>
       <div className="grid grid-cols-2 gap-2">
         {items.map((item) => {
           const isSelected = selectedIds.includes(item.id)
@@ -51,11 +51,11 @@ export default function TaxonomyMultiSelect({
                 id={`${groupId}-${item.id}`}
                 checked={isSelected}
                 onChange={() => onChange(item.id)}
-                className="h-4 w-4 rounded border-gray-300"
+                className="h-4 w-4 rounded border-input"
               />
               <span
                 className={`text-sm ${
-                  isSelected ? "font-medium text-gray-900" : "text-gray-600"
+                  isSelected ? "font-medium text-foreground" : "text-muted-foreground"
                 }`}
               >
                 {item.name}

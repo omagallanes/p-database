@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/development/lookup-commands | Priority: low | Version: 1.0 | Updated: 2026-07-16 -->
+<!-- Context: project-intelligence/development/lookup-commands | Priority: low | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Lookup: Plan C Commands
 
@@ -29,6 +29,14 @@ git diff-tree --no-commit-id -r <sha> --name-only
 ## Deploy
 ```bash
 source .env && npx vercel --prod --token="$VERCEL_TOKEN"
+```
+
+## Migración BD (Neon, sin BD local)
+```bash
+# NO hay BD local: la única BD es Neon (producción). No hay carpeta prisma/migrations (gitignored).
+set -a; source .env.local; set +a      # DATABASE_URL → Neon
+npx prisma db push                     # aplica cambios del schema directamente a Neon
+npx prisma generate                    # regenera el cliente Prisma
 ```
 
 ## Dump DB

@@ -1,10 +1,8 @@
-<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.3 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.4 | Updated: 2026-08-06 -->
 
 # Decisions Log
 
-> Major architectural decisions with context, rationale, and impact. Details + alternatives tables in `lookup/decision-details.md`.
-
-**Updated**: 2026-08-06 | **Status**: Decided items, deprecated list at bottom
+**Updated**: 2026-08-06 | **Status**: Decided items, deprecated list at bottom. Details + alternatives en `lookup/decision-details.md`.
 
 ---
 
@@ -169,18 +167,32 @@
 
 ---
 
-## Deprecated Decisions
+## 12. Perfil con pestañas + personalización del escritorio (Fase B, 2026-08-06)
 
-| Decision | Replaced By | Why |
-|----------|-------------|-----|
-| Railway deployment with Docker | Vercel (D2) | Docker complexity > value |
-| SQLite as primary DB | PostgreSQL (D1) | Unfit for production/serverless |
-| String fields for prompt metadata | N:M junctions (D3) | Needed integrity + multi-value |
-| KILO agent framework | OAC (D6) | Standardization |
-| VPS/Hetzner self-hosting | Vercel (D2) | Eliminated unused infra |
+**Context**: El perfil (MLI + Topbar) necesitaba gestión de cuenta (idioma, nombre, contraseña) y personalización del escritorio (tema, color, orden de filtros, columnas), todo persistido en la cuenta.
+
+**Decision**: Perfil en pestañas Cuenta/Escritorio (`components/ui/tabs.tsx` shadcn + Radix). **Idioma de la cuenta con prioridad sobre `accept-language`** (visitantes sin sesión → cabecera; solo 2 locales activos). Tema y color de acento con variables CSS semánticas, clase `dark` **server-side** en el root layout (anti-FOUC) + toggle idempotente en cliente. Columnas configurables con fijas siempre ★/Copiar/Editar/Título (mínimo 1); reorden con flechas, sin drag & drop ni dependencias nuevas; `filterOrder` para las cajas de filtros. Preferencias del usuario; simplicidad (flechas) sobre drag & drop.
+
+**Impact**: ✅ 13 subtareas, tests 97→147 verdes, deploy PROD verificado (preferencias persisten tras recargar). ❌ Dos lecturas de BD por request (root + layout). Risk: restos de colores fijos tras el barrido (verificado visualmente).
+
+**Related**: `development/frontend/concepts/theme-accent-pattern.md`, `development/frontend/concepts/ui-preferences-pattern.md`
+
+---
+
+## 13. Seed sin credenciales reales + hardening de autenticación (Pulido, 2026-08-06)
+
+**Context**: `prisma/seed.ts:12,30` con contraseñas reales en texto plano (expuestas en git history). Sin protección contra fuerza bruta (`UPSTASH_ENABLED=false`, sin Upstash) y sesiones JWT no revocables al cambiar la contraseña.
+
+**Decision**: Seed con `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil). **Rate limiting sin dependencias**: `failedLoginAttempts` + `lockoutUntil` en `User` (5 fallos → 15 min, errores genéricos que no revelan bloqueo). **Revocación de sesiones**: `tokenVersion Int @default(0)` en `User` y JWT, verificado con `findUnique` ligero en el callback `jwt` con política **fail-open** (BD caída → sesión sigue válida). Anti-FOUC: clase `dark` server-side. Sin Upstash: seguridad básica no merece dependencia; fail-open para no tumbar la app.
+
+**Impact**: ✅ Implementado y verificado (lib/auth.ts, PATCH /api/user/password incrementa `tokenVersion` y revoca todos los JWT previos); debt de living-notes resuelto. ❌ Query extra por request en el callback jwt (select ligero por PK, aceptado).
+
+**Related**: `development/backend/concepts/auth-hardening-pattern.md`, `project-intelligence/living-notes.md`
+
+---
 
 ## Reference
 
-- `lookup/decision-details.md` — Full alternatives tables + related commits
+- `lookup/decision-details.md` — Full alternatives tables, deprecated decisions + related commits
 - `technical-domain.md` — Technical implementation
 - `business-tech-bridge.md` — Business impact of decisions

@@ -19,9 +19,7 @@ tag      Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
 ## Seed Passwords in Plain Text
 
-`prisma/seed.ts` contains hardcoded bcrypt-hashed passwords derived from plain text (`G4VK2F56FTS96YDG`, `281116pDB`). These credentials are committed to git history.
-
-**Fix**: Use `process.env.ADMIN_PASSWORD` / `process.env.USER_PASSWORD` with dev fallback.
+`prisma/seed.ts` previously contained hardcoded bcrypt-hashed passwords derived from plain text (real credentials). **Resolved 2026-08-06**: the seed now reads `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` from environment variables and fails fast when they are missing. Rotate the real account passwords in production if the old seed was ever executed.
 
 ---
 

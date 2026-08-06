@@ -14,7 +14,7 @@
 | ORM | Prisma | ^5.19.1 · schema-first, `prisma/schema.prisma` |
 | Auth | NextAuth.js (v5 beta) | JWT · Prisma adapter · credentials · bcryptjs |
 | Validation | Zod | ^3.23.8 |
-| Testing | Jest + React Testing Library | ^29.7.0 · **81 tests, 12 suites, 100% passing** |
+| Testing | Jest + React Testing Library | ^29.7.0 · **147 tests, 23 suites, 100% passing** |
 | Styling | TailwindCSS + shadcn/ui | + lucide-react, cva, tailwind-merge, clsx |
 | Linting | ESLint + eslint-config-next | ^8.57.1 |
 | Deployment | Vercel (Hobby) + Neon PostgreSQL | **Completado** (ya no pendiente) |
@@ -30,7 +30,9 @@
 | Búsqueda full-text | ✅ Completo | Export/Import JSON v2.0 | ✅ Completo |
 | Filtros multi-selección | ✅ (lógica AND) | Copiar al portapapeles | ✅ Completo |
 | Autenticación + Roles (USER/ADMIN) | ✅ Completo | Duplicar prompts | ✅ Completo |
-| Vista cards/lista persistente | ✅ Completo | Preferencia de usuario | ✅ Completo (UI) |
+| Vista cards/lista persistente | ✅ Completo | Preferencia de usuario | ✅ Completo (UI + perfil) |
+| Perfil con pestañas (Cuenta/Escritorio) | ✅ Completo | Idioma en cuenta con prioridad | ✅ Completo |
+| Tema claro/oscuro + color de acento | ✅ Completo | Orden de filtros y columnas | ✅ Completo |
 | Panel de filtros ocultable + MLI colapsable | ✅ Completo | Favoritos en barra superior | ✅ Completo |
 | Panel de administración | ⚠️ Endpoints sin UI | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
 
@@ -133,7 +135,7 @@ middleware.ts
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` / `build` / `start` / `lint` | Desarrollo, build standalone, producción, ESLint |
-| `npm test` / `test:watch` | Jest — **81 tests, 12 suites, 100% passing** |
+| `npm test` / `test:watch` | Jest — **147 tests, 23 suites, 100% passing** |
 | `npx tsc --noEmit` | TypeScript check rápido |
 | `npm run db:*` | push · migrate · seed · generate · migrate-data |
 | `npx prisma studio` / `migrate dev` | UI BD / migración en dev |

@@ -142,6 +142,11 @@ async function getPrompts(searchParams: {
             clientProject: true,
           },
         },
+        useCases: {
+          include: {
+            useCase: true,
+          },
+        },
       },
       orderBy: {
         updatedAt: "desc",
@@ -194,6 +199,13 @@ async function getPrompts(searchParams: {
             id: cp.clientProject.id,
             name: cp.clientProject.name,
             slug: cp.clientProject.slug,
+          },
+        })),
+        useCases: prompt.useCases.map((pu) => ({
+          useCase: {
+            id: pu.useCase.id,
+            name: pu.useCase.name,
+            slug: pu.useCase.slug,
           },
         })),
         user: null,
@@ -395,12 +407,12 @@ export default async function PromptsPage({
     <ViewModeProvider initialViewMode={viewMode}>
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[var(--accent-color)] to-pink-500 bg-clip-text text-transparent">
             {t("title")}
           </h1>
           <ViewToggle />
         </div>
-        <p className="text-gray-600 font-medium">
+        <p className="text-muted-foreground font-medium">
           {t("promptsFound", { count: prompts.total })}
         </p>
       </div>

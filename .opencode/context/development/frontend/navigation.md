@@ -1,4 +1,4 @@
-<!-- Context: development/frontend/nav | Priority: high | Version: 1.3 | Updated: 2026-08-06 -->
+<!-- Context: development/frontend/nav | Priority: high | Version: 1.4 | Updated: 2026-08-06 -->
 
 # Frontend Development
 
@@ -17,7 +17,8 @@ frontend/
 │   ├── filter-patterns.md       # URL-driven multi-dimension filters
 │   ├── search-clear-pattern.md  # Clear button for search inputs
 │   ├── view-mode-pattern.md     # Card/list toggle with persistence
-│   └── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
+│   ├── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
+│   └── theme-accent-pattern.md  # Dark mode + accent color (CSS vars, anti-FOUC)
 └── react/
     ├── navigation.md
     └── react-patterns.md
@@ -34,6 +35,7 @@ frontend/
 | **Search clear button** | `concepts/search-clear-pattern.md` |
 | **View mode toggle** | `concepts/view-mode-pattern.md` |
 | **UI preferences (en cuenta)** | `concepts/ui-preferences-pattern.md` |
+| **Theme + accent color** | `concepts/theme-accent-pattern.md` |
 | **When to delegate** | `when-to-delegate.md` |
 | **React patterns** | `react/react-patterns.md` |
 

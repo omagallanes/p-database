@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { Topbar } from "@/components/layout/Topbar"
 import { Sidebar } from "@/components/layout/Sidebar"
 import { UIContextProvider } from "@/contexts/UIContext"
-import { parseUIPreferences } from "@/lib/ui-preferences"
+import { parseUIPreferences, UI_PREFERENCES_DEFAULTS } from "@/lib/ui-preferences"
 
 export default async function AppLayout({
   children,
@@ -11,17 +11,28 @@ export default async function AppLayout({
   children: React.ReactNode
 }) {
   const session = await auth()
-  let uiPreferences = { sidebarCollapsed: false, filtersVisible: true }
+  let uiPreferences = UI_PREFERENCES_DEFAULTS
   if (session?.user?.id) {
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { uiPreferences: true },
-    })
-    uiPreferences = parseUIPreferences(user?.uiPreferences)
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { uiPreferences: true },
+      })
+      uiPreferences = parseUIPreferences(user?.uiPreferences)
+    } catch {
+      // Fail-open: si la BD falla, usar defaults (el UIContext no se rompe)
+    }
   }
   return (
     <div className="flex h-screen overflow-hidden">
-      <UIContextProvider initialSidebarCollapsed={uiPreferences.sidebarCollapsed} initialFiltersVisible={uiPreferences.filtersVisible}>
+      <UIContextProvider
+        initialSidebarCollapsed={uiPreferences.sidebarCollapsed}
+        initialFiltersVisible={uiPreferences.filtersVisible}
+        initialTheme={uiPreferences.theme}
+        initialAccentColor={uiPreferences.accentColor}
+        initialFilterOrder={uiPreferences.filterOrder}
+        initialColumns={uiPreferences.columns}
+      >
         <Sidebar />
         <div className="flex flex-1 flex-col overflow-hidden">
           <Topbar />
