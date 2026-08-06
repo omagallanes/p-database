@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -10,6 +12,9 @@ const registerSchema = z.object({
 })
 
 export async function POST(request: Request) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const body = await request.json()
     const validatedData = registerSchema.parse(body)
@@ -21,7 +26,7 @@ export async function POST(request: Request) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "User with this email already exists" },
+        { error: t("emailAlreadyExists") },
         { status: 400 }
       )
     }
@@ -50,15 +55,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ data: user }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
+      // Cada campo tiene una única regla de validación, así que el path
+      // identifica de forma inequívoca el mensaje localizado sin tocar el schema.
+      const field = error.errors[0]?.path[0]
+      const errorKey =
+        field === "name"
+          ? "nameTooShort"
+          : field === "email"
+            ? "invalidEmail"
+            : "passwordTooShort"
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: t(errorKey) },
         { status: 400 }
       )
     }
 
     console.error("Registration error:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: t("internalServerError") },
       { status: 500 }
     )
   }

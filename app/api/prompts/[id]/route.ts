@@ -3,6 +3,8 @@ import { prisma, PROMPT_INCLUDES } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { enrichWithParentCategories } from "@/lib/category-utils"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const updatePromptSchema = z.object({
   title: z.string().min(1).optional(),
@@ -30,20 +32,28 @@ const updatePromptSchema = z.object({
   tagIds: z.array(z.string()).optional(),
 })
 
+type OwnershipResult =
+  | { authorized: true }
+  | { authorized: false; errorKey: "promptNotFound" | "forbidden"; status: 404 | 403 }
+
 // Helper function to check ownership
-async function checkOwnership(promptId: string, userId: string, isAdmin: boolean) {
+async function checkOwnership(
+  promptId: string,
+  userId: string,
+  isAdmin: boolean
+): Promise<OwnershipResult> {
   const prompt = await prisma.prompt.findUnique({
     where: { id: promptId },
     select: { userId: true }
   })
 
   if (!prompt) {
-    return { authorized: false, error: "Prompt not found", status: 404 }
+    return { authorized: false, errorKey: "promptNotFound", status: 404 }
   }
 
   // Admins can edit any prompt, users can only edit their own
   if (!isAdmin && prompt.userId !== userId) {
-    return { authorized: false, error: "Forbidden", status: 403 }
+    return { authorized: false, errorKey: "forbidden", status: 403 }
   }
 
   return { authorized: true }
@@ -53,6 +63,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const prompt = await prisma.prompt.findUnique({
       where: { id: params.id },
@@ -60,14 +73,14 @@ export async function GET(
     })
 
     if (!prompt) {
-      return NextResponse.json({ error: "Prompt not found" }, { status: 404 })
+      return NextResponse.json({ error: t("promptNotFound") }, { status: 404 })
     }
 
     return NextResponse.json({ data: prompt, success: true })
   } catch (error) {
     console.error("Error fetching prompt:", error)
     return NextResponse.json(
-      { error: "Failed to fetch prompt" },
+      { error: t("failedToFetchPrompt") },
       { status: 500 }
     )
   }
@@ -77,12 +90,15 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -95,7 +111,7 @@ export async function PUT(
 
     if (!ownership.authorized) {
       return NextResponse.json(
-        { error: ownership.error },
+        { error: t(ownership.errorKey) },
         { status: ownership.status }
       )
     }
@@ -171,13 +187,13 @@ export async function PUT(
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: error.errors },
+        { error: t("invalidInput"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error updating prompt:", error)
     return NextResponse.json(
-      { error: "Failed to update prompt" },
+      { error: t("failedToUpdatePrompt") },
       { status: 500 }
     )
   }
@@ -187,12 +203,15 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -205,7 +224,7 @@ export async function DELETE(
 
     if (!ownership.authorized) {
       return NextResponse.json(
-        { error: ownership.error },
+        { error: t(ownership.errorKey) },
         { status: ownership.status }
       )
     }
@@ -214,11 +233,11 @@ export async function DELETE(
       where: { id: params.id },
     })
 
-    return NextResponse.json({ data: { message: "Prompt deleted successfully" }, success: true })
+    return NextResponse.json({ data: { message: t("promptDeleted") }, success: true })
   } catch (error) {
     console.error("Error deleting prompt:", error)
     return NextResponse.json(
-      { error: "Failed to delete prompt" },
+      { error: t("failedToDeletePrompt") },
       { status: 500 }
     )
   }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -23,10 +24,12 @@ export default function BasicInfoSegment({
   onBodyChange,
   errors,
 }: BasicInfoSegmentProps) {
+  const t = useTranslations("BasicInfoSegment")
+
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t("titleLabel")}</Label>
         <Input
           id="title"
           value={title}
@@ -39,7 +42,7 @@ export default function BasicInfoSegment({
       </div>
 
       <div>
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("descriptionLabel")}</Label>
         <Textarea
           id="description"
           value={description}
@@ -52,7 +55,7 @@ export default function BasicInfoSegment({
       </div>
 
       <div>
-        <Label htmlFor="body">Prompt Body *</Label>
+        <Label htmlFor="body">{t("bodyLabel")}</Label>
         <Textarea
           id="body"
           value={body}

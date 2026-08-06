@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog"
 import { Plus, Edit, Trash2, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 interface Category {
   id: string
@@ -39,10 +40,20 @@ interface Category {
 
 // Error boundary to prevent page crashes from rendering errors
 class CategoryErrorBoundary extends React.Component<
-  { children: React.ReactNode },
+  {
+    children: React.ReactNode
+    errorTitle: string
+    errorMessage: string
+    reloadPage: string
+  },
   { hasError: boolean; error: Error | null }
 > {
-  constructor(props: { children: React.ReactNode }) {
+  constructor(props: {
+    children: React.ReactNode
+    errorTitle: string
+    errorMessage: string
+    reloadPage: string
+  }) {
     super(props)
     this.state = { hasError: false, error: null }
   }
@@ -61,10 +72,10 @@ class CategoryErrorBoundary extends React.Component<
         <div className="flex flex-col items-center justify-center p-12">
           <AlertTriangle className="h-12 w-12 text-red-500 mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            Something went wrong
+            {this.props.errorTitle}
           </h2>
           <p className="text-gray-600 mb-4">
-            An error occurred while loading categories.
+            {this.props.errorMessage}
           </p>
           <pre className="text-sm text-red-600 bg-red-50 p-4 rounded-lg max-w-lg overflow-auto mb-4">
             {this.state.error?.message}
@@ -76,7 +87,7 @@ class CategoryErrorBoundary extends React.Component<
             }}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
           >
-            Reload page
+            {this.props.reloadPage}
           </button>
         </div>
       )
@@ -87,6 +98,8 @@ class CategoryErrorBoundary extends React.Component<
 
 function CategoriesPage() {
   const router = useRouter()
+  const t = useTranslations("CategoriesPage")
+  const tCommon = useTranslations("Common")
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -170,11 +183,11 @@ function CategoriesPage() {
         router.refresh()
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error saving category:", error)
-      toast.error("Failed to save category")
+      toast.error(t("saveFailed"))
     } finally {
       setLoading(false)
     }
@@ -184,8 +197,8 @@ function CategoriesPage() {
     const category = categories.find((cat) => cat.id === id)
     const hasChildren = category && category.children && category.children.length > 0
     const message = hasChildren
-      ? `Are you sure you want to delete "${category.name}" and all its subcategories? Prompts linked to them will NOT be affected.`
-      : "Are you sure you want to delete this category? Prompts linked to it will NOT be affected."
+      ? t("deleteConfirmWithChildren", { name: category.name })
+      : t("deleteConfirm")
     if (!confirm(message)) return
 
     try {
@@ -199,11 +212,11 @@ function CategoriesPage() {
         router.refresh()
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error deleting category:", error)
-      toast.error("Failed to delete category")
+      toast.error(t("deleteFailed"))
     }
   }
 
@@ -239,8 +252,7 @@ function CategoriesPage() {
             <div className="flex-1">
               <div className="font-semibold">{category.name}</div>
               <div className="text-sm text-muted-foreground">
-                {category.slug} • {category._count?.prompts ?? 0} prompt
-                {(category._count?.prompts ?? 0) !== 1 ? "s" : ""}
+                {t("promptCount", { slug: category.slug, count: category._count?.prompts ?? 0 })}
               </div>
             </div>
             <div className="flex gap-2">
@@ -273,7 +285,7 @@ function CategoriesPage() {
     : []
 
   if (loading && categories.length === 0) {
-    return <div>Loading...</div>
+    return <div>{tCommon("loading")}</div>
   }
 
   return (
@@ -281,31 +293,31 @@ function CategoriesPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            Categories
+            {t("title")}
           </h1>
           <p className="text-gray-600 font-medium">
-            Organize your prompts into categories
+            {t("subtitle")}
           </p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={handleNew} className="gradient-primary shadow-glow hover:shadow-glow-hover transition-all">
               <Plus className="mr-2 h-4 w-4" />
-              New Category
+              {t("newCategory")}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
-                {editingCategory ? "Edit Category" : "New Category"}
+                {editingCategory ? t("editCategory") : t("newCategory")}
               </DialogTitle>
               <DialogDescription>
-                Create a category to organize your prompts.
+                {t("dialogDescription")}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">{t("nameLabel")}</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -321,7 +333,7 @@ function CategoriesPage() {
               </div>
 
               <div>
-                <Label htmlFor="slug">Slug *</Label>
+                <Label htmlFor="slug">{t("slugLabel")}</Label>
                 <Input
                   id="slug"
                   value={formData.slug}
@@ -333,7 +345,7 @@ function CategoriesPage() {
               </div>
 
               <div>
-                <Label htmlFor="parentId">Parent Category</Label>
+                <Label htmlFor="parentId">{t("parentCategory")}</Label>
                 <Select
                   value={formData.parentId || undefined}
                   onValueChange={(value) =>
@@ -341,10 +353,10 @@ function CategoriesPage() {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="None" />
+                    <SelectValue placeholder={tCommon("none")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="none">{tCommon("none")}</SelectItem>
                     {categories
                       .filter((cat) => cat.id !== editingCategory?.id)
                       .filter((cat) => !cat.parentId)
@@ -358,7 +370,7 @@ function CategoriesPage() {
               </div>
 
               <div>
-                <Label htmlFor="sortOrder">Sort Order</Label>
+                <Label htmlFor="sortOrder">{t("sortOrder")}</Label>
                 <Input
                   id="sortOrder"
                   type="number"
@@ -373,7 +385,7 @@ function CategoriesPage() {
               </div>
 
               <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : "Save"}
+                {loading ? tCommon("saving") : tCommon("save")}
               </Button>
             </form>
           </DialogContent>
@@ -384,7 +396,7 @@ function CategoriesPage() {
         {topLevelCategories.length === 0 ? (
           <Card>
             <CardContent className="p-6 text-center text-muted-foreground">
-              No categories yet. Create your first category!
+              {t("noCategories")}
             </CardContent>
           </Card>
         ) : (
@@ -397,8 +409,14 @@ function CategoriesPage() {
 
 // Wrap with ErrorBoundary to catch rendering errors
 export default function CategoriesPageWithErrorBoundary() {
+  const t = useTranslations("CategoriesPage")
+
   return (
-    <CategoryErrorBoundary>
+    <CategoryErrorBoundary
+      errorTitle={t("errorTitle")}
+      errorMessage={t("errorMessage")}
+      reloadPage={t("reloadPage")}
+    >
       <CategoriesPage />
     </CategoryErrorBoundary>
   )

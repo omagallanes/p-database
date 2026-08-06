@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 import { importV1Schema, importV2Schema } from "../schemas"
 import { importV1 } from "../import-v1"
 import { importV2 } from "../import-v2"
 
 export async function POST(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     // CRÍTICO: Auth check como PRIMERA operación (seguridad crítica)
     // Ver conocimiento_tecnico_preventivo.md §30
@@ -13,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -50,13 +55,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid import format", details: error.errors },
+        { error: t("invalidImportFormat"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error importing prompts:", error)
     return NextResponse.json(
-      { error: "Failed to import prompts" },
+      { error: t("failedToImportPrompts") },
       { status: 500 }
     )
   }

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const createCategorySchema = z.object({
   name: z.string().min(1),
@@ -10,7 +12,10 @@ const createCategorySchema = z.object({
   sortOrder: z.number().default(0),
 })
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const categories = await prisma.category.findMany({
       include: {
@@ -32,19 +37,22 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching categories:", error)
     return NextResponse.json(
-      { error: "Failed to fetch categories" },
+      { error: t("failedToFetchCategories") },
       { status: 500 }
     )
   }
 }
 
 export async function POST(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -60,13 +68,13 @@ export async function POST(request: NextRequest) {
       })
       if (!parentCategory) {
         return NextResponse.json(
-          { error: "Parent category not found" },
+          { error: t("parentCategoryNotFound") },
           { status: 400 }
         )
       }
       if (parentCategory.parentId !== null) {
         return NextResponse.json(
-          { error: "Cannot nest categories deeper than 2 levels. Select a top-level category as parent." },
+          { error: t("maxDepthExceeded") },
           { status: 400 }
         )
       }
@@ -96,13 +104,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: error.errors },
+        { error: t("invalidInput"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error creating category:", error)
     return NextResponse.json(
-      { error: "Failed to create category" },
+      { error: t("failedToCreateCategory") },
       { status: 500 }
     )
   }

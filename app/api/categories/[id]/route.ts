@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const updateCategorySchema = z.object({
   name: z.string().min(1).optional(),
@@ -14,12 +16,15 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user || session.user.role !== "admin") {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -30,7 +35,7 @@ export async function PUT(
     // Validate: prevent self-reference (category cannot be its own parent)
     if (data.parentId === params.id) {
       return NextResponse.json(
-        { error: "A category cannot be its own parent" },
+        { error: t("categorySelfParent") },
         { status: 400 }
       )
     }
@@ -43,13 +48,13 @@ export async function PUT(
       })
       if (!parentCategory) {
         return NextResponse.json(
-          { error: "Parent category not found" },
+          { error: t("parentCategoryNotFound") },
           { status: 400 }
         )
       }
       if (parentCategory.parentId !== null) {
         return NextResponse.json(
-          { error: "Cannot nest categories deeper than 2 levels. Select a top-level category as parent." },
+          { error: t("maxDepthExceeded") },
           { status: 400 }
         )
       }
@@ -79,13 +84,13 @@ export async function PUT(
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: error.errors },
+        { error: t("invalidInput"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error updating category:", error)
     return NextResponse.json(
-      { error: "Failed to update category" },
+      { error: t("failedToUpdateCategory") },
       { status: 500 }
     )
   }
@@ -95,12 +100,15 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user || session.user.role !== "admin") {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -109,11 +117,11 @@ export async function DELETE(
       where: { id: params.id },
     })
 
-    return NextResponse.json({ data: { message: "Category deleted successfully" } })
+    return NextResponse.json({ data: { message: t("categoryDeleted") } })
   } catch (error) {
     console.error("Error deleting category:", error)
     return NextResponse.json(
-      { error: "Failed to delete category" },
+      { error: t("failedToDeleteCategory") },
       { status: 500 }
     )
   }

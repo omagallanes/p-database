@@ -1,6 +1,7 @@
 "use client"
 
 import { useId } from "react"
+import { useTranslations } from "next-intl"
 
 interface TaxonomyItem {
   id: string
@@ -21,13 +22,14 @@ export default function TaxonomyMultiSelect({
   onChange,
 }: TaxonomyMultiSelectProps) {
   const groupId = useId()
+  const t = useTranslations("TaxonomyMultiSelect")
 
   // If no items to select from, show an empty state
   if (items.length === 0) {
     return (
       <fieldset className="space-y-2">
         <legend className="text-sm font-semibold text-gray-700">{label}</legend>
-        <p className="text-sm text-gray-400">No options available</p>
+        <p className="text-sm text-gray-400">{t("noOptionsAvailable")}</p>
       </fieldset>
     )
   }

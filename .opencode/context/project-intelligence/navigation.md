@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/nav | Priority: high | Version: 2.2 | Updated: 2026-07-16 -->
+<!-- Context: project-intelligence/nav | Priority: high | Version: 2.3 | Updated: 2026-08-06 -->
 
 # Project Intelligence
 
@@ -12,10 +12,10 @@
 ├── business-domain.md         # Business context and problem statement
 ├── technical-domain.md        # Stack, patterns, naming, standards, security (v2.2)
 ├── business-tech-bridge.md    # How business needs map to solutions
-├── decisions-log.md           # Major decisions with rationale
+├── decisions-log.md           # Major decisions with rationale (v2.3)
 ├── living-notes.md            # Active issues, debt, open questions
 ├── errors/
-│   └── tech-knowledge.md      # Full error catalog with code examples (v1.0)
+│   └── tech-knowledge.md      # Full error catalog with code examples (v1.1)
 └── development/
     ├── navigation.md          # Development knowledge index (v1.0)
     ├── concepts/              # Component refactor, API response, upsert, delegation
@@ -37,7 +37,7 @@
 | Code standards | `technical-domain.md` → Code Standards | Strict TS, Prisma, Server Components |
 | Security requirements | `technical-domain.md` → Security Requirements | Auth, Zod, Prisma, env vars |
 | See the connection | `business-tech-bridge.md` | Business → technical mapping |
-| Know the context | `decisions-log.md` | Why decisions were made |
+| Know the context | `decisions-log.md` | Why decisions were made (11 entries, 2026-08-06) |
 | Current state | `living-notes.md` | Active issues and open questions |
 | Error catalog | `errors/tech-knowledge.md` | Known errors with code examples and prevention |
 | Pitfalls quick-ref | `technical-domain.md` → Known Pitfalls | High-level gotchas organized by domain |

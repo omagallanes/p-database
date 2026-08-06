@@ -2,6 +2,18 @@
  * @jest-environment node
  */
 
+// Mock next-intl/server: the next-intl plugin wires `next-intl/config` via a
+// webpack alias that next/jest does not apply, so the real getTranslations
+// throws in Jest. Resolve messages from the en-GB catalog instead (requests
+// without accept-language fall back to en-GB, keeping API error literals).
+jest.mock("next-intl/server", () => ({
+  getTranslations: jest.fn(async ({ locale, namespace }: { locale: string; namespace: string }) => {
+    const messages = require("../../messages/en-GB.json")
+    const namespaceMessages = messages[namespace] ?? {}
+    return (key: string) => namespaceMessages[key] ?? key
+  }),
+}))
+
 import { POST as registerPOST } from "@/app/api/auth/register/route"
 import { NextRequest } from "next/server"
 

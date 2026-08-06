@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, Copy, Edit } from "lucide-react"
@@ -52,6 +53,8 @@ interface PromptListProps {
 
 export function PromptList({ prompts }: PromptListProps) {
   const { viewMode } = useViewMode()
+  const t = useTranslations("PromptList")
+  const tCommon = useTranslations("Common")
   const handleCopy = async (body: string, id: string) => {
     try {
       await navigator.clipboard.writeText(body)
@@ -65,9 +68,9 @@ export function PromptList({ prompts }: PromptListProps) {
   if (prompts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
-        <p className="text-muted-foreground">No prompts found.</p>
+        <p className="text-muted-foreground">{t("noPromptsFound")}</p>
         <Link href="/prompts/new" className="mt-4">
-          <Button>Create your first prompt</Button>
+          <Button>{t("createFirstPrompt")}</Button>
         </Link>
       </div>
     )
@@ -100,15 +103,15 @@ export function PromptList({ prompts }: PromptListProps) {
         <table className="w-full border-collapse">
           <thead>
             <tr className="border-b-2 border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Copy</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Edit</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Title</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colCopy")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colEdit")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colTitle")}</th>
               <th className="text-center py-3 px-4 font-semibold text-gray-700">★</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Status</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Platforms</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Categories</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Tags</th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">Client/Project</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colStatus")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colPlatforms")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colCategories")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colTags")}</th>
+              <th className="text-left py-3 px-4 font-semibold text-gray-700">{t("colClientProject")}</th>
             </tr>
           </thead>
           <tbody>
@@ -293,7 +296,7 @@ export function PromptList({ prompts }: PromptListProps) {
             <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-100">
               <span className="flex items-center gap-1">
                 <span className="font-medium text-gray-700">{prompt.usageCount}</span>
-                <span>uses</span>
+                <span>{t("uses", { count: prompt.usageCount })}</span>
                 {prompt.lastUsedAt && (
                   <>
                     <span>•</span>
@@ -303,7 +306,7 @@ export function PromptList({ prompts }: PromptListProps) {
               </span>
               {prompt.user && (
                 <span className="text-xs text-gray-400">
-                  by {prompt.user.name}
+                  {t("byUser", { name: prompt.user.name })}
                 </span>
               )}
             </div>
@@ -315,7 +318,7 @@ export function PromptList({ prompts }: PromptListProps) {
                 className="flex-1 border-purple-200 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all"
               >
                 <Copy className="mr-2 h-4 w-4" />
-                Copy
+                {tCommon("copy")}
               </Button>
               <Link href={`/prompts/${prompt.id}`} className="flex-1">
                 <Button 
@@ -323,7 +326,7 @@ export function PromptList({ prompts }: PromptListProps) {
                   className="w-full border-purple-200 hover:bg-purple-50 hover:border-purple-300 hover:text-purple-700 transition-all"
                 >
                   <Edit className="mr-2 h-4 w-4" />
-                  Edit
+                  {tCommon("edit")}
                 </Button>
               </Link>
             </div>

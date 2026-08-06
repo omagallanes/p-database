@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/business | Priority: high | Version: 1.2 | Updated: 2026-08-04 -->
+<!-- Context: project-intelligence/business | Priority: high | Version: 1.3 | Updated: 2026-08-06 -->
 
 # Business Domain
 
@@ -45,11 +45,11 @@ See project maintainers (not documented in project files).
 
 ## Roadmap Context
 
-**Current Focus**: 4 of 5 development phases completed. Fase 5 (Validation & Polish) done — build verified, tests passing (60/60, 100%), deployed to Vercel with manual smoke tests completed.
+**Current Focus**: 4 of 5 development phases completed. Fase 5 (Validation & Polish) done — build verified, tests passing (81/81, 12 suites, 100%), deployed to Vercel with manual smoke tests completed. i18n: en-GB base + es-ES complete, deployed to PROD (2026-08-06).
 
-**Next Milestone**: Keep context updated as new features ship (category hierarchy 2-level limit, auto-add parent, crash fixes verified 2026-08-04).
+**Next Milestone**: Keep context updated as new features ship (category hierarchy 2-level limit, auto-add parent, crash fixes verified 2026-08-04; i18n es-ES deployed 2026-08-06).
 
-**Long-term Vision**: Mature prompt management platform with multi-language support (i18n), AI-assisted prompt generation, team collaboration and sharing features, and expanded admin panel.
+**Long-term Vision**: Mature prompt management platform with full multi-language support (i18n: 8 locales pending translation + language selector), AI-assisted prompt generation, team collaboration and sharing features, and expanded admin panel.
 
 ## Business Constraints
 
@@ -68,7 +68,7 @@ See project maintainers (not documented in project files).
 - [ ] Understand the three-segment form layout: Basic Information → Metadata → Advanced
 - [ ] Review API routes under `app/api/` — prompts, categories, tags, export, import
 - [ ] Read governance rules (`conoc_previo/.governance/reglas_proyecto.md`) before making changes
-- [ ] Run `npm test` to verify baseline: 60+ tests across 8+ suites
+- [ ] Run `npm test` to verify baseline: 81+ tests across 12+ suites
 
 ## Related Files
 

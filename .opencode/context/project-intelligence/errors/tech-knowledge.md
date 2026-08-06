@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/errors/tech-knowledge | Priority: high | Version: 1.0 | Updated: 2026-07-16 -->
+<!-- Context: project-intelligence/errors/tech-knowledge | Priority: high | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Catálogo de Errores y Conocimiento Preventivo
 
@@ -98,6 +98,21 @@
 - Crear páginas de error para todos los flujos posibles de autenticación
 - Revisar que todas las páginas personalizadas de NextAuth.js existan
 - Validar consistencia entre configuración e implementación
+
+---
+
+### 1.7 TypeError `(0 , ys.cache…)` en PROD tras envolver `auth()` con `cache()` de React
+
+**Estado:** 🔧 Corregido (revertido)  
+**Código:** `lib/auth.ts`  
+**Descripción:** Envolver la exportación de `auth()` de NextAuth con `cache()` de React rompió TODAS las rutas en producción: 500 en Vercel con logs `TypeError: (0 , ys.cache…`. Causa: incompatibilidad del cache de React con la exportación de NextAuth en el bundle de producción (resolución de módulos). No se detectó en local ni en build.
+
+**Prevención:**
+- NO envolver `auth()` con React `cache()` en este proyecto
+- Si se quiere deduplicar llamadas, validar primero con un deploy de preview antes de merge
+- Ante 500 masivos con `ys.cache` en logs de Vercel: revertir a la exportación simple de `auth()` (como estaba)
+
+**Cross-ref:** §4.2 (force-dynamic para páginas que usan `auth()`)
 
 ---
 
@@ -488,40 +503,11 @@ async function upsertEntity(
 
 ### 3.4 PostgreSQL como Configuración Principal desde Desarrollo
 
-**Estado:** ✅ Validado  
-**Código:** `.env` (SQLite local), `.env.example`, `prisma/schema.prisma` (provider: postgresql)  
-**Descripción:** El proyecto usa PostgreSQL en producción (Neon.tech) pero SQLite en desarrollo local. Prisma schema tiene provider = "postgresql". Esta discrepancia puede causar errores de sintaxis SQL o tipos incompatibles al desplegar.
+**Estado:** ❌ Obsoleto (desde 2026-08-06)  
+**Código:** `prisma/schema.prisma` (provider: postgresql)  
+**Descripción:** OBSOLETO — ya NO existe SQLite local ni BD local: la BD única es Neon (producción). Los cambios de schema se aplican contra producción con `npx prisma db push` (ver `development/guides/deploy-to-vercel.md` → "Migración de schema — BD única Neon"). Se conserva: schema.prisma define binaryTargets para Vercel (native, linux-musl-openssl-3.0.x, linux-musl-arm64-openssl-3.0.x, debian-openssl-3.0.x).
 
-**Prevención:**
-- Tener presente que el desarrollo local usa SQLite y producción usa PostgreSQL
-- Probar migraciones contra PostgreSQL antes de desplegar (usar Neon分支 o base local)
-- Verificar que queries funcionan en ambos motores
-- Schema.prisma define binaryTargets para Vercel: native, linux-musl-openssl-3.0.x, linux-musl-arm64-openssl-3.0.x, debian-openssl-3.0.x
-
-**Código de ejemplo (.env.development recomendado):**
-```
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/prompt_db_dev?schema=public"
-```
-
-**Código de ejemplo (docker-compose.dev.yml):**
-```yaml
-services:
-  postgres:
-    image: postgres:14-alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: prompt_db_dev
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-```
-
-**Riesgo:** Errores de sintaxis SQL específicos de PostgreSQL, tipos de datos incompatibles, migraciones que fallan en producción.
+**Riesgo:** Seguir la documentación antigua (SQLite local, docker-compose, `.env.development`) ya no aplica a este proyecto.
 
 ---
 
@@ -1756,6 +1742,7 @@ tags: prompt.tags.map((pt) => pt.tag.name),
 
 | Fecha | Cambio | Responsable |
 |-------|--------|-------------|
+| 2026-08-06 | Añadido §1.7 (TypeError `ys.cache` en PROD) y §3.4 marcada obsoleta (BD única Neon, sin SQLite local) | Context Organizer |
 | 2026-07-16 | Creación inicial desde tech-knowledge.md del proyecto | Repo Manager |
 | 2026-04-25 | Última actualización de fuente original (Fase 4 COMPLETADA, SF-5.1 ✅, SF-5.2 ✅ Build+Lint) | agente-inventariador |
 | 2026-04-24 | Añadido Selector de Idioma con Códigos ISO (SF-2.1-S2) | agente-inventariador |

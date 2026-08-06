@@ -1,15 +1,20 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     // Action 1: Auth check - FIRST operation before any DB access
     const session = await auth()
 
     if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -101,7 +106,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error exporting prompts:", error)
     return NextResponse.json(
-      { error: "Failed to export prompts" },
+      { error: t("failedToExportPrompts") },
       { status: 500 }
     )
   }

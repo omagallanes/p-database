@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.5 | Updated: 2026-08-04 -->
+<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.6 | Updated: 2026-08-06 -->
 
 # Technical Domain
 
@@ -14,7 +14,7 @@
 | ORM | Prisma | ^5.19.1 · schema-first, `prisma/schema.prisma` |
 | Auth | NextAuth.js (v5 beta) | JWT · Prisma adapter · credentials · bcryptjs |
 | Validation | Zod | ^3.23.8 |
-| Testing | Jest + React Testing Library | ^29.7.0 · **60 tests, 8 suites, 100% passing** |
+| Testing | Jest + React Testing Library | ^29.7.0 · **81 tests, 12 suites, 100% passing** |
 | Styling | TailwindCSS + shadcn/ui | + lucide-react, cva, tailwind-merge, clsx |
 | Linting | ESLint + eslint-config-next | ^8.57.1 |
 | Deployment | Vercel (Hobby) + Neon PostgreSQL | **Completado** (ya no pendiente) |
@@ -30,8 +30,9 @@
 | Búsqueda full-text | ✅ Completo | Export/Import JSON v2.0 | ✅ Completo |
 | Filtros multi-selección | ✅ (lógica AND) | Copiar al portapapeles | ✅ Completo |
 | Autenticación + Roles (USER/ADMIN) | ✅ Completo | Duplicar prompts | ✅ Completo |
-| Vista cards/lista persistente | ✅ Completo | Preferencia de usuario | ✅ Completo |
-| Panel de administración | ⚠️ Endpoints sin UI | Multidioma (i18n) | 🔄 Pendiente |
+| Vista cards/lista persistente | ✅ Completo | Preferencia de usuario | ✅ Completo (UI) |
+| Panel de filtros ocultable + MLI colapsable | ✅ Completo | Favoritos en barra superior | ✅ Completo |
+| Panel de administración | ⚠️ Endpoints sin UI | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
 
 ## Arquitectura
 
@@ -43,9 +44,11 @@
 app/          (app)/prompts·categories·tags · (auth)/auth/signin·signup · api/* (12 recursos)
 components/   auth/ · layout/ · prompt/ · ui/ (shadcn)
 contexts/     ViewModeContext.tsx
-lib/          auth.ts · prisma.ts · utils.ts
+i18n/         request.ts · locales.ts (next-intl)
+lib/          auth.ts · prisma.ts · utils.ts · locale.ts
+messages/     en-GB.json · es-ES.json (240 claves c/u)
 prisma/       schema.prisma · seed.ts · migrate-data.ts
-tests/        api/ (5 archivos) · components/ (3 archivos)
+tests/        api/ (5) · components/ (3) · i18n/ (4)
 types/        next-auth.d.ts
 docs/         index.md · archive/ · decisions/ · developing/ · guide/ · planning/ · reference/ · reservas/ · technical-development-knowledge/ · temp/
 middleware.ts
@@ -54,10 +57,12 @@ middleware.ts
 ## Code Patterns
 
 - **API**: Auth → Zod → Prisma → Response; errores `{ error }` JSON. Ejemplo: `app/api/prompts/route.ts`. Ver `development/concepts/api-response-standards.md`.
+- **Preferencias UI**: `User.uiPreferences` (JSON) con schema compartido `lib/ui-preferences.ts`; `UIContext` (patrón ViewModeContext) con persistencia PATCH `/api/user/preferences`; Fase A: sidebarCollapsed, filtersVisible (todo en cuenta, no localStorage).
 - **Componentes**: Server Components por defecto; `"use client"` solo con interactividad. Props tipadas `{Name}Props`.
 - **Refactor en segmentos**: orquestador + segmentos por funcionalidad; verificar `npx tsc --noEmit` tras cada extracción. Ver `development/concepts/component-refactor-pattern.md`.
 - **Upsert de entidades globales**: normalizar (trim+uppercase) → upsert por slug. Ver `development/concepts/upsert-entity-pattern.md`.
 - **Delegación de tareas**: CodeReviewer gate entre subtareas; mismo archivo → mismo batch. Ver `development/concepts/task-delegation-workflow.md`.
+- **i18n**: next-intl v4 sin enrutado; locale por `accept-language` (helper puro `lib/locale.ts`); API routes con `getTranslations({ locale, namespace: "Api" })`. Ver `development/concepts/i18n-next-intl-pattern.md`.
 
 ## Naming Conventions
 
@@ -121,12 +126,14 @@ middleware.ts
 | Preferencias | `/api/user/preferences` |
 | Usuarios | `/api/users` · `/api/users/[id]` (Admin) |
 
+**Filtrado AND**: cada valor seleccionado añade `{ entity: { some: { entityId } } }` a la matriz de condiciones; todos deben coincidir (verificado en `app/api/prompts/route.ts`; detalle en `errors/tech-knowledge.md` §5).
+
 ## Commands (package.json)
 
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` / `build` / `start` / `lint` | Desarrollo, build standalone, producción, ESLint |
-| `npm test` / `test:watch` | Jest — **60 tests, 8 suites, 100% passing** |
+| `npm test` / `test:watch` | Jest — **81 tests, 12 suites, 100% passing** |
 | `npx tsc --noEmit` | TypeScript check rápido |
 | `npm run db:*` | push · migrate · seed · generate · migrate-data |
 | `npx prisma studio` / `migrate dev` | UI BD / migración en dev |
@@ -136,25 +143,20 @@ middleware.ts
 
 - Route groups: `(app)` autenticado (prompts, categories, tags) · `(auth)` público (signin, signup)
 - shadcn/ui: button, card, dialog, dropdown-menu, input, label, select, tabs, textarea, badge
-- **PromptForm: 769 líneas** (`components/prompt/PromptForm.tsx`) · PromptFilters · PromptList · Sidebar · Topbar
+- **PromptForm: 769 líneas** · PromptFilters · PromptList · Sidebar · Topbar
 - ViewModeContext persiste vía PATCH `/api/user/preferences`
 - Páginas: `/prompts`, `/prompts/new`, `/prompts/[id]`, `/categories`, `/tags`, `/auth/signin`, `/auth/signup`
 
-## Filtrado de Prompts
-
-Lógica **Y (AND) con `some()` por valor**: cada valor seleccionado añade `{ entity: { some: { entityId } } }` a la matriz de condiciones; todos deben coincidir. Verificado en `app/api/prompts/route.ts`. Detalle en `errors/tech-knowledge.md` (§5).
-
 ## Testing
 
-- Jest 29.7 + next/jest + jest-environment-jsdom; 8 archivos (5 API + 3 componentes)
-- **60 pruebas, todas superadas** (el conteo de 56 es obsoleto)
-- Mocks: next-auth, @auth/prisma-adapter, next/navigation, prisma ($transaction), URLSearchParams directo
+- Jest 29.7 + next/jest + jest-environment-jsdom; **12 archivos** (5 API + 3 componentes + 4 i18n)
+- **81 pruebas, todas superadas** (conteo previo de 60/56 obsoleto)
+- Mocks: next-auth, @auth/prisma-adapter, next/navigation, prisma ($transaction), next-intl/server (con catálogos reales)
 - Cobertura actual ≥ 60%; detalle en `errors/tech-knowledge.md` (§7)
 
 ## Docker
 
-- `Dockerfile` multi-stage (node:20-alpine, output standalone, prisma generate en build)
-- `Dockerfile.dev` hot-reload; `docker-compose.dev.yml` app + PostgreSQL 14 con healthcheck
+- `Dockerfile` multi-stage (node:20-alpine, output standalone) · `Dockerfile.dev` + `docker-compose.dev.yml` (hot-reload + PostgreSQL 14)
 - `docker-compose.yml` producción con Traefik (legacy, no usado)
 
 ## Environment Variables
@@ -173,7 +175,7 @@ Lógica **Y (AND) con `some()` por valor**: cada valor seleccionado añade `{ en
 - 🔴 **Credenciales visibles en `prisma/seed.ts` líneas 12 y 30** (deuda técnica de prioridad alta)
 - ⚠️ Página `/auth/error` referenciada pero no creada (ver Autenticación)
 - Panel de administración sin UI (endpoints `/api/users/*` sin frontend)
-- Multidioma (i18n) pendiente
+- i18n: selector de idioma pendiente (otro plan de trabajo) y 8 idiomas declarados sin traducir (ver `docs/plan-traduccion-i18n.md`)
 
 ## 📂 Codebase References
 
@@ -182,6 +184,8 @@ Lógica **Y (AND) con `some()` por valor**: cada valor seleccionado añade `{ en
 | API pattern + filtros AND | `app/api/prompts/route.ts` |
 | Formulario | `components/prompt/PromptForm.tsx` (769 líneas) |
 | Componente cliente | `components/prompt/PromptList.tsx` |
+| i18n (resolución de locale) | `i18n/request.ts` · `lib/locale.ts` |
+| Mensajes i18n | `messages/en-GB.json` · `messages/es-ES.json` |
 | Schema BD | `prisma/schema.prisma` (provider: postgresql) |
 | Seed (⚠️ credenciales) | `prisma/seed.ts` (líneas 12, 30) |
 | Auth / middleware | `lib/auth.ts` · `middleware.ts` |
@@ -191,7 +195,7 @@ Lógica **Y (AND) con `some()` por valor**: cada valor seleccionado añade `{ en
 ## Related Files
 
 - `business-domain.md` — contexto de negocio
-- `decisions-log.md` — decisiones (SQLite→PG, Railway→Vercel)
+- `decisions-log.md` — decisiones (SQLite→PG, Railway→Vercel, i18n next-intl)
 - `living-notes.md` — deuda y preguntas abiertas
 - `errors/tech-knowledge.md` — catálogo completo de errores con código
-- `development/concepts/*.md` — patrones: refactor de componentes, API response, upsert, delegación
+- `development/concepts/*.md` — patrones: refactor, API response, upsert, delegación, i18n

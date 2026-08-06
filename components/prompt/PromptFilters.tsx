@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
@@ -19,7 +20,6 @@ interface PromptFiltersProps {
     platform?: string
     platformIds?: string | string[]
     status?: string | string[]
-    isFavorite?: string
     language?: string | string[]
     clientProjectIds?: string | string[]
     useCaseIds?: string | string[]
@@ -27,25 +27,25 @@ interface PromptFiltersProps {
 }
 
 const LANGUAGES = [
-  { code: "en", name: "English" },
-  { code: "es", name: "Spanish" },
-  { code: "fr", name: "French" },
-  { code: "de", name: "German" },
-  { code: "it", name: "Italian" },
-  { code: "pt", name: "Portuguese" },
-  { code: "nl", name: "Dutch" },
-  { code: "pl", name: "Polish" },
-  { code: "ru", name: "Russian" },
-  { code: "ja", name: "Japanese" },
-  { code: "zh", name: "Chinese" },
-  { code: "ko", name: "Korean" },
-]
+  { code: "en", nameKey: "languageEnglish" },
+  { code: "es", nameKey: "languageSpanish" },
+  { code: "fr", nameKey: "languageFrench" },
+  { code: "de", nameKey: "languageGerman" },
+  { code: "it", nameKey: "languageItalian" },
+  { code: "pt", nameKey: "languagePortuguese" },
+  { code: "nl", nameKey: "languageDutch" },
+  { code: "pl", nameKey: "languagePolish" },
+  { code: "ru", nameKey: "languageRussian" },
+  { code: "ja", nameKey: "languageJapanese" },
+  { code: "zh", nameKey: "languageChinese" },
+  { code: "ko", nameKey: "languageKorean" },
+] as const
 
 const STATUSES = [
-  { value: "DRAFT", label: "Draft" },
-  { value: "TESTED", label: "Tested" },
-  { value: "PRODUCTION", label: "Production" },
-]
+  { value: "DRAFT", labelKey: "statusDraft" },
+  { value: "TESTED", labelKey: "statusTested" },
+  { value: "PRODUCTION", labelKey: "statusProduction" },
+] as const
 
 export function PromptFilters({
   categories,
@@ -57,16 +57,7 @@ export function PromptFilters({
 }: PromptFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
-
-  const updateFilter = (key: string, value: string | null) => {
-    const params = new URLSearchParams(searchParams.toString())
-    if (value) {
-      params.set(key, value)
-    } else {
-      params.delete(key)
-    }
-    router.push(`/prompts?${params.toString()}`)
-  }
+  const t = useTranslations("PromptFilters")
 
   const toggleFilter = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -159,7 +150,7 @@ export function PromptFilters({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-gray-800">Filters</h2>
+        <h2 className="text-lg font-bold text-gray-800">{t("title")}</h2>
         {(initialFilters.categoryId ||
           selectedCategoryIds.length > 0 ||
           selectedPlatformIds.length > 0 ||
@@ -168,37 +159,17 @@ export function PromptFilters({
           selectedStatuses.length > 0 ||
           selectedLanguages.length > 0 ||
           selectedClientProjectIds.length > 0 ||
-          selectedUseCaseIds.length > 0 ||
-          initialFilters.isFavorite) && (
-          <Button variant="ghost" size="sm" onClick={clearFilters} aria-label="Clear filters" className="hover:bg-purple-50 hover:text-purple-700">
+          selectedUseCaseIds.length > 0) && (
+          <Button variant="ghost" size="sm" onClick={clearFilters} aria-label={t("clearFilters")} className="hover:bg-purple-50 hover:text-purple-700">
             <X className="h-4 w-4" />
-            <span className="sr-only">Clear filters</span>
+            <span className="sr-only">{t("clearFilters")}</span>
           </Button>
         )}
       </div>
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Favorite</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <label className="flex items-center space-x-2 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={initialFilters.isFavorite === "true"}
-              onChange={(e) =>
-                updateFilter("isFavorite", e.target.checked ? "true" : null)
-              }
-              className="h-4 w-4 rounded border-purple-300 text-purple-600 focus:ring-purple-400 focus:ring-2 cursor-pointer"
-            />
-            <span className="text-sm text-gray-700 group-hover:text-purple-700">Show favorites only</span>
-          </label>
-        </CardContent>
-      </Card>
-
-      <Card className="gradient-card shadow-glow border-purple-100">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Category</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("category")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {categories.map((category) => {
@@ -219,7 +190,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Tags</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("tags")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {tags.map((tag) => {
@@ -243,7 +214,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Platform</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("platform")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {platforms.map((platform) => {
@@ -264,7 +235,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Status</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("status")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {STATUSES.map((statusOption) => {
@@ -276,7 +247,7 @@ export function PromptFilters({
                   onChange={() => toggleFilter("status", statusOption.value)}
                   className="h-4 w-4 rounded border-gray-300"
                 />
-                <span className="text-sm">{statusOption.label}</span>
+                <span className="text-sm">{t(statusOption.labelKey)}</span>
               </label>
             )
           })}
@@ -285,7 +256,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Language</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("language")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {LANGUAGES.map((languageOption) => {
@@ -297,7 +268,7 @@ export function PromptFilters({
                   onChange={() => toggleFilter("language", languageOption.code)}
                   className="h-4 w-4 rounded border-gray-300"
                 />
-                <span className="text-sm">{languageOption.name}</span>
+                <span className="text-sm">{t(languageOption.nameKey)}</span>
               </label>
             )
           })}
@@ -306,7 +277,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Client / Project</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("clientProject")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {clients.map((client) => {
@@ -327,7 +298,7 @@ export function PromptFilters({
 
       <Card className="gradient-card shadow-glow border-purple-100">
         <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-semibold text-gray-700">Use Case</CardTitle>
+          <CardTitle className="text-sm font-semibold text-gray-700">{t("useCase")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {useCases.map((useCase) => {

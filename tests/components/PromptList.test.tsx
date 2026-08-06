@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react"
+import { NextIntlClientProvider } from "next-intl"
 import { PromptList } from "@/components/prompt/PromptList"
 import { ViewModeProvider } from "@/contexts/ViewModeContext"
+import messages from "../../messages/en-GB.json"
 
 const mockPrompts = [
   {
@@ -41,9 +43,11 @@ const mockPrompts = [
 
 function renderWithViewModeProvider(ui: React.ReactElement) {
   return render(
-    <ViewModeProvider initialViewMode="cards">
-      {ui}
-    </ViewModeProvider>
+    <NextIntlClientProvider locale="en-GB" messages={messages}>
+      <ViewModeProvider initialViewMode="cards">
+        {ui}
+      </ViewModeProvider>
+    </NextIntlClientProvider>
   )
 }
 

@@ -3,12 +3,14 @@
 import { useState } from "react"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export function LoginForm() {
   const router = useRouter()
+  const t = useTranslations("LoginForm")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -27,13 +29,13 @@ export function LoginForm() {
       })
 
       if (result?.error) {
-        setError("Invalid email or password")
+        setError(t("invalidCredentials"))
       } else {
         router.push("/")
         router.refresh()
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError(t("genericError"))
     } finally {
       setIsLoading(false)
     }
@@ -42,11 +44,11 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input
           id="email"
           type="email"
-          placeholder="name@example.com"
+          placeholder={t("emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -54,7 +56,7 @@ export function LoginForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           type="password"
@@ -69,7 +71,7 @@ export function LoginForm() {
         <div className="text-sm text-red-500">{error}</div>
       )}
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Signing in..." : "Sign In"}
+        {isLoading ? t("signingIn") : t("signIn")}
       </Button>
     </form>
   )

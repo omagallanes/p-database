@@ -1,6 +1,7 @@
 "use client"
 
 import { useTransition } from "react"
+import { useTranslations } from "next-intl"
 import { LayoutGrid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useViewMode } from "@/contexts/ViewModeContext"
@@ -8,6 +9,7 @@ import { useViewMode } from "@/contexts/ViewModeContext"
 export function ViewToggle() {
   const { viewMode, setViewMode } = useViewMode()
   const [isPending, startTransition] = useTransition()
+  const t = useTranslations("ViewToggle")
 
   const handleViewChange = (mode: "cards" | "list") => {
     startTransition(() => {
@@ -25,7 +27,7 @@ export function ViewToggle() {
         className="h-8 px-3"
       >
         <LayoutGrid className="h-4 w-4 mr-2" />
-        Cards
+        {t("cards")}
       </Button>
       <Button
         variant={viewMode === "list" ? "default" : "ghost"}
@@ -35,7 +37,7 @@ export function ViewToggle() {
         className="h-8 px-3"
       >
         <List className="h-4 w-4 mr-2" />
-        List
+        {t("list")}
       </Button>
     </div>
   )

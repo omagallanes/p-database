@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/lookup | Priority: low | Version: 1.0 | Updated: 2026-07-14 -->
+<!-- Context: project-intelligence/lookup | Priority: low | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Lookup: Decision Details & Alternatives
 
@@ -82,6 +82,17 @@ Related: `.opencode/`, commit `37bb4b8`, `reglas-abreviaciones.txt`
 | Keep both VPS and Vercel | Flexible, gradual migration | Confusing, split CI/CD | Clarity > flexibility |
 
 Related: commit `37bb4b8`, `docker-compose.yml` (retained for local PG), `Dockerfile` (outdated)
+
+---
+
+## 11. Preferencias de interfaz en cuenta (no localStorage)
+
+| Alternative | Pros | Cons | Why Rejected? |
+|-------------|------|------|---------------|
+| localStorage | Instantáneo, cero red, offline | No homologa entre dispositivos/navegadores | "así todo está homologado" (usuario) |
+| Cookie de preferencias | Síncrona con la sesión | Tamaño limitado, sin estructura tipada | JSON en BD más simple y escalable |
+
+Related: `contexts/UIContext.tsx`, `lib/ui-preferences.ts`, `app/api/user/preferences/route.ts`
 
 ---
 

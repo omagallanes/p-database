@@ -1,40 +1,12 @@
-import { PromptList } from "@/components/prompt/PromptList"
-import { PromptFilters } from "@/components/prompt/PromptFilters"
+import { PromptsPageContent, type TransformedPrompt } from "@/components/prompt/PromptsPageContent"
 import { prisma } from "@/lib/prisma"
 import { Prisma } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { ViewToggle } from "@/components/prompt/ViewToggle"
 import { ViewModeProvider } from "@/contexts/ViewModeContext"
+import { getTranslations } from "next-intl/server"
 
 export const dynamic = 'force-dynamic'
-
-interface TransformedPrompt {
-  id: string
-  title: string
-  description: string | null
-  body: string
-  type: string
-  platform: string
-  modelHint: string | null
-  language: string
-  useCase: string | null
-  clientOrProject: string | null
-  status: string
-  isFavorite: boolean
-  version: number
-  changelog: string | null
-  notes: string | null
-  usageCount: number
-  lastUsedAt: string | null
-  category: null
-  categories: { category: { id: string; name: string; slug: string } }[]
-  tags: { tag: { id: string; name: string; slug: string } }[]
-  platforms: { platform: { id: string; name: string; slug: string } }[]
-  clientProjects: { clientProject: { id: string; name: string; slug: string } }[]
-  user: { name: string; email: string } | null
-  createdAt: string
-  updatedAt: string
-}
 
 async function getPrompts(searchParams: {
   search?: string
@@ -365,6 +337,7 @@ export default async function PromptsPage({
 }) {
   const session = await auth()
   const userId = session?.user?.id
+  const t = await getTranslations("PromptsPage")
   
   const tagIds = Array.isArray(searchParams.tagIds)
     ? searchParams.tagIds
@@ -420,32 +393,26 @@ export default async function PromptsPage({
 
   return (
     <ViewModeProvider initialViewMode={viewMode}>
-      <div className="flex gap-6">
-        <div className="w-64 flex-shrink-0">
-          <PromptFilters
-            categories={categories}
-            tags={tags}
-            platforms={platforms}
-            clients={clients}
-            useCases={useCases}
-            initialFilters={{ ...searchParams, categoryIds, platformIds, clientProjectIds, useCaseIds, status, language }}
-          />
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            {t("title")}
+          </h1>
+          <ViewToggle />
         </div>
-        <div className="flex-1">
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Prompts
-              </h1>
-              <ViewToggle />
-            </div>
-            <p className="text-gray-600 font-medium">
-              {prompts.total} prompt{prompts.total !== 1 ? "s" : ""} found
-            </p>
-          </div>
-          <PromptList prompts={prompts.items} />
-        </div>
+        <p className="text-gray-600 font-medium">
+          {t("promptsFound", { count: prompts.total })}
+        </p>
       </div>
+      <PromptsPageContent
+        prompts={prompts.items}
+        categories={categories}
+        tags={tags}
+        platforms={platforms}
+        clients={clients}
+        useCases={useCases}
+        initialFilters={{ ...searchParams, categoryIds, platformIds, clientProjectIds, useCaseIds, status, language }}
+      />
     </ViewModeProvider>
   )
 }

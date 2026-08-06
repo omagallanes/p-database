@@ -4,6 +4,8 @@ import { Prisma } from "@prisma/client"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { enrichWithParentCategories } from "@/lib/category-utils"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const createPromptSchema = z.object({
   title: z.string().min(1),
@@ -32,6 +34,9 @@ const createPromptSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get("search")
@@ -153,19 +158,22 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching prompts:", error)
     return NextResponse.json(
-      { error: "Failed to fetch prompts" },
+      { error: t("failedToFetchPrompts") },
       { status: 500 }
     )
   }
 }
 
 export async function POST(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -241,13 +249,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: error.errors },
+        { error: t("invalidInput"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error creating prompt:", error)
     return NextResponse.json(
-      { error: "Failed to create prompt" },
+      { error: t("failedToCreatePrompt") },
       { status: 500 }
     )
   }

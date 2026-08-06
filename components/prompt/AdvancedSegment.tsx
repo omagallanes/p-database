@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -23,10 +24,12 @@ export default function AdvancedSegment({
   onNotesChange,
   errors,
 }: AdvancedSegmentProps) {
+  const t = useTranslations("AdvancedSegment")
+
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="version">Version</Label>
+        <Label htmlFor="version">{t("version")}</Label>
         <Input
           id="version"
           type="number"
@@ -41,7 +44,7 @@ export default function AdvancedSegment({
       </div>
 
       <div>
-        <Label htmlFor="changelog">Changelog</Label>
+        <Label htmlFor="changelog">{t("changelog")}</Label>
         <Textarea
           id="changelog"
           value={changelog}
@@ -54,7 +57,7 @@ export default function AdvancedSegment({
       </div>
 
       <div>
-        <Label htmlFor="notes">Notes</Label>
+        <Label htmlFor="notes">{t("notes")}</Label>
         <Textarea
           id="notes"
           value={notes}

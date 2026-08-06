@@ -17,6 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Plus, Edit, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 interface Tag {
   id: string
@@ -29,6 +30,8 @@ interface Tag {
 
 export default function TagsPage() {
   const router = useRouter()
+  const t = useTranslations("TagsPage")
+  const tCommon = useTranslations("Common")
   const [tags, setTags] = useState<Tag[]>([])
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -80,18 +83,18 @@ export default function TagsPage() {
         router.refresh()
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error saving tag:", error)
-      toast.error("Failed to save tag")
+      toast.error(t("saveFailed"))
     } finally {
       setLoading(false)
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this tag?")) return
+    if (!confirm(t("deleteConfirm"))) return
 
     try {
       const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -104,11 +107,11 @@ export default function TagsPage() {
         router.refresh()
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error deleting tag:", error)
-      toast.error("Failed to delete tag")
+      toast.error(t("deleteFailed"))
     }
   }
 
@@ -135,35 +138,35 @@ export default function TagsPage() {
   }
 
   if (loading && tags.length === 0) {
-    return <div>Loading...</div>
+    return <div>{tCommon("loading")}</div>
   }
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Tags</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Manage tags to label and filter your prompts
+            {t("subtitle")}
           </p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={handleNew}>
               <Plus className="mr-2 h-4 w-4" />
-              New Tag
+              {t("newTag")}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editingTag ? "Edit Tag" : "New Tag"}</DialogTitle>
+              <DialogTitle>{editingTag ? t("editTag") : t("newTag")}</DialogTitle>
               <DialogDescription>
-                Create a tag to label your prompts.
+                {t("dialogDescription")}
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">{t("nameLabel")}</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -179,7 +182,7 @@ export default function TagsPage() {
               </div>
 
               <div>
-                <Label htmlFor="slug">Slug *</Label>
+                <Label htmlFor="slug">{t("slugLabel")}</Label>
                 <Input
                   id="slug"
                   value={formData.slug}
@@ -191,7 +194,7 @@ export default function TagsPage() {
               </div>
 
               <Button type="submit" disabled={loading}>
-                {loading ? "Saving..." : "Save"}
+                {loading ? tCommon("saving") : tCommon("save")}
               </Button>
             </form>
           </DialogContent>
@@ -202,7 +205,7 @@ export default function TagsPage() {
         {tags.length === 0 ? (
           <Card>
             <CardContent className="p-6 text-center text-muted-foreground">
-              No tags yet. Create your first tag!
+              {t("noTags")}
             </CardContent>
           </Card>
         ) : (
@@ -214,8 +217,7 @@ export default function TagsPage() {
                     {tag.name}
                   </Badge>
                   <div className="text-sm text-muted-foreground">
-                    {tag.slug} • {tag._count.prompts} prompt
-                    {tag._count.prompts !== 1 ? "s" : ""}
+                    {t("promptCount", { slug: tag.slug, count: tag._count.prompts })}
                   </div>
                 </div>
                 <div className="flex gap-2">

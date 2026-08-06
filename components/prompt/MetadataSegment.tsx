@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -26,53 +27,55 @@ export default function MetadataSegment({
   onFavoriteChange,
   errors,
 }: MetadataSegmentProps) {
+  const t = useTranslations("MetadataSegment")
+
   return (
     <div className="space-y-4">
       <div>
-        <Label htmlFor="type">Type</Label>
+        <Label htmlFor="type">{t("type")}</Label>
         <Select value={type} onValueChange={onTypeChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="SYSTEM">System</SelectItem>
-            <SelectItem value="USER">User</SelectItem>
-            <SelectItem value="TOOL">Tool</SelectItem>
+            <SelectItem value="SYSTEM">{t("system")}</SelectItem>
+            <SelectItem value="USER">{t("user")}</SelectItem>
+            <SelectItem value="TOOL">{t("tool")}</SelectItem>
           </SelectContent>
         </Select>
         {errors?.type && <p className="mt-1 text-sm text-red-500">{errors.type}</p>}
       </div>
       <div>
-        <Label htmlFor="status">Status</Label>
+        <Label htmlFor="status">{t("status")}</Label>
         <Select value={status} onValueChange={onStatusChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="DRAFT">Draft</SelectItem>
-            <SelectItem value="TESTED">Tested</SelectItem>
-            <SelectItem value="PRODUCTION">Production</SelectItem>
+            <SelectItem value="DRAFT">{t("draft")}</SelectItem>
+            <SelectItem value="TESTED">{t("tested")}</SelectItem>
+            <SelectItem value="PRODUCTION">{t("production")}</SelectItem>
           </SelectContent>
         </Select>
         {errors?.status && <p className="mt-1 text-sm text-red-500">{errors.status}</p>}
       </div>
       <div>
-        <Label htmlFor="language">Language</Label>
+        <Label htmlFor="language">{t("language")}</Label>
         <Select value={language} onValueChange={onLanguageChange}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="catalan/valenciano">Català/Valencià</SelectItem>
-            <SelectItem value="de">Deutsch</SelectItem>
-            <SelectItem value="en">English</SelectItem>
-            <SelectItem value="es">Español</SelectItem>
-            <SelectItem value="vasco">Euskara</SelectItem>
-            <SelectItem value="fr">Français</SelectItem>
-            <SelectItem value="gallego">Galego</SelectItem>
-            <SelectItem value="it">Italiano</SelectItem>
-            <SelectItem value="nl">Nederlands</SelectItem>
-            <SelectItem value="pt">Português</SelectItem>
+            <SelectItem value="catalan/valenciano">{t("languageCatalan")}</SelectItem>
+            <SelectItem value="de">{t("languageDeutsch")}</SelectItem>
+            <SelectItem value="en">{t("languageEnglish")}</SelectItem>
+            <SelectItem value="es">{t("languageSpanish")}</SelectItem>
+            <SelectItem value="vasco">{t("languageEuskara")}</SelectItem>
+            <SelectItem value="fr">{t("languageFrench")}</SelectItem>
+            <SelectItem value="gallego">{t("languageGalician")}</SelectItem>
+            <SelectItem value="it">{t("languageItalian")}</SelectItem>
+            <SelectItem value="nl">{t("languageDutch")}</SelectItem>
+            <SelectItem value="pt">{t("languagePortuguese")}</SelectItem>
           </SelectContent>
         </Select>
         {errors?.language && <p className="mt-1 text-sm text-red-500">{errors.language}</p>}
@@ -86,7 +89,7 @@ export default function MetadataSegment({
           className="h-4 w-4 rounded border-gray-300"
         />
         <Label htmlFor="isFavorite" className="cursor-pointer">
-          Mark as favorite
+          {t("markAsFavorite")}
         </Label>
       </div>
       {errors?.isFavorite && <p className="mt-1 text-sm text-red-500">{errors.isFavorite}</p>}

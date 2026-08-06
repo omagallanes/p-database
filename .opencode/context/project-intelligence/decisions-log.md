@@ -1,10 +1,10 @@
-<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.1 | Updated: 2026-07-16 -->
+<!-- Context: project-intelligence/decisions | Priority: high | Version: 2.3 | Updated: 2026-08-06 -->
 
 # Decisions Log
 
 > Major architectural decisions with context, rationale, and impact. Details + alternatives tables in `lookup/decision-details.md`.
 
-**Updated**: 2026-07-14 | **Status**: Decided items, deprecated list at bottom
+**Updated**: 2026-08-06 | **Status**: Decided items, deprecated list at bottom
 
 ---
 
@@ -138,6 +138,34 @@
 **Execution**: `curl -X GET "https://p-database.vercel.app/api/system/assign-category"` via Vercel CLI token. 3 commits: `6302787` (create), `2201462` (temp auth removal for Vercel token), `9d54180` (delete endpoint + cleanup).
 
 **Related**: `backend/examples/temp-admin-bulk-op.md`, `backend/concepts/nextjs-api-patterns.md`
+
+---
+
+## 10. Internacionalización con next-intl v4 sin enrutado (2026-08-06)
+
+**Context**: La app estaba 100% en inglés hardcodeado. Se necesitaba soporte multilingüe (10 idiomas declarados: en-GB, es-ES, es-MX, ca, ca-ES-valencia, gl, pt-PT, fr, ru, zh-CN) con traducción completa es-ES en esta fase.
+
+**Decision**: next-intl v4 en modo "without i18n routing": resolución del locale por cabecera `accept-language` (coincidencia exacta → prefijos `es`→`es-ES`, `en`→`en-GB` → fallback en-GB), sin prefijo de URL, sin middleware de routing, sin cookie propia, sin campo de preferencia en BD. Solo se sirven `activeLocales` (en-GB, es-ES); los demás declarados sin mensajes no se sirven. Selector de idioma diferido a otro plan de trabajo. Errores de API traducidos con `getTranslations({ locale, namespace: "Api" })` en las 17 rutas. Despliegue directo a PROD (nada en local).
+
+**Rationale**: Opción más fácil y menos problemática según el usuario: sin cambios de sesión ni de BD, sin complejidad de enrutado; `accept-language` ya lo envía el navegador. next-intl v4 es compatible con Next.js 14 (peer deps) y su patrón oficial sin enrutado usa `headers()` en `getRequestConfig`.
+
+**Impact**: ✅ 21 namespaces, 240 claves por idioma con paridad verificada por test; fechas y números con formato regional (`useFormatter`); 81/81 tests; desplegado a PROD (prompt-database-liard.vercel.app) y verificado en vivo. ❌ Sin selector ni persistencia de preferencia (diferido); 8 idiomas declarados sin traducir; Jest exige `transformIgnorePatterns` sobrescrito (next-intl v4 es ESM-only) y simular `next-intl/server` en tests de API. Risk: los q-values del header se ignoran (el orden del header manda; impacto mínimo).
+
+**Related**: `development/concepts/i18n-next-intl-pattern.md`, `docs/plan-traduccion-i18n.md`, `technical-domain.md`
+
+---
+
+## 11. Preferencias de interfaz en cuenta, nunca localStorage (2026-08-06)
+
+**Context**: El colapso del sidebar, la ocultación del panel de filtros y futuras preferencias (idioma, tema, color, columnas) debían sobrevivir entre sesiones y dispositivos.
+
+**Decision**: Las preferencias de interfaz se guardan TODAS en la cuenta: BD vía `PATCH /api/user/preferences` → JSON en `User.uiPreferences` (schema compartido `lib/ui-preferences.ts`), expuestas a componentes cliente vía `UIContext`. Nunca `localStorage`.
+
+**Rationale**: Motivo del usuario: "así todo está homologado" — el usuario recupera su entorno en cualquier ordenador o móvil. localStorage no homologa entre dispositivos.
+
+**Impact**: ✅ Entorno recuperable en cualquier dispositivo; base extensible para Fase B (theme, accentColor, columns). ❌ Requiere sesión autenticada (sin sesión → defaults). Risk: JSON corrupto en BD mitigado por `.catch({})` del schema Zod.
+
+**Related**: `development/frontend/concepts/ui-preferences-pattern.md`, `lookup/decision-details.md` #11
 
 ---
 

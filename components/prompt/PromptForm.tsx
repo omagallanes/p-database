@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import { useTranslations, useFormatter } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -91,6 +92,9 @@ interface PromptFormProps {
 export function PromptForm({ prompt, categories, tags, platforms, clientProjects, useCases, modelHints }: PromptFormProps) {
   useSession()
   const router = useRouter()
+  const t = useTranslations("PromptForm")
+  const tCommon = useTranslations("Common")
+  const format = useFormatter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<{
     title: string
@@ -204,11 +208,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         }
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error saving prompt:", error)
-      toast.error("Failed to save prompt")
+      toast.error(t("saveFailed"))
     } finally {
       setLoading(false)
     }
@@ -221,9 +225,9 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
     try {
       const payload = {
         ...formData,
-        title: `${formData.title} (Copy)`,
+        title: t("duplicateTitle", { title: formData.title }),
         version: 1,
-        changelog: `Duplicated from version ${prompt.version}`,
+        changelog: t("duplicatedFromVersion", { version: prompt.version }),
         platformIds: selectedPlatforms.map((p) => p.id),
         categoryIds: selectedCategories.map((c) => c.id),
         tagIds: selectedTags.map((t) => t.id),
@@ -250,11 +254,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         }
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error duplicating prompt:", error)
-      toast.error("Failed to duplicate prompt")
+      toast.error(t("duplicateFailed"))
     } finally {
       setLoading(false)
     }
@@ -267,16 +271,16 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
         await fetch(`${basePath}/api/prompts/${prompt.id}/usage`, { method: "PATCH" })
       }
-      toast.success("Copied to clipboard!")
+      toast.success(t("copiedToClipboard"))
     } catch (error) {
       console.error("Failed to copy:", error)
-      toast.error("Failed to copy to clipboard")
+      toast.error(t("copyFailed"))
     }
   }
 
   const handleDelete = async () => {
     if (!prompt) return
-    if (!confirm("Are you sure you want to delete this prompt?")) return
+    if (!confirm(t("deleteConfirm"))) return
 
     setLoading(true)
     try {
@@ -290,11 +294,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         router.refresh()
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error deleting prompt:", error)
-      toast.error("Failed to delete prompt")
+      toast.error(t("deleteFailed"))
     } finally {
       setLoading(false)
     }
@@ -367,11 +371,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         setNewPlatformName("")
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error creating platform:", error)
-      toast.error("Failed to create platform")
+      toast.error(t("createPlatformFailed"))
     } finally {
       setCreatingPlatform(false)
     }
@@ -403,11 +407,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         setNewClientProjectName("")
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error creating client-project:", error)
-      toast.error("Failed to create client-project")
+      toast.error(t("createClientProjectFailed"))
     } finally {
       setCreatingClientProject(false)
     }
@@ -439,11 +443,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         setNewUseCaseName("")
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error creating use-case:", error)
-      toast.error("Failed to create use-case")
+      toast.error(t("createUseCaseFailed"))
     } finally {
       setCreatingUseCase(false)
     }
@@ -475,11 +479,11 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
         setNewModelHintName("")
       } else {
         const error = await response.json()
-        toast.error(`Error: ${error.error}`)
+        toast.error(tCommon("errorToast", { message: error.error }))
       }
     } catch (error) {
       console.error("Error creating model-hint:", error)
-      toast.error("Failed to create model-hint")
+      toast.error(t("createModelHintFailed"))
     } finally {
       setCreatingModelHint(false)
     }
@@ -526,29 +530,29 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">
-          {prompt ? "Edit Prompt" : "New Prompt"}
+          {prompt ? t("titleEdit") : t("titleNew")}
         </h1>
         <div className="flex gap-2">
           {prompt && (
             <>
               <Button type="button" variant="outline" onClick={handleCopy}>
                 <Copy className="mr-2 h-4 w-4" />
-                Copy Prompt
+                {t("copyPrompt")}
               </Button>
               <Button type="button" variant="outline" onClick={handleDuplicate}>
-                Duplicate
+                {tCommon("duplicate")}
               </Button>
               <Button
                 type="button"
                 variant="destructive"
                 onClick={handleDelete}
               >
-                Delete
+                {tCommon("delete")}
               </Button>
             </>
           )}
           <Button type="submit" disabled={loading}>
-            {loading ? "Saving..." : "Save"}
+            {loading ? tCommon("saving") : tCommon("save")}
           </Button>
         </div>
       </div>
@@ -556,7 +560,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
+            <CardTitle>{t("basicInformation")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <BasicInfoSegment
@@ -569,7 +573,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
             />
 
             <div>
-              <Label htmlFor="prePrompt">Pre-Prompt</Label>
+              <Label htmlFor="prePrompt">{t("prePrompt")}</Label>
               <Textarea
                 id="prePrompt"
                 value={formData.prePrompt}
@@ -578,12 +582,12 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
                 }
                 rows={6}
                 className="font-mono text-sm"
-                placeholder="Optional pre-prompt instructions..."
+                placeholder={t("prePromptPlaceholder")}
               />
             </div>
 
             <div>
-              <Label htmlFor="manualDeUso">Manual de uso</Label>
+              <Label htmlFor="manualDeUso">{t("manualDeUso")}</Label>
               <Textarea
                 id="manualDeUso"
                 value={formData.manualDeUso}
@@ -592,25 +596,39 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
                 }
                 rows={6}
                 className="font-mono text-sm"
-                placeholder="Optional usage instructions..."
+                placeholder={t("manualDeUsoPlaceholder")}
               />
             </div>
 
             {prompt && (
               <>
                 <div>
-                  <Label>Fecha de creación</Label>
+                  <Label>{t("createdAt")}</Label>
                   <Input
-                    value={new Date(prompt.createdAt).toLocaleString("es-ES")}
+                    value={format.dateTime(new Date(prompt.createdAt), {
+                      day: "numeric",
+                      month: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      second: "numeric",
+                    })}
                     readOnly
                     disabled
                   />
                 </div>
 
                 <div>
-                  <Label>Fecha de actualización</Label>
+                  <Label>{t("updatedAt")}</Label>
                   <Input
-                    value={new Date(prompt.updatedAt).toLocaleString("es-ES")}
+                    value={format.dateTime(new Date(prompt.updatedAt), {
+                      day: "numeric",
+                      month: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      second: "numeric",
+                    })}
                     readOnly
                     disabled
                   />
@@ -622,7 +640,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
 
         <Card>
           <CardHeader>
-            <CardTitle>Metadata</CardTitle>
+            <CardTitle>{t("metadata")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <MetadataSegment
@@ -637,28 +655,28 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
             />
 
             <TaxonomyMultiSelect
-              label="Categories"
+              label={t("categories")}
               items={categories}
               selectedIds={selectedCategories.map((c) => c.id)}
               onChange={handleCategoryChange}
             />
 
             <TaxonomyMultiSelect
-              label="Tags"
+              label={t("tags")}
               items={tags}
               selectedIds={selectedTags.map((t) => t.id)}
               onChange={handleTagChange}
             />
 
             <TaxonomyMultiSelect
-              label="Use Cases"
+              label={t("useCases")}
               items={useCases}
               selectedIds={selectedUseCases.map((uc) => uc.id)}
               onChange={handleUseCaseChange}
             />
             <div className="flex gap-2">
               <Input
-                placeholder="New use case..."
+                placeholder={t("newUseCasePlaceholder")}
                 value={newUseCaseName}
                 onChange={(e) => setNewUseCaseName(e.target.value)}
                 onKeyDown={handleUseCaseKeyDown}
@@ -675,14 +693,14 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
             </div>
 
             <TaxonomyMultiSelect
-              label="Client/Project"
+              label={t("clientProject")}
               items={clientProjects}
               selectedIds={selectedClientProjects.map((cp) => cp.id)}
               onChange={handleClientProjectChange}
             />
             <div className="flex gap-2">
               <Input
-                placeholder="New client/project..."
+                placeholder={t("newClientProjectPlaceholder")}
                 value={newClientProjectName}
                 onChange={(e) => setNewClientProjectName(e.target.value)}
                 onKeyDown={handleClientProjectKeyDown}
@@ -699,14 +717,14 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
             </div>
 
             <TaxonomyMultiSelect
-              label="Platforms"
+              label={t("platforms")}
               items={platforms}
               selectedIds={selectedPlatforms.map((p) => p.id)}
               onChange={handlePlatformSelectChange}
             />
             <div className="flex gap-2">
               <Input
-                placeholder="New platform..."
+                placeholder={t("newPlatformPlaceholder")}
                 value={newPlatformName}
                 onChange={(e) => setNewPlatformName(e.target.value)}
                 onKeyDown={handlePlatformKeyDown}
@@ -723,14 +741,14 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
             </div>
 
             <TaxonomyMultiSelect
-              label="Model Hints"
+              label={t("modelHints")}
               items={modelHints}
               selectedIds={selectedModelHints.map((mh) => mh.id)}
               onChange={handleModelHintChange}
             />
             <div className="flex gap-2">
               <Input
-                placeholder="New model hint..."
+                placeholder={t("newModelHintPlaceholder")}
                 value={newModelHintName}
                 onChange={(e) => setNewModelHintName(e.target.value)}
                 onKeyDown={handleModelHintKeyDown}
@@ -751,7 +769,7 @@ export function PromptForm({ prompt, categories, tags, platforms, clientProjects
 
       <Card>
         <CardHeader>
-          <CardTitle>Advanced</CardTitle>
+          <CardTitle>{t("advanced")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <AdvancedSegment

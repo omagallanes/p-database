@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/notes | Priority: high | Version: 1.2 | Updated: 2026-08-04 -->
+<!-- Context: project-intelligence/notes | Priority: high | Version: 1.4 | Updated: 2026-08-06 -->
 
 # Living Notes
 
@@ -69,12 +69,15 @@
 - **Prisma migrations** (`/prisma/migrations`) are gitignored (`.gitignore:41`) — migration history is NOT in the repository. Run `npx prisma migrate dev` on fresh clones.
 - **PromptForm.tsx** is 769 lines — the largest component in the project (reduced from 1,021 via Plan C segment split) and a potential refactor target.
 - **Auth secret must be generated** with `openssl rand -base64 32` — the `.env.example` placeholder value will not work in production.
+- **Jest + next-intl v4 (ESM-only)**: `next/jest` antepone `/node_modules/` a `transformIgnorePatterns`, así que añadir patrones a `customJestConfig` NO transforma next-intl. La config debe sobrescribirlos tras `createJestConfig` (`jest.config.js`): `"/node_modules/(?!(next-auth|@auth/core|@auth/prisma-adapter|next-intl|use-intl|intl-messageformat|@formatjs)/)"`. Además `getTranslations` de `next-intl/server` NO funciona en Jest (stub que lanza); los tests de API deben simular `next-intl/server` con los catálogos reales.
+- **Localización por `accept-language`**: solo se sirven los locales activos (en-GB, es-ES); los declarados sin traducción (es-MX, ca, gl...) caen al respaldo en-GB. Para activar un idioma nuevo: añadirlo a `activeLocales` en `i18n/locales.ts` y crear su catálogo con paridad total (verificado por `tests/i18n/messages.test.ts`).
 
 ## Active Projects
 
 | Project | Goal | Timeline |
 |---------|------|----------|
 | Production deployment to Vercel | Deployed (2026-04/07) — smoke tests verified, 22 static pages built | Done |
+| Fase A — Interfaz (sidebar colapsable, filtros ocultables, preferencias en cuenta) | Implementado 2026-08-06 — ver `development/frontend/concepts/ui-preferences-pattern.md` | Done |
 
 ## What Works Well
 

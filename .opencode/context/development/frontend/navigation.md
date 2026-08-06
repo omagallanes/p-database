@@ -1,4 +1,4 @@
-<!-- Context: development/frontend/nav | Priority: high | Version: 1.2 | Updated: 2026-07-16 -->
+<!-- Context: development/frontend/nav | Priority: high | Version: 1.3 | Updated: 2026-08-06 -->
 
 # Frontend Development
 
@@ -16,7 +16,8 @@ frontend/
 │   ├── form-patterns.md         # Segment form (PromptForm 3 sections)
 │   ├── filter-patterns.md       # URL-driven multi-dimension filters
 │   ├── search-clear-pattern.md  # Clear button for search inputs
-│   └── view-mode-pattern.md     # Card/list toggle with persistence
+│   ├── view-mode-pattern.md     # Card/list toggle with persistence
+│   └── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
 └── react/
     ├── navigation.md
     └── react-patterns.md
@@ -32,6 +33,7 @@ frontend/
 | **URL-driven filters** | `concepts/filter-patterns.md` |
 | **Search clear button** | `concepts/search-clear-pattern.md` |
 | **View mode toggle** | `concepts/view-mode-pattern.md` |
+| **UI preferences (en cuenta)** | `concepts/ui-preferences-pattern.md` |
 | **When to delegate** | `when-to-delegate.md` |
 | **React patterns** | `react/react-patterns.md` |
 

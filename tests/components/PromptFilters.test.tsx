@@ -3,7 +3,17 @@
  */
 
 import { render, screen, fireEvent } from "@testing-library/react"
+import { NextIntlClientProvider } from "next-intl"
 import { PromptFilters } from "@/components/prompt/PromptFilters"
+import messages from "../../messages/en-GB.json"
+
+function renderWithI18n(ui: React.ReactElement) {
+  return render(
+    <NextIntlClientProvider locale="en-GB" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>
+  )
+}
 
 // Mock next/navigation
 const mockPush = jest.fn()
@@ -69,7 +79,7 @@ describe("PromptFilters", () => {
   })
 
   it("should render with empty filters", () => {
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -90,7 +100,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue([]) // No existing platformIds
     mockToString.mockReturnValue("")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -114,7 +124,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue(["plat-1"]) // Existing platformIds
     mockToString.mockReturnValue("")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -138,7 +148,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue([]) // No existing categoryIds
     mockToString.mockReturnValue("")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -162,7 +172,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue(["cat-1"]) // Existing categoryIds
     mockToString.mockReturnValue("")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -186,7 +196,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue([]) // No existing tagIds
     mockToString.mockReturnValue("")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -211,7 +221,7 @@ describe("PromptFilters", () => {
     mockGetAll.mockReturnValue(["plat-1"])
     mockToString.mockReturnValue("platformIds=plat-1")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}
@@ -234,7 +244,7 @@ describe("PromptFilters", () => {
   it("should clear all filters when clear filters is clicked", () => {
     mockToString.mockReturnValue("platformIds=plat-1&categoryIds=cat-1&tagIds=tag-1")
 
-    render(
+    renderWithI18n(
       <PromptFilters
         categories={mockCategories}
         tags={mockTags}

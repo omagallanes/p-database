@@ -17,6 +17,7 @@ model User {
   password                 String?
   role                     String    @default("user")
   promptListViewPreference String    @default("cards")
+  uiPreferences            Json      @default("{}")
   createdAt                DateTime  @default(now())
   updatedAt                DateTime  @updatedAt
   accounts                 Account[]

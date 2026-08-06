@@ -1,18 +1,21 @@
-/** @type {import('next').NextConfig} */
+const createNextIntlPlugin = require("next-intl/plugin")
+
+const withNextIntl = createNextIntlPlugin()
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: 'standalone',
-  ...(basePath && basePath !== '' && { basePath }),
-  ...(basePath && basePath !== '' && { assetPrefix: basePath }),
+  output: "standalone",
+  ...(basePath && basePath !== "" && { basePath }),
+  ...(basePath && basePath !== "" && { assetPrefix: basePath }),
   experimental: {
-    // Disable static generation for all pages
+    // Server Actions payload limit
     serverActions: {
-      bodySizeLimit: '2mb',
+      bodySizeLimit: "2mb",
     },
   },
 }
 
-module.exports = nextConfig
+module.exports = withNextIntl(nextConfig)

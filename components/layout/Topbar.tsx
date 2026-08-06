@@ -1,28 +1,64 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useSession, signOut } from "next-auth/react"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Plus, Download, Upload, Search } from "lucide-react"
-import { toast } from "sonner"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Switch } from "@/components/ui/switch"
+import { useUIContext } from "@/contexts/UIContext"
+import { Plus, Search, SlidersHorizontal } from "lucide-react"
+
+function FavoritesSwitch() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const t = useTranslations("Topbar")
+
+  const isFavorite = searchParams.get("isFavorite") === "true"
+
+  const handleToggle = (checked: boolean) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (checked) {
+      params.set("isFavorite", "true")
+    } else {
+      params.delete("isFavorite")
+    }
+    const query = params.toString()
+    if (pathname === "/prompts") {
+      router.push(query ? `/prompts?${query}` : "/prompts")
+    } else {
+      router.push(checked ? "/prompts?isFavorite=true" : "/prompts")
+    }
+  }
+
+  return (
+    <label
+      htmlFor="favorites-only-switch"
+      className="flex cursor-pointer items-center gap-2 whitespace-nowrap"
+    >
+      <Switch
+        id="favorites-only-switch"
+        checked={isFavorite}
+        onCheckedChange={handleToggle}
+      />
+      <span className="text-sm text-gray-700">{t("showFavoritesOnly")}</span>
+    </label>
+  )
+}
 
 export function Topbar() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
+  const { filtersVisible, setFiltersVisible, activeFilterCount } = useUIContext()
+  const t = useTranslations("Topbar")
+  const tCommon = useTranslations("Common")
   const [searchQuery, setSearchQuery] = useState("")
-  const [importOpen, setImportOpen] = useState(false)
-  const [importFile, setImportFile] = useState<File | null>(null)
+
+  const showFilterBadge = !filtersVisible && pathname === "/prompts" && activeFilterCount > 0
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -30,55 +66,7 @@ export function Topbar() {
     if (searchQuery) {
       params.set("search", searchQuery)
     }
-    router.push(`/prompts?${params.toString()}`)
-  }
-
-  const handleExport = async () => {
-    try {
-      const response = await fetch(`/api/export/prompts`)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `prompts-export-${new Date().toISOString().split("T")[0]}.json`
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
-    } catch (error) {
-      console.error("Export failed:", error)
-      toast.error("Failed to export prompts")
-    }
-  }
-
-  const handleImport = async () => {
-    if (!importFile) return
-
-    try {
-      const text = await importFile.text()
-      const data = JSON.parse(text)
-
-      const response = await fetch(`/api/import/prompts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (response.ok) {
-        toast.success("Import successful!")
-        setImportOpen(false)
-        setImportFile(null)
-        router.refresh()
-      } else {
-        const error = await response.json()
-        toast.error(`Import failed: ${error.error}`)
-      }
-    } catch (error) {
-      console.error("Import failed:", error)
-      toast.error("Failed to import prompts")
-    }
+    router.push(params.toString() ? `/prompts?${params.toString()}` : "/prompts")
   }
 
   return (
@@ -89,7 +77,7 @@ export function Topbar() {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-purple-400" />
             <Input
               type="text"
-              placeholder="Search prompts..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 border-purple-200 focus:border-purple-400 focus:ring-purple-400"
@@ -105,57 +93,47 @@ export function Topbar() {
             }}
             className="text-sm text-purple-600 hover:text-purple-800 hover:underline px-1 whitespace-nowrap"
           >
-            Clear
+            {tCommon("clear")}
           </button>
         )}
       </div>
 
       <div className="flex items-center gap-2">
         {status === "loading" ? (
-          <div className="text-sm text-gray-500">Loading...</div>
+          <div className="text-sm text-gray-500">{tCommon("loading")}</div>
         ) : session?.user ? (
           <>
             <Link href="/prompts/new">
               <Button className="gradient-primary shadow-glow hover:shadow-glow-hover transition-all">
                 <Plus className="mr-2 h-4 w-4" />
-                New Prompt
+                {t("newPrompt")}
               </Button>
             </Link>
 
-            <Button variant="outline" onClick={handleExport} className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
-              <Download className="mr-2 h-4 w-4" />
-              Export
+            <Button
+              variant="outline"
+              onClick={() => setFiltersVisible(!filtersVisible)}
+              aria-label={filtersVisible ? t("hideFilters") : t("showFilters")}
+              className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
+            >
+              <span className="relative">
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                {showFilterBadge && (
+                  <span
+                    role="status"
+                    aria-label={t("filtersActive", { count: activeFilterCount })}
+                    className="absolute -top-2 -right-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-purple-600 px-1 text-[10px] font-bold text-white"
+                  >
+                    {activeFilterCount}
+                  </span>
+                )}
+              </span>
+              {filtersVisible ? t("hideFilters") : t("showFilters")}
             </Button>
 
-            <Dialog open={importOpen} onOpenChange={setImportOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Import
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Import Prompts</DialogTitle>
-                  <DialogDescription>
-                    Upload a JSON file exported from this application.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <Input
-                    type="file"
-                    accept=".json"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0]
-                      if (file) setImportFile(file)
-                    }}
-                  />
-                  <Button onClick={handleImport} disabled={!importFile}>
-                    Import
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+            <Suspense fallback={null}>
+              <FavoritesSwitch />
+            </Suspense>
 
             <Link href="/auth/profile">
               <Button variant="ghost" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
@@ -168,19 +146,19 @@ export function Topbar() {
               onClick={() => signOut({ callbackUrl: "/" })}
               className="border-purple-200 hover:bg-purple-50 hover:border-purple-300"
             >
-              Sign Out
+              {t("signOut")}
             </Button>
           </>
         ) : (
           <>
             <Link href="/auth/signin">
               <Button variant="ghost" className="border-purple-200 hover:bg-purple-50 hover:border-purple-300">
-                Sign In
+                {t("signIn")}
               </Button>
             </Link>
             <Link href="/auth/signup">
               <Button className="gradient-primary shadow-glow hover:shadow-glow-hover transition-all">
-                Sign Up
+                {t("signUp")}
               </Button>
             </Link>
           </>

@@ -1,7 +1,17 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { NextIntlClientProvider } from "next-intl"
 import { LoginForm } from "@/components/auth/LoginForm"
 import { SignupForm } from "@/components/auth/SignupForm"
 import { UserProfile } from "@/components/auth/UserProfile"
+import messages from "../../messages/en-GB.json"
+
+function renderWithI18n(ui: React.ReactElement) {
+  return render(
+    <NextIntlClientProvider locale="en-GB" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>
+  )
+}
 
 // Mock next-auth/react
 jest.mock("next-auth/react", () => ({
@@ -21,7 +31,7 @@ jest.mock("next/navigation", () => ({
 describe("Authentication Components", () => {
   describe("LoginForm", () => {
     it("should render login form", () => {
-      render(<LoginForm />)
+      renderWithI18n(<LoginForm />)
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
       expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument()
@@ -31,7 +41,7 @@ describe("Authentication Components", () => {
       const { signIn } = require("next-auth/react")
       signIn.mockResolvedValue({ error: "Invalid credentials" })
 
-      render(<LoginForm />)
+      renderWithI18n(<LoginForm />)
 
       const emailInput = screen.getByLabelText(/email/i)
       const passwordInput = screen.getByLabelText(/password/i)
@@ -49,7 +59,7 @@ describe("Authentication Components", () => {
 
   describe("SignupForm", () => {
     it("should render signup form", () => {
-      render(<SignupForm />)
+      renderWithI18n(<SignupForm />)
       expect(screen.getByLabelText(/name/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
@@ -72,7 +82,7 @@ describe("Authentication Components", () => {
         status: "authenticated",
       })
 
-      render(<UserProfile />)
+      renderWithI18n(<UserProfile />)
 
       expect(screen.getByText(/test user/i)).toBeInTheDocument()
       expect(screen.getByText(/test@example.com/i)).toBeInTheDocument()
@@ -86,7 +96,7 @@ describe("Authentication Components", () => {
         status: "unauthenticated",
       })
 
-      const { container } = render(<UserProfile />)
+      const { container } = renderWithI18n(<UserProfile />)
       expect(container.firstChild).toBeNull()
     })
   })

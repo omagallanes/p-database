@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const prompt = await prisma.prompt.update({
       where: { id: params.id },
@@ -28,7 +33,7 @@ export async function PATCH(
   } catch (error) {
     console.error("Error updating prompt usage:", error)
     return NextResponse.json(
-      { error: "Failed to update prompt usage" },
+      { error: t("failedToUpdatePromptUsage") },
       { status: 500 }
     )
   }

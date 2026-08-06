@@ -74,3 +74,4 @@ session-*
 
 # ── DIRECTORIOS TEMPORALES ──────────────────────────────────────────────────
 temp/
+.env*

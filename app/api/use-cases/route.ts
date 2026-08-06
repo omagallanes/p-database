@@ -2,12 +2,17 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 const createUseCaseSchema = z.object({
   name: z.string().min(1),
 })
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const useCases = await prisma.useCase.findMany({
       include: {
@@ -26,19 +31,22 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching use-cases:", error)
     return NextResponse.json(
-      { error: "Failed to fetch use-cases" },
+      { error: t("failedToFetchUseCases") },
       { status: 500 }
     )
   }
 }
 
 export async function POST(request: NextRequest) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user) {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -64,13 +72,13 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input", details: error.errors },
+        { error: t("invalidInput"), details: error.errors },
         { status: 400 }
       )
     }
     console.error("Error creating use-case:", error)
     return NextResponse.json(
-      { error: "Failed to create use-case" },
+      { error: t("failedToCreateUseCase") },
       { status: 500 }
     )
   }

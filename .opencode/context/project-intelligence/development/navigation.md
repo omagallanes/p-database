@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/development/nav | Priority: medium | Version: 1.0 | Updated: 2026-07-16 -->
+<!-- Context: project-intelligence/development/nav | Priority: medium | Version: 1.1 | Updated: 2026-08-06 -->
 
 # Development Knowledge
 
@@ -23,6 +23,7 @@ development/
 | API response standards | `concepts/api-response-standards.md` |
 | Upsert pattern for entities | `concepts/upsert-entity-pattern.md` |
 | CodeReviewer gate workflow | `concepts/task-delegation-workflow.md` |
+| i18n con next-intl (sin enrutado) | `concepts/i18n-next-intl-pattern.md` |
 | Mock Prisma upsert entities | `examples/mock-entity-upsert.md` |
 | Mock Prisma $transaction | `examples/mock-transaction.md` |
 | Segment component pattern | `examples/segment-component.md` |
@@ -30,6 +31,7 @@ development/
 | Refactor step-by-step | `guides/refactor-large-components.md` |
 | Rollback procedures | `guides/rollback-procedures.md` |
 | Deploy to Vercel | `guides/deploy-to-vercel.md` |
+| Migración de schema (BD única Neon) | `guides/deploy-to-vercel.md` → sección "Migración de schema" |
 | Commands reference | `lookup/plan-c-commands.md` |
 | Mock coverage table | `lookup/mock-coverage-table.md` |
 | Files modified per phase | `lookup/plan-c-files-list.md` |

@@ -2,12 +2,26 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+// Errors currently returned by /api/auth/register. Subtasks 10/11 will
+// translate them server-side; until then this map shows localized messages.
+// Unknown responses fall through unchanged (they will already be translated).
+const REGISTER_ERROR_TO_API_KEY: Record<string, string> = {
+  "Name must be at least 2 characters": "nameTooShort",
+  "Invalid email address": "invalidEmail",
+  "Password must be at least 6 characters": "passwordTooShort",
+  "User with this email already exists": "emailAlreadyExists",
+  "Internal server error": "internalServerError",
+}
+
 export function SignupForm() {
   const router = useRouter()
+  const t = useTranslations("SignupForm")
+  const tApi = useTranslations("Api")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -29,12 +43,13 @@ export function SignupForm() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || "Registration failed")
+        const apiKey = REGISTER_ERROR_TO_API_KEY[data.error ?? ""]
+        setError(apiKey ? tApi(apiKey) : data.error || t("registrationFailed"))
       } else {
         router.push("/auth/signin?registered=true")
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError(t("genericError"))
     } finally {
       setIsLoading(false)
     }
@@ -43,11 +58,11 @@ export function SignupForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">{t("name")}</Label>
         <Input
           id="name"
           type="text"
-          placeholder="John Doe"
+          placeholder={t("namePlaceholder")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -55,11 +70,11 @@ export function SignupForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("email")}</Label>
         <Input
           id="email"
           type="email"
-          placeholder="name@example.com"
+          placeholder={t("emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -67,7 +82,7 @@ export function SignupForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("password")}</Label>
         <Input
           id="password"
           type="password"
@@ -82,7 +97,7 @@ export function SignupForm() {
         <div className="text-sm text-red-500">{error}</div>
       )}
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Creating account..." : "Sign Up"}
+        {isLoading ? t("creatingAccount") : t("signUp")}
       </Button>
     </form>
   )

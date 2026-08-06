@@ -3,17 +3,22 @@ import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import bcrypt from "bcryptjs"
+import { getTranslations } from "next-intl/server"
+import { getLocaleFromRequest } from "@/lib/locale"
 
 export const dynamic = 'force-dynamic'
 
 // GET /api/users - List all users (admin only)
-export async function GET() {
+export async function GET(request: Request) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user || session.user.role !== "admin") {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -34,7 +39,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching users:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: t("internalServerError") },
       { status: 500 }
     )
   }
@@ -42,12 +47,15 @@ export async function GET() {
 
 // PUT /api/users - Update user (admin only)
 export async function PUT(request: Request) {
+  const locale = getLocaleFromRequest(request)
+  const t = await getTranslations({ locale, namespace: "Api" })
+
   try {
     const session = await auth()
     
     if (!session?.user || session.user.role !== "admin") {
       return NextResponse.json(
-        { error: "Unauthorized" },
+        { error: t("unauthorized") },
         { status: 401 }
       )
     }
@@ -77,7 +85,7 @@ export async function PUT(request: Request) {
   } catch (error) {
     console.error("Error updating user:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: t("internalServerError") },
       { status: 500 }
     )
   }
