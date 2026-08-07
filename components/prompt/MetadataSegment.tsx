@@ -147,12 +147,21 @@ export default function MetadataSegment({
       ? statusItems
       : [{ value: status, label: status }, ...statusItems]
 
+  // Accessible names include the current value so screen readers announce
+  // both the field and its selection (aria-label overrides the visible text).
+  const currentTypeLabel =
+    displayTypeItems.find((item) => item.value === type)?.label ?? type
+  const currentStatusLabel =
+    displayStatusItems.find((item) => item.value === status)?.label ?? status
+  const currentLanguageLabel =
+    displayLanguageItems.find((item) => item.value === language)?.label ?? language
+
   return (
     <div className="space-y-4">
       <div>
         <Label htmlFor="type">{t("type")}</Label>
         <Select value={type} onValueChange={onTypeChange}>
-          <SelectTrigger>
+          <SelectTrigger aria-label={`${t("type")}: ${currentTypeLabel}`}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -168,7 +177,7 @@ export default function MetadataSegment({
       <div>
         <Label htmlFor="status">{t("status")}</Label>
         <Select value={status} onValueChange={onStatusChange}>
-          <SelectTrigger>
+          <SelectTrigger aria-label={`${t("status")}: ${currentStatusLabel}`}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -184,7 +193,7 @@ export default function MetadataSegment({
       <div>
         <Label htmlFor="language">{t("language")}</Label>
         <Select value={language} onValueChange={onLanguageChange}>
-          <SelectTrigger>
+          <SelectTrigger aria-label={`${t("language")}: ${currentLanguageLabel}`}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

@@ -155,7 +155,7 @@ middleware.ts
 - Jest 29.7 + next/jest + jest-environment-jsdom; **12 archivos** (5 API + 3 componentes + 4 i18n)
 - **81 pruebas, todas superadas** (conteo previo de 60/56 obsoleto)
 - Mocks: next-auth, @auth/prisma-adapter, next/navigation, prisma ($transaction), next-intl/server (con catálogos reales)
-- Cobertura actual 73.48% de líneas (75.29% funciones); objetivo ≥70%; informe en `docs/informe-cobertura.md`
+- Cobertura actual 79.61% de líneas; objetivo ≥70%; informe en `docs/informe-cobertura.md`
 
 ## Docker
 

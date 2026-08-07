@@ -27,5 +27,17 @@ module.exports = async () => {
     "^.+\\.module\\.(css|sass|scss)$",
   ]
 
+  // Protect the verified coverage levels (docs/informe-cobertura.md): a
+  // regression below the threshold fails the suite. Thresholds sit slightly
+  // below the measured values so small fluctuations do not break CI.
+  config.coverageThreshold = {
+    global: {
+      lines: 75,
+      functions: 60,
+      statements: 72,
+      branches: 60,
+    },
+  }
+
   return config
 }
