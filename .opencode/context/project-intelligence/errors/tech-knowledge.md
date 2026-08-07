@@ -1,9 +1,9 @@
-<!-- Context: project-intelligence/errors/tech-knowledge | Priority: high | Version: 1.1 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/errors/tech-knowledge | Priority: high | Version: 1.2 | Updated: 2026-08-06 -->
 
 # Catálogo de Errores y Conocimiento Preventivo
 
 > **Finalidad:** Fuente única de verdad para errores conocidos, anti-patrones y conocimiento preventivo del proyecto Prompt Database.
-> **Versión:** 1.0
+> **Versión:** 1.2
 > **Importante:** Consultar este archivo antes de planificar, desarrollar, modificar, depurar, probar o desplegar cambios.
 > **Relación:** Complementa `technical-domain.md` (Known Pitfalls — resumen de alto nivel) con el catálogo detallado.
 
@@ -77,9 +77,9 @@
 
 ### 1.5 Falta de Página de Administración de Usuarios
 
-**Estado:** ✅ Validado  
+**Estado:** 🔧 Corregido (Fase C, 2026-08-06)  
 **Código:** `app/api/users/`, `app/api/users/[id]/`  
-**Descripción:** Backend implementado sin frontend correspondiente.
+**Descripción:** Backend implementado sin frontend correspondiente. **Resuelto por la Fase C (2026-08-06)**: pestaña "Usuarios" en el perfil del administrador (alta, edición, desactivar/reactivar con `isActive`, eliminación transaccional de prompts y usuario, protección del último administrador activo). Ver decisión #15 de `decisions-log.md`.
 
 **Prevención:**
 - Planificar desarrollo frontend/backend en paralelo
@@ -90,9 +90,9 @@
 
 ### 1.6 Falta de Página de Error de Autenticación
 
-**Estado:** ✅ Validado  
-**Código:** `lib/auth.ts` (línea 13), `app/(auth)/`  
-**Descripción:** NextAuth.js configura `error: "/auth/error"` pero la página no existe.
+**Estado:** 🔧 Corregido (2026-08-06)  
+**Código:** `lib/auth.ts` (línea 13), `app/(auth)/auth/error/`  
+**Descripción:** NextAuth.js configura `error: "/auth/error"` pero la página no existía. **Resuelto (2026-08-06)**: página de error creada e internacionalizada en `app/(auth)/auth/error/`; los fallos de autenticación muestran la página propia.
 
 **Prevención:**
 - Crear páginas de error para todos los flujos posibles de autenticación
@@ -1215,7 +1215,7 @@ export async function POST(request: NextRequest) {
 
 **Estado:** ✅ Validado  
 **Código:** `npm test`, `npm test -- --listTests`, `npm test -- --coverage`  
-**Descripción:** Antes de añadir tests nuevos, ejecutar `npm test` para verificar que tests existentes pasan, infraestructura funciona, y no hay regresiones. Actualmente (julio 2026): 56 tests, 8 suites, 100% passing.
+**Descripción:** Antes de añadir tests nuevos, ejecutar `npm test` para verificar que tests existentes pasan, infraestructura funciona, y no hay regresiones. Actualmente (2026-08-06): 388 tests, 40 suites, 100% passing (antes, julio 2026: 56 tests, 8 suites; serie completa del histórico: 60 → 81 → 97 → 147 → 203 → 275 → 338 → 388).
 
 **Prevención:**
 - Ejecutar `npm test -- --listTests` para ver qué tests existen
@@ -1386,7 +1386,7 @@ global.URLSearchParams = jest.fn(() => ({
 
 **Estado:** ✅ Validado  
 **Código:** `tests/api/*.test.ts`, `tests/components/*.test.tsx`  
-**Descripción:** No es necesario tener 100% de tests passing para alcanzar ≥ 60% de cobertura. Actualmente (julio 2026) hay 56 tests con 100% passing.
+**Descripción:** No es necesario tener 100% de tests passing para alcanzar ≥ 60% de cobertura. Actualmente (2026-08-06) hay 388 tests en 40 suites con 100% passing (antes, julio 2026: 56 tests en 8 suites).
 
 **Prevención:**
 - Priorizar cobertura de flujos críticos sobre perfección de mocks
@@ -1757,6 +1757,7 @@ tags: prompt.tags.map((pt) => pt.tag.name),
 
 | Fecha | Cambio | Responsable |
 |-------|--------|-------------|
+| 2026-08-06 | v1.2: §1.5 y §1.6 marcadas como resueltas (Fase C y página `/auth/error` creada e internacionalizada); cifras de pruebas actualizadas a 388/40 con histórico | Context Organizer |
 | 2026-08-06 | Añadido §1.7 (TypeError `ys.cache` en PROD) y §3.4 marcada obsoleta (BD única Neon, sin SQLite local) | Context Organizer |
 | 2026-07-16 | Creación inicial desde tech-knowledge.md del proyecto | Repo Manager |
 | 2026-04-25 | Última actualización de fuente original (Fase 4 COMPLETADA, SF-5.1 ✅, SF-5.2 ✅ Build+Lint) | agente-inventariador |

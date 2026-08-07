@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/business | Priority: high | Version: 1.3 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/business | Priority: high | Version: 1.4 | Updated: 2026-08-06 (v1.4: estado al 2026-08-06 — plan completo, 388 pruebas en 40 suites, compartidos existentes, límite por IP activo sin Upstash) -->
 
 # Business Domain
 
@@ -39,6 +39,8 @@ Solution: A full-stack web application (Next.js 14 + Prisma + PostgreSQL) with C
 
 Not yet defined — project is in development phase. Current focus is feature completion (4 of 5 phases done) rather than quantitative targets.
 
+> **2026-08-06**: todas las fases del plan de trabajo (A–D) y la etapa final están completadas y desplegadas; las métricas cuantitativas siguen sin definir.
+
 ## Key Stakeholders
 
 See project maintainers (not documented in project files).
@@ -47,9 +49,13 @@ See project maintainers (not documented in project files).
 
 **Current Focus**: 4 of 5 development phases completed. Fase 5 (Validation & Polish) done — build verified, tests passing (81/81, 12 suites, 100%), deployed to Vercel with manual smoke tests completed. i18n: en-GB base + es-ES complete, deployed to PROD (2026-08-06).
 
+**Estado al 2026-08-06**: todas las fases del plan de trabajo (A–D) y la etapa final completadas y desplegadas. Pruebas actuales: 388 en 40 suites, cobertura del 79.63% de las líneas. Los prompts compartidos ya existen (campo compartido, página de compartidos y API). El límite de intentos está activo por cuenta e IP, sin Upstash (resuelto sin Redis externo).
+
 **Next Milestone**: Keep context updated as new features ship (category hierarchy 2-level limit, auto-add parent, crash fixes verified 2026-08-04; i18n es-ES deployed 2026-08-06).
 
 **Long-term Vision**: Mature prompt management platform with full multi-language support (i18n: 8 locales pending translation + language selector), AI-assisted prompt generation, team collaboration and sharing features, and expanded admin panel.
+
+> **2026-08-06**: los prompts compartidos ya están implementados (campo compartido, página de compartidos y API); siguen pendientes la colaboración en equipo, el selector de idioma y los 8 locales por traducir.
 
 ## Business Constraints
 
@@ -58,6 +64,7 @@ See project maintainers (not documented in project files).
 - **Credentials-only authentication** — no OAuth providers configured (Google, GitHub, etc.); uses NextAuth.js with CredentialsProvider + JWT strategy
 - **Single-user by design** — multi-user capable (User model with roles: USER, ADMIN) but no team/collaboration features yet
 - **Rate limiting not active** — feature flag `UPSTASH_ENABLED="false"`; Upstash Redis integration optional, pending activation
+  - **2026-08-06 (resuelto)**: el límite de intentos está activo por cuenta e IP, sin Upstash — resuelto sin Redis externo; el flag se mantiene y la opción Upstash ya no es necesaria.
 
 ## Onboarding Checklist
 
@@ -69,9 +76,15 @@ See project maintainers (not documented in project files).
 - [ ] Review API routes under `app/api/` — prompts, categories, tags, export, import
 - [ ] Read governance rules (`conoc_previo/.governance/reglas_proyecto.md`) before making changes
 - [ ] Run `npm test` to verify baseline: 81+ tests across 12+ suites
+  - **2026-08-06**: cifras reales verificadas — 388 pruebas en 40 suites, cobertura del 79.63% de las líneas.
 
 ## Related Files
 
 - `technical-domain.md` - How this business need is solved technically
 - `business-tech-bridge.md` - Mapping between business and technical
 - `decisions-log.md` - Business decisions with context
+
+## Evolución
+
+- **v1.4 (2026-08-06)**: estado de negocio actualizado — plan de trabajo completo (todas las fases A–D y la etapa final, desplegadas), cifras reales de pruebas (388 en 40 suites, cobertura del 79.63% de las líneas), prompts compartidos existentes (campo compartido, página de compartidos y API) y límite de intentos por IP activo sin Upstash (resuelto sin Redis externo). Las afirmaciones anteriores (4 de 5 fases, 81 pruebas, límite de intentos inactivo) se conservan como histórico con notas de fecha.
+- **v1.3 (2026-08-06)**: versión anterior, conservada en las secciones precedentes.

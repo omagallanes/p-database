@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/bridge | Priority: high | Version: 1.1 | Updated: 2026-07-14 -->
+<!-- Context: project-intelligence/bridge | Priority: high | Version: 1.2 | Updated: 2026-08-06 (v1.2: desajuste de administración de usuarios marcado como resuelto — fase C) -->
 
 # Business ↔ Tech Bridge
 
@@ -56,17 +56,21 @@ The preference persists across sessions — a logged-in user who prefers list vi
 | Situation | Business Priority | Technical Priority | Decision | Rationale |
 |-----------|-------------------|-------------------|----------|-----------|
 | User registration openness | Easy onboarding (anyone can sign up with valid name/email/password) | Security (prevent abuse, spam, bots) | Open registration with basic zod validation only (no invite, captcha, email verification) | Simple app; no paid tier; abuse not yet a concern; email+password minimum length validation as light gate |
-| Backend-first development | Deliver export/import features faster by focusing on API | Complete full-stack (FE + BE) for all endpoints | Backend API first, UI later for non-critical endpoints | `/api/users` + `/api/users/[id]` (GET/PUT/DELETE) exist but have no admin user management page; documented as incomplete |
+| Backend-first development | Deliver export/import features faster by focusing on API | Complete full-stack (FE + BE) for all endpoints | Backend API first, UI later for non-critical endpoints | `/api/users` + `/api/users/[id]` (GET/PUT/DELETE) exist but have no admin user management page; documented as incomplete. **Resolved (2026-08-06, Phase C)**: the "Usuarios" tab in the profile (admin-only) manages users — create with role and initial password, edit name/password, deactivate/reactivate, delete |
 | Filter state approach | Users want persistent, shareable filters | Avoid complex client-state management | URL search params as single source of truth for filter state | URL is inherently shareable and bookmarkable; eliminates need for Redux/Zustand for filter state; trade-off: params can get long |
 
 ## Common Misalignments
 
 | Misalignment | Warning Signs | Resolution Approach |
 |--------------|---------------|---------------------|
-| Backend endpoints without frontend UI | API routes for users CRUD exist (`/api/users`, `/api/users/[id]`) but no admin user management page | Document as incomplete; create admin page when user management becomes a business priority |
+| Backend endpoints without frontend UI | API routes for users CRUD exist (`/api/users`, `/api/users/[id]`) but no admin user management page | **Resolved (2026-08-06, Phase C)**: the "Usuarios" tab in the profile (admin-only) implements full user management (create, edit, deactivate/reactivate, delete). Previous approach (document as incomplete; create admin page when it becomes a business priority) is kept as historical record |
 | Server component duplication | `getPrompts` logic is duplicated between `app/(app)/prompts/page.tsx` (server component) and `app/api/prompts/route.ts` (API route) | Extract shared Prisma query logic to `lib/queries/prompts.ts` to eliminate drift between server-side render and API responses |
 
 ## Related Files
 
 - `project-intelligence/technical-domain.md` - Technical implementation details
 - `project-intelligence/decisions-log.md` - Decisions made with full context
+
+## Evolución
+
+- **v1.2 (2026-08-06)**: marcado como resuelto el desajuste «no existe página de administración de usuarios» (fase C): la pestaña "Usuarios" del perfil (solo admin) implementa la gestión completa de usuarios (alta con rol y contraseña inicial, edición, desactivación o reactivación y eliminación). Se actualizaron la fila de decisiones de compensación "Backend-first development" y la fila de desajustes comunes "Backend endpoints without frontend UI"; el texto anterior se conserva como registro histórico con nota de resolución.

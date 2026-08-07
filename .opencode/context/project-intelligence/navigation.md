@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/nav | Priority: high | Version: 2.3 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/nav | Priority: high | Version: 2.4 | Updated: 2026-08-06 (v2.4: mapa reconciliado con la estructura real de carpetas) -->
 
 # Project Intelligence
 
@@ -10,21 +10,21 @@
 .opencode/context/project-intelligence/
 ├── navigation.md              # This file - quick overview
 ├── business-domain.md         # Business context and problem statement
-├── technical-domain.md        # Stack, patterns, naming, standards, security (v2.2)
+├── technical-domain.md        # Stack, patterns, naming, standards, security
 ├── business-tech-bridge.md    # How business needs map to solutions
-├── decisions-log.md           # Major decisions with rationale (v2.3)
+├── decisions-log.md           # Major decisions with rationale (18 entries; #12-#18 live)
 ├── living-notes.md            # Active issues, debt, open questions
 ├── errors/
-│   └── tech-knowledge.md      # Full error catalog with code examples (v1.1)
-│   └── lookup/                # Decision details, archive, commands
-│       ├── decision-details.md    # Alternatives tables (#1-#11)
-│       └── decision-archive.md    # Historical decisions #1-#11 (full text)
+│   └── tech-knowledge.md      # Full error catalog with code examples
+├── lookup/
+│   ├── decision-details.md    # Alternatives tables (#1-#11)
+│   └── decision-archive.md    # Historical decisions #1-#11 (full text)
 └── development/
-    ├── navigation.md          # Development knowledge index (v1.0)
-    ├── concepts/              # Component refactor, API response, upsert, delegation
-    ├── examples/              # Mock patterns, segment component, clean route
-    ├── guides/                # Refactor, rollback, deploy procedures
-    └── lookup/                # Commands, mock coverage, files list
+    ├── navigation.md          # Development knowledge index
+    ├── concepts/              # API response, component refactor, i18n, delegation, upsert
+    ├── examples/              # Clean route, mock entity upsert, mock transaction, segment
+    ├── guides/                # Deploy to Vercel, refactor large components, rollback
+    └── lookup/                # Commands, mock coverage table, files list
 ```
 
 ## Quick Routes
@@ -40,14 +40,25 @@
 | Code standards | `technical-domain.md` → Code Standards | Strict TS, Prisma, Server Components |
 | Security requirements | `technical-domain.md` → Security Requirements | Auth, Zod, Prisma, env vars |
 | See the connection | `business-tech-bridge.md` | Business → technical mapping |
-| Know the context | `decisions-log.md` | Why decisions were made (16 entries; #12-#16 vivo, #1-#11 en archive) |
+| Know the context | `decisions-log.md` | Why decisions were made (18 entries; #12-#18 live, #1-#11 in archive) |
 | Current state | `living-notes.md` | Active issues and open questions |
 | Error catalog | `errors/tech-knowledge.md` | Known errors with code examples and prevention |
 | Pitfalls quick-ref | `technical-domain.md` → Known Pitfalls | High-level gotchas organized by domain |
 | Refactor pattern | `development/concepts/component-refactor-pattern.md` | Split large components into segments |
+| API response standards | `development/concepts/api-response-standards.md` | Response shape conventions for API routes |
+| i18n pattern | `development/concepts/i18n-next-intl-pattern.md` | next-intl setup and usage without routing |
+| Task delegation | `development/concepts/task-delegation-workflow.md` | CodeReviewer gate per subtask |
+| Upsert pattern | `development/concepts/upsert-entity-pattern.md` | Upsert for global entities |
 | Mock patterns | `development/examples/mock-entity-upsert.md` | Prisma mock methods checklist |
+| Transaction mocks | `development/examples/mock-transaction.md` | Prisma $transaction mock pattern |
+| Clean route example | `development/examples/clean-route-handler.md` | Minimal POST route handler example |
+| Segment example | `development/examples/segment-component.md` | Form segment component pattern |
 | Deploy guide | `development/guides/deploy-to-vercel.md` | Manual deploy with env vars |
+| Refactor guide | `development/guides/refactor-large-components.md` | Procedure for refactoring large components |
+| Rollback procedures | `development/guides/rollback-procedures.md` | Rollback steps after deploys |
 | Commands | `development/lookup/plan-c-commands.md` | Test, git, deploy, task CLI |
+| Mock coverage table | `development/lookup/mock-coverage-table.md` | Prisma mock coverage per entity |
+| Files list | `development/lookup/plan-c-files-list.md` | Files modified in Plan C |
 
 ## Quick Reference (from technical-domain.md v2.0)
 
@@ -96,3 +107,7 @@ Keep this folder current:
 - Governance and ownership
 
 See `.opencode/context/core/standards/project-intelligence.md` for the standard itself.
+
+## Evolución
+
+- **v2.4 (2026-08-06)**: mapa reconciliado con la estructura real de carpetas — `lookup/` (decision-details.md y decision-archive.md) vive al nivel raíz de la inteligencia del proyecto, no dentro de `errors/`; el árbol de `development/` refleja los archivos reales (concepts: api-response-standards, component-refactor-pattern, i18n-next-intl-pattern, task-delegation-workflow, upsert-entity-pattern; examples: clean-route-handler, mock-entity-upsert, mock-transaction, segment-component; guides: deploy-to-vercel, refactor-large-components, rollback-procedures; lookup: mock-coverage-table, plan-c-commands, plan-c-files-list). Rutas rápidas ampliadas con los archivos existentes y actualizado el registro de decisiones (18 entradas; #12–#18 vivas). Las referencias anteriores se conservan como histórico en las secciones precedentes.

@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/development/lookup-commands | Priority: low | Version: 1.1 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/development/lookup-commands | Priority: low | Version: 1.2 | Updated: 2026-08-06 (v1.2: cifras de pruebas actualizadas a 388 en 40 suites) -->
 
 # Lookup: Plan C Commands
 
@@ -6,7 +6,7 @@
 
 ## Verification
 ```bash
-npm test                        # 56 tests, 8 suites
+npm test                        # 388 tests, 40 suites
 npm test -- --testPathPattern="import"
 npm test -- --testPathPattern="PromptFilters"
 npm test -- --testPathPattern="prompts-\[id\]"
@@ -53,3 +53,8 @@ bash .opencode/skills/task-management/router.sh blocked
 ```
 
 **Reference**: `docs/technical-development-knowledge/PCI-plan-c-completo.md` §6
+
+## Evolución
+
+- **v1.2 (2026-08-06)**: cifras de verificación actualizadas a las reales — 388 pruebas en 40 suites (antes 56 en 8 suites). Los comandos no cambian.
+- **v1.1 (2026-08-06)**: versión anterior, conservada en las secciones precedentes.

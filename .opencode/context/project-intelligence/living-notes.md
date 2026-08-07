@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/notes | Priority: high | Version: 1.5 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/notes | Priority: high | Version: 1.6 | Updated: 2026-08-06 -->
 
 # Living Notes
 
@@ -12,7 +12,8 @@
 
 ### Resolved (2026-08-06, Pulido)
 - ~~Hardcoded credentials in seed~~ → `prisma/seed.ts` ahora usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (decisión #13).
-- ~~Rate limiting not implemented~~ → implementado sin Upstash (BD): `failedLoginAttempts` + `lockoutUntil` (5 fallos → 15 min) en login y cambio de contraseña; revocación de sesiones con `tokenVersion`. Ver `development/backend/concepts/auth-hardening-pattern.md`.
+- ~~Rate limiting not implemented~~ → implementado sin Upstash (BD): límite por cuenta (`failedLoginAttempts` + `lockoutUntil`, 5 fallos → 15 min) en login y cambio de contraseña, y límite por dirección IP (tabla `IpAttempt`, 5 fallos → 15 min, tolerante a fallos en BD, tiempos igualados); revocación de sesiones con `tokenVersion`; campo `isActive`. Ver `development/backend/concepts/auth-hardening-pattern.md`.
+- ~~Missing `/auth/error` page~~ → página creada e internacionalizada (2026-08-06) en `app/(auth)/auth/error/`; los fallos de autenticación muestran la página propia (sección histórica más abajo).
 
 ### Legacy String Fields on Prompt Model
 **Priority**: Medium
@@ -25,16 +26,17 @@
 
 | Issue | Severity | Workaround | Status |
 |-------|----------|------------|--------|
-| Missing `/auth/error` page | High | Next.js default error page shown instead | Known |
 | `force-dynamic` required for auth pages | Medium | Add `export const dynamic = 'force-dynamic'` | Known |
 | ESLint `react/no-unescaped-entities` | Medium | Escape apostrophes or disable rule | Known |
 
-### Missing `/auth/error` Page
-**Severity**: High
-**Impact**: Referenced in `lib/auth.ts:13` (`error: "/auth/error"`) and `middleware.ts:12` as a public route, but the page does not exist — no directory under `app/(auth)/auth/error/`. Auth errors fall through to Next.js default error page.
-**Workaround**: Users see browser-default error on auth failures.
+> **Histórico**: la fila "Missing `/auth/error` page" se retiró de esta tabla el 2026-08-06 porque la página se creó (ver sección resuelta abajo).
+
+### Missing `/auth/error` Page (RESUELTO 2026-08-06)
+**Severity**: High (resuelto)
+**Impact**: Referenced in `lib/auth.ts:13` (`error: "/auth/error"`) and `middleware.ts:12` as a public route, but the page did not exist — no directory under `app/(auth)/auth/error/`. Auth errors fell through to Next.js default error page.
+**Workaround**: Users saw the browser-default error on auth failures.
 **Root Cause**: Page was never created after auth configuration was set up.
-**Status**: Known
+**Status**: **Resolved (2026-08-06)** — page created and internationalized at `app/(auth)/auth/error/`; the section is kept for the historical record.
 
 ### `force-dynamic` Required for Auth Pages
 **Severity**: Medium
@@ -50,10 +52,10 @@
 
 ## Gotchas for Maintainers
 
-- **Seed passwords**: `prisma/seed.ts` usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil) desde el Pulido 2026-08-06 — las contraseñas antiguas siguen expuestas en git history. Ejecutar el seed requiere definir esas env vars.
+- **Seed passwords**: `prisma/seed.ts` usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (sin fallback débil) desde el Pulido 2026-08-06 — las contraseñas antiguas siguen expuestas en git history (pendiente P-01, ver `docs/dodp.md`). Ejecutar el seed requiere definir esas env vars.
 - **All 6 junction tables** (`PromptTag`, `PromptPlatform`, `PromptClientProject`, `PromptUseCase`, `PromptModelHint`, `PromptCategory`) use `onDelete: Cascade` on **both** foreign keys — deleting a Prompt automatically removes all its junction records, and deleting a Tag/Platform/etc. removes all its prompt associations.
 - **Export v2.0** transforms N:M relations to arrays of names (e.g., `platforms: ["CURSOR"]`). The **import parser** accepts both v2.0 (arrays) and v1.0 (legacy string fields). Version detection is via `body.version === "2.0"` in `app/api/import/prompts/route.ts:627`.
-- **Middleware** (`middleware.ts`) protects all routes except `/auth/signin`, `/auth/signup`, and `/auth/error` — but `/auth/error` doesn't exist (see Known Issues).
+- **Middleware** (`middleware.ts`) protects all routes except `/auth/signin`, `/auth/signup`, and `/auth/error` — la página `/auth/error` ya existe (creada 2026-08-06); antes era una ruta pública sin página (ver sección resuelta).
 - **Prisma migrations** (`/prisma/migrations`) are gitignored (`.gitignore:41`) — migration history is NOT in the repository. Run `npx prisma migrate dev` on fresh clones.
 - **PromptForm.tsx** is 769 lines — the largest component in the project (reduced from 1,021 via Plan C segment split) and a potential refactor target.
 - **Auth secret must be generated** with `openssl rand -base64 32` — the `.env.example` placeholder value will not work in production.
@@ -68,9 +70,19 @@
 | Fase A — Interfaz (sidebar colapsable, filtros ocultables, preferencias en cuenta) | Implementado 2026-08-06 — ver `development/frontend/concepts/ui-preferences-pattern.md` | Done |
 | Fase B — Perfil en pestañas + personalización (idioma, tema, color, orden filtros, columnas) | Implementado 2026-08-06 — ver `development/frontend/concepts/theme-accent-pattern.md` | Done |
 | Pulido — Seguridad (rate limiting, revocación tokenVersion, anti-FOUC, seed seguro) | Implementado 2026-08-06 — ver `development/backend/concepts/auth-hardening-pattern.md` | Done |
-| Fase D — Aislamiento por usuario (row-level ownership) | Implementado en código 2026-08-06 — ver `development/backend/concepts/row-level-isolation-pattern.md`. ⚠️ Validación final (test/tsc/lint/build) + deploy sin confirmar | En curso |
-| Fase C — Pestaña Usuarios (admin) | Implementado en código 2026-08-06 — isActive, protección último admin, borrado transaccional. ⚠️ Validación final + deploy sin confirmar | En curso |
-| Etapa final — Taxonomía + Compartir | Implementado en código 2026-08-06 — 3 catálogos, /taxonomy/*, /shared. ⚠️ Validación final + deploy sin confirmar | En curso |
+| Fase D — Aislamiento por usuario (row-level ownership) | **Completado 2026-08-06** (decisión #14) — ver `development/backend/concepts/row-level-isolation-pattern.md`; verificado: 388 pruebas, 40 suites, 100 % superadas, cobertura 79.63 % de líneas | Done |
+| Fase C — Pestaña Usuarios (admin) | **Completado 2026-08-06** (decisión #15) — isActive, protección último admin, borrado transaccional; verificado: 388 pruebas, 40 suites, 100 % superadas | Done |
+| Etapa final — Taxonomía + Compartir | **Completado 2026-08-06** (decisión #16) — 3 catálogos, /taxonomy/*, /shared; verificado: 388 pruebas, 40 suites, 100 % superadas | Done |
+
+## Pendientes reales (docs/dodp.md)
+
+| ID | Tarea | Estado |
+|----|-------|--------|
+| P-01 | Rotar las contraseñas reales de las cuentas del historial de git | Pendiente — requiere acción del propietario de las cuentas |
+| P-02 | Internacionalización de los 8 idiomas restantes (es-MX, ca, ca-ES-valencia, gl, pt-PT, fr, ru, zh-CN) | Pendiente — trabajo futuro por idioma |
+| P-03 | Rotar el token de Vercel descargado al entorno local | Pendiente — requiere acción del propietario en Vercel |
+
+Detalle completo (riesgo, motivo de exclusión y cómo abordarlas) en `docs/dodp.md`.
 
 ## What Works Well
 

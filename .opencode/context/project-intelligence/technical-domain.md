@@ -1,8 +1,10 @@
-<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.6 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.7 | Updated: 2026-08-06 -->
 
 # Technical Domain
 
 > Tech stack, arquitectura, patrones, estándares, seguridad y conocimiento técnico del proyecto Prompt Database. Resumen MVI — el detalle operativo vive en los archivos referenciados.
+>
+> **Historial de versiones**: v2.7 (2026-08-06) — cifras de pruebas unificadas (388 pruebas, 40 suites, 100 % superadas; cobertura 79.63 % de líneas), seguridad de agosto (límite de intentos por cuenta e IP, revocación con `tokenVersion`, campo `isActive`, página `/auth/error`), filtro de tipo, preferencias de interfaz, catálogos de taxonomía y prompts compartidos; deudas del seed y de la página de error retiradas; pendientes reales P-01, P-02 y P-03 registrados. v2.6 (2026-08-06) — fases A/B, Pulido, taxonomía y compartidos en la tabla de funcionalidades.
 
 ## Primary Stack
 
@@ -14,7 +16,7 @@
 | ORM | Prisma | ^5.19.1 · schema-first, `prisma/schema.prisma` |
 | Auth | NextAuth.js (v5 beta) | JWT · Prisma adapter · credentials · bcryptjs |
 | Validation | Zod | ^3.23.8 |
-| Testing | Jest + React Testing Library | ^29.7.0 · **338 tests, 34 suites, 100% passing** |
+| Testing | Jest + React Testing Library | ^29.7.0 · **388 tests, 40 suites, 100% passing** |
 | Styling | TailwindCSS + shadcn/ui | + lucide-react, cva, tailwind-merge, clsx |
 | Linting | ESLint + eslint-config-next | ^8.57.1 |
 | Deployment | Vercel (Hobby) + Neon PostgreSQL | **Completado** (ya no pendiente) |
@@ -36,6 +38,7 @@
 | Panel de filtros ocultable + MLI colapsable | ✅ Completo | Favoritos en barra superior | ✅ Completo |
 | Panel de administración (usuarios) | ✅ Completo | Taxonomía (7 elementos CRUD admin) | ✅ Completo |
 | Compartir prompts (isShared + /shared) | ✅ Completo | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
+| Filtro de tipo (catálogo Type) | ✅ Completo | Página de error de autenticación (/auth/error) | ✅ Completo |
 
 ## Arquitectura
 
@@ -49,9 +52,9 @@ components/   auth/ · layout/ · prompt/ · ui/ (shadcn)
 contexts/     ViewModeContext.tsx
 i18n/         request.ts · locales.ts (next-intl)
 lib/          auth.ts · prisma.ts · utils.ts · locale.ts
-messages/     en-GB.json · es-ES.json (240 claves c/u)
+messages/     en-GB.json · es-ES.json (404 claves c/u, 27 namespaces; verificado 2026-08-06)
 prisma/       schema.prisma · seed.ts · migrate-data.ts
-tests/        api/ (5) · components/ (3) · i18n/ (4)
+tests/        api/ · components/ · i18n/ · unit/
 types/        next-auth.d.ts
 docs/         index.md · archive/ · decisions/ · developing/ · guide/ · planning/ · reference/ · reservas/ · technical-development-knowledge/ · temp/
 middleware.ts
@@ -60,7 +63,9 @@ middleware.ts
 ## Code Patterns
 
 - **API**: Auth → Zod → Prisma → Response; errores `{ error }` JSON. Ejemplo: `app/api/prompts/route.ts`. Ver `development/concepts/api-response-standards.md`.
-- **Preferencias UI**: `User.uiPreferences` (JSON) con schema compartido `lib/ui-preferences.ts`; `UIContext` (patrón ViewModeContext) con persistencia PATCH `/api/user/preferences`; Fase A: sidebarCollapsed, filtersVisible (todo en cuenta, no localStorage).
+- **Preferencias de interfaz**: `User.uiPreferences` (JSON) con schema compartido `lib/ui-preferences.ts`; `UIContext` (patrón ViewModeContext) con persistencia PATCH `/api/user/preferences`; todo guardado en la cuenta, sin localStorage. Incluye tema claro/oscuro, color de acento, orden de filtros (8 cajas) y columnas configurables; Fase A: sidebarCollapsed, filtersVisible.
+- **Catálogos de taxonomía**: modelos `Type`, `Status` y `Language` sembrados (3/3/12) con CRUD solo administrador en las páginas `/taxonomy/*`; el formulario y los filtros leen los catálogos; filtro de tipo en la página de prompts. Ver decisión #16 de `decisions-log.md`.
+- **Prompts compartidos**: campo `isShared` en `Prompt` + página `/shared` (solo prompts de otros, con búsqueda, sin filtros, sin favoritos ni edición, 8 columnas); detalle en solo lectura con copiado que incrementa el contador de usos; edición y borrado exigen propiedad. Ver decisión #16 de `decisions-log.md`.
 - **Componentes**: Server Components por defecto; `"use client"` solo con interactividad. Props tipadas `{Name}Props`.
 - **Refactor en segmentos**: orquestador + segmentos por funcionalidad; verificar `npx tsc --noEmit` tras cada extracción. Ver `development/concepts/component-refactor-pattern.md`.
 - **Upsert de entidades globales**: normalizar (trim+uppercase) → upsert por slug. Ver `development/concepts/upsert-entity-pattern.md`.
@@ -98,13 +103,16 @@ middleware.ts
 - Zod en cada endpoint; Prisma parameterizado (sin SQL injection)
 - `AUTH_SECRET` obligatorio; env vars validadas al init
 - Sin secretos en VCS (`.env*.local` en `.gitignore`)
-- Rate limiting previsto (flag `UPSTASH_ENABLED`)
+- ~~Rate limiting previsto (flag `UPSTASH_ENABLED`)~~ → **Resuelto (2026-08-06) sin Upstash** (decisión #13): límite de intentos por cuenta (`failedLoginAttempts` + `lockoutUntil` en `User`: 5 fallos → 15 minutos, errores genéricos) y por dirección IP (tabla `IpAttempt`: 5 fallos → 15 minutos, tolerante a fallos en base de datos, tiempos igualados).
+- **Revocación de sesiones** con `tokenVersion` en `User` y JWT: se incrementa al cambiar la contraseña, al desactivar usuarios y al degradar roles; invalida los JWT emitidos (política fail-open si la base de datos falla). Ver decisión #13.
+- **Campo `isActive` en usuarios**: desactivar cierra las sesiones y bloquea accesos; eliminar borra los prompts en transacción; no se puede desactivar ni eliminar al último administrador activo. Ver decisión #15.
+- **Página `/auth/error` creada e internacionalizada** (2026-08-06): los fallos de autenticación muestran la página propia.
 - Passwords con bcryptjs (credentials provider)
 - CORS por defecto de Next.js
 
 ## Database Schema
 
-**17 modelos**: Prompt (central, 18 campos) + 6 entidades (Category, Tag, Platform, ClientProject, UseCase, ModelHint) + User/Account/Session/VerificationToken + 6 junction tables. 6 N:M · 6 1:N · 26 índices · 16 FKs.
+**21 modelos** (v2.7, 2026-08-06): los 17 de la versión anterior (Prompt central, 6 entidades de taxonomía, autenticación y 6 tablas de unión N:M) + `IpAttempt` (intentos por IP) + 3 catálogos (`Type`, `Status`, `Language`). Histórico v2.6: 17 modelos, 26 índices, 16 FKs.
 
 - **Categorías jerárquicas**: límite de **2 niveles** de profundidad; al asignar una categoría hija se añade automáticamente la categoría principal.
 - **Junction tables**: IDs compuestos `@@id([promptId, entityId])`, `onDelete: Cascade`.
@@ -114,8 +122,8 @@ middleware.ts
 ## Autenticación (NextAuth.js)
 
 - NextAuth.js v5 (JWT, Prisma adapter, credentials + bcryptjs); handlers en `/api/auth/[...nextauth]`.
-- Rutas de autenticación en `app/(auth)/auth/`: `signin` y `signup`.
-- ⚠️ **`/auth/error` NO existe**: referenciada en `lib/auth.ts:13` y `middleware.ts:12`, pero la página no está creada. Ver `errors/tech-knowledge.md` (1.6).
+- Rutas de autenticación en `app/(auth)/auth/`: `signin`, `signup` y `error`.
+- ✅ **Página `/auth/error` creada e internacionalizada (2026-08-06)** — antes no existía (referenciada en `lib/auth.ts:13` y `middleware.ts:12` sin estar creada); ahora los fallos de autenticación muestran la página propia. Ver `errors/tech-knowledge.md` (1.6).
 
 ## API Routes
 
@@ -136,7 +144,7 @@ middleware.ts
 | Comando | Descripción |
 |---------|-------------|
 | `npm run dev` / `build` / `start` / `lint` | Desarrollo, build standalone, producción, ESLint |
-| `npm test` / `test:watch` | Jest — **338 tests, 34 suites, 100% passing** |
+| `npm test` / `test:watch` | Jest — **388 tests, 40 suites, 100% passing** |
 | `npx tsc --noEmit` | TypeScript check rápido |
 | `npm run db:*` | push · migrate · seed · generate · migrate-data |
 | `npx prisma studio` / `migrate dev` | UI BD / migración en dev |
@@ -152,10 +160,11 @@ middleware.ts
 
 ## Testing
 
-- Jest 29.7 + next/jest + jest-environment-jsdom; **12 archivos** (5 API + 3 componentes + 4 i18n)
-- **81 pruebas, todas superadas** (conteo previo de 60/56 obsoleto)
+- Jest 29.7 + next/jest + jest-environment-jsdom
+- **388 pruebas, 40 suites, 100 % superadas** (cifra unificada a 2026-08-06; anteriormente la cifra aparecía desdoblada en 338/34 y 81)
+- **Histórico de cifras de pruebas**: 60 → 81 → 97 → 147 → 203 → 275 → 338 → 388 (cada hito superado en su fase; la serie se mantiene para evitar contradicciones futuras)
+- Cobertura actual **79.63 % de líneas**; objetivo ≥ 70 %; informe en `docs/informe-cobertura.md`
 - Mocks: next-auth, @auth/prisma-adapter, next/navigation, prisma ($transaction), next-intl/server (con catálogos reales)
-- Cobertura actual 79.61% de líneas; objetivo ≥70%; informe en `docs/informe-cobertura.md`
 
 ## Docker
 
@@ -170,14 +179,15 @@ middleware.ts
 | `AUTH_SECRET` / `AUTH_URL` | NextAuth JWT / base URL | Sí |
 | `NODE_ENV` | dev/prod/test | Sí |
 | `NEXT_PUBLIC_BASE_PATH` | Subfolder base path | Opcional |
-| `UPSTASH_ENABLED` + `UPSTASH_REDIS_*` | Rate limiting | Opcional |
+| ~~`UPSTASH_ENABLED` + `UPSTASH_REDIS_*`~~ | Rate limiting (obsoleto — implementado sin Upstash, 2026-08-06) | Opcional |
 | `POSTGRES_PRISMA_URL`, `POSTGRES_URL*`, `POSTGRES_USER/PASSWORD/HOST/DATABASE` | Neon pool/no-pool | Prod |
 
 ## Deuda Técnica Conocida
 
-- 🔴 **Credenciales visibles en `prisma/seed.ts` líneas 12 y 30** (deuda técnica de prioridad alta)
-- ⚠️ Página `/auth/error` referenciada pero no creada (ver Autenticación)
-- i18n: selector de idioma pendiente (otro plan de trabajo) y 8 idiomas declarados sin traducir (ver `docs/plan-traduccion-i18n.md`)
+- ~~🔴 **Credenciales visibles en `prisma/seed.ts` líneas 12 y 30**~~ → **Resuelto (2026-08-06)**: el seed usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (decisión #13). Pendiente real: **P-01 — rotar las contraseñas reales del historial de git** (ver `docs/dodp.md`).
+- ~~⚠️ Página `/auth/error` referenciada pero no creada~~ → **Resuelto (2026-08-06)**: página creada e internacionalizada (ver Autenticación).
+- **P-02 — 8 idiomas declarados sin traducir** (es-MX, ca, ca-ES-valencia, gl, pt-PT, fr, ru, zh-CN; ver `docs/plan-traduccion-i18n.md` y `docs/dodp.md`). El selector de idioma ya existe en el perfil (pestaña Cuenta) con prioridad sobre el navegador.
+- **P-03 — rotar el token de Vercel** descargado al entorno local (ver `docs/dodp.md`).
 
 ## 📂 Codebase References
 
@@ -189,7 +199,7 @@ middleware.ts
 | i18n (resolución de locale) | `i18n/request.ts` · `lib/locale.ts` |
 | Mensajes i18n | `messages/en-GB.json` · `messages/es-ES.json` |
 | Schema BD | `prisma/schema.prisma` (provider: postgresql) |
-| Seed (⚠️ credenciales) | `prisma/seed.ts` (líneas 12, 30) |
+| Seed (env vars, sin credenciales reales) | `prisma/seed.ts` (usa `SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD`) |
 | Auth / middleware | `lib/auth.ts` · `middleware.ts` |
 | Prisma client | `lib/prisma.ts` |
 | Test setup | `jest.setup.js` |

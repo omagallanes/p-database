@@ -1,8 +1,8 @@
-<!-- Context: project-intelligence/decisions | Priority: high | Version: 3.0 | Updated: 2026-08-06 (16 entradas; #1–#11 archivadas en lookup/decision-archive.md) -->
+<!-- Context: project-intelligence/decisions | Priority: high | Version: 3.1 | Updated: 2026-08-06 (18 entradas; #1–#11 archivadas en lookup/decision-archive.md; referencias de #12–#16 corregidas a docs/reference/) -->
 
 # Decisions Log
 
-**Vivo**: entradas #12–#16 (2026-08-06). Histórico #1–#11 en `lookup/decision-archive.md` · alternatives en `lookup/decision-details.md`.
+**Vivo**: entradas #12–#18 (2026-08-06). Histórico #1–#11 en `lookup/decision-archive.md` · alternatives en `lookup/decision-details.md`.
 
 ---
 
@@ -12,7 +12,7 @@
 
 **Impact**: ✅ 13 subtareas, tests 97→147 verdes, deploy PROD verificado (preferencias persisten tras recargar). ❌ Dos lecturas de BD por request (root + layout). Risk: restos de colores fijos tras el barrido (verificado visualmente).
 
-**Related**: `development/frontend/concepts/theme-accent-pattern.md`, `development/frontend/concepts/ui-preferences-pattern.md`
+**Related**: `docs/reference/preferencias-interfaz.md` (patrones de tema y acento + preferencias de interfaz; creado el 2026-08-06)
 
 ---
 
@@ -30,7 +30,7 @@
 
 **Impact**: ✅ Implementado y verificado en código (getPrompts(userId), GET /api/prompts con auth+401, usage con ownership, detalle filtrado, tests nuevos). ⚠️ Validación final (test/tsc/lint/build) y deploy sin documentar.
 
-**Related**: `development/backend/concepts/row-level-isolation-pattern.md`, `backend/errors/api-common-errors.md`
+**Related**: patrones de aislamiento por fila y de errores comunes de API → pendientes de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
 
 ---
 
@@ -40,7 +40,7 @@
 
 **Impact**: ✅ 7 subtareas, implementado y verificado (schema isActive, authorize, ProfileUsersTab.tsx, i18n paridad). ⚠️ Validación final + deploy sin documentar.
 
-**Related**: `backend/errors/api-common-errors.md` · `backend/concepts/auth-hardening-pattern.md` (tokenVersion)
+**Related**: `docs/reference/seguridad-autenticacion.md` (endurecimiento de autenticación, tokenVersion; creado el 2026-08-06) · patrón de errores comunes de API → pendiente de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
 
 ---
 
@@ -50,7 +50,27 @@
 
 **Impact**: ✅ 10 subtareas, implementado y verificado (schema isShared + 3 catálogos, `/api/shared/prompts`, `/shared`, `/taxonomy/*`). ⚠️ Validación final + deploy sin documentar.
 
-**Related**: `data/concepts/catalog-pattern.md` · `backend/concepts/row-level-isolation-pattern.md` (excepción compartidos)
+**Related**: `docs/reference/taxonomia-catalogos.md` (patrón de catálogos; creado el 2026-08-06) · `docs/reference/prompts-compartidos.md` (compartir prompts; creado el 2026-08-06) · patrón de aislamiento por fila (excepción compartidos) → pendiente de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
+
+---
+
+## 17. Límite de intentos por dirección IP — tabla IpAttempt (Lote de mejoras, 2026-08-06)
+
+**Decision**: El límite de intentos por cuenta (decisión 13) se complementa con un límite por dirección IP: nueva tabla `IpAttempt` (5 fallos → 15 minutos), tolerante a fallos en la base de datos (si la base de datos no responde, el inicio de sesión no se bloquea) y con tiempos igualados para no revelar qué cuentas están bloqueadas. Queda activo SIN la opción de Upstash: el límite por IP se resuelve sin Redis externo, confirmando la decisión 13 de no añadir esa dependencia.
+
+**Impact**: ✅ Implementado y verificado en el flujo de autenticación (tabla `IpAttempt` en `prisma/schema.prisma`); el límite por IP está activo sin Upstash, resuelto sin Redis externo. ❌ Sin efectos secundarios conocidos.
+
+**Related**: `docs/reference/seguridad-autenticacion.md` (límite por cuenta e IP; creado el 2026-08-06)
+
+---
+
+## 18. Página de error de autenticación + filtro de tipo + umbrales de cobertura (Lote de mejoras, 2026-08-06)
+
+**Decision**: Se crea la página de error de autenticación (`/auth/error`) con internacionalización completa; se añade el filtro de tipo a la página de prompts; los umbrales de cobertura quedan protegidos en la configuración de pruebas para que no bajen de los objetivos.
+
+**Impact**: ✅ Implementado y verificado; la página de error queda internacionalizada y el filtro de tipo operativo. Pruebas actuales: 388 en 40 suites, cobertura del 79.63% de las líneas. ❌ Sin efectos secundarios conocidos.
+
+**Related**: `docs/reference/seguridad-autenticacion.md` (página `/auth/error`; creado el 2026-08-06)
 
 ---
 
@@ -59,3 +79,7 @@
 - `lookup/decision-archive.md` — Histórico #1–#11 (2026-04 → 2026-07)
 - `lookup/decision-details.md` — Alternatives tables, deprecated decisions + related commits
 - `technical-domain.md` — Technical implementation · `business-tech-bridge.md` — Business impact
+
+## Evolución
+
+- **v3.1 (2026-08-06)**: añadidas las decisiones 17 (límite de intentos por dirección IP con la tabla `IpAttempt`, activo sin Upstash) y 18 (página de error de autenticación internacionalizada + filtro de tipo + umbrales de cobertura). Corregidas las referencias rotas de las decisiones 12 a 16: las de preferencias de interfaz, tema y acento, endurecimiento de autenticación y patrón de catálogos apuntan ahora a los archivos creados en `docs/reference/` (preferencias-interfaz.md, taxonomia-catalogos.md, prompts-compartidos.md, seguridad-autenticacion.md); las de aislamiento por fila y errores comunes de API quedan marcadas como pendientes de creación. No se han borrado decisiones previas: el texto original de #12–#16 se conserva y #1–#11 permanecen en `lookup/decision-archive.md`.

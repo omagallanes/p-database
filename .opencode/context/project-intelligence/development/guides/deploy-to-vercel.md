@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/development/guide-deploy | Priority: medium | Version: 1.1 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/development/guide-deploy | Priority: medium | Version: 1.2 | Updated: 2026-08-06 (v1.2: lista de verificación con cifras reales de pruebas) -->
 
 # Guide: Deploy to Vercel
 
@@ -17,7 +17,7 @@ source .env && npx vercel --prod --token="$VERCEL_TOKEN"
 
 **Pre-deploy checklist**:
 ```bash
-npm test          # 56 tests, 8 suites, 0 failures expected
+npm test          # 388 tests, 40 suites, 0 failures expected
 npm run lint      # 0 no-unused-vars expected
 npm run build     # Compiled successfully expected
 npx tsc --noEmit  # 0 errors expected
@@ -39,4 +39,9 @@ npx tsc --noEmit  # 0 errors expected
 - Verificación post-despliegue y rollback
 - Solución de problemas con errores reales documentados
 - Referencia rápida de comandos
+
+## Evolución
+
+- **v1.2 (2026-08-06)**: lista de verificación previa al despliegue actualizada con las cifras reales de pruebas — 388 pruebas en 40 suites (antes 56 en 8 suites). Los comandos no cambian.
+- **v1.1 (2026-08-06)**: versión anterior, conservada en las secciones precedentes.
 
