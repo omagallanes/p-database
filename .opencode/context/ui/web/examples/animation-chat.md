@@ -108,6 +108,6 @@ msgSelect: 200ms [bg→accent, S1→1.02]
 
 ## Related Files
 
-- [Animation Basics](./animation-basics.md) - Fundamentals
+- [Animation Basics](../concepts/animation-basics.md) - Fundamentals
 - [Component Animations](./animation-components.md) - UI components
 - [Loading Animations](./animation-loading.md) - Loading states

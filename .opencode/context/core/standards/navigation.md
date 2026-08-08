@@ -1,4 +1,4 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/navigation | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Core Standards Navigation
 
@@ -17,9 +17,6 @@
 | `project-intelligence.md` | What and why | ⭐⭐⭐⭐ | Onboarding, understanding projects |
 | `project-intelligence-management.md` | How to manage | ⭐⭐⭐ | Managing intelligence files |
 | `code-analysis.md` | Analysis approaches | ⭐⭐⭐ | Analyzing code, debugging |
-| `typescript.md` | Universal TypeScript patterns | ⭐⭐⭐⭐ | Writing/reviewing TypeScript code |
-| `csharp.md` | Universal C# / .NET patterns | ⭐⭐⭐⭐ | Writing/reviewing C# code |
-| `csharp-project-structure.md` | ASP.NET Core project structure (Minimal APIs, CQRS, EF Core + PostgreSQL) | ⭐⭐⭐⭐ | Starting or structuring a C# API project |
 
 ---
 
@@ -28,18 +25,6 @@
 **For code implementation**:
 1. Load `code-quality.md` (critical)
 2. Load `security-patterns.md` (high)
-
-**For TypeScript code**:
-1. Load `typescript.md` (critical)
-2. Load `code-quality.md` (high)
-
-**For C# / .NET code**:
-1. Load `csharp.md` (critical)
-2. Load `code-quality.md` (high)
-
-**For C# API project structure**:
-1. Load `csharp-project-structure.md` (critical)
-2. Load `csharp.md` (high)
 
 **For testing**:
 1. Load `test-coverage.md` (critical)
@@ -64,3 +49,15 @@
 - **Workflows** → `../workflows/navigation.md`
 - **Development Principles** → `../../development/principles/`
 - **Project Intelligence** → `../../project-intelligence/navigation.md` (full project context)
+
+---
+
+## Nota de versión
+
+### Versión 1.1 — 2026-08-08
+- Eliminadas las filas de `typescript.md`, `csharp.md` y `csharp-project-structure.md` de la tabla de archivos: no existen en el disco.
+- Eliminadas de la estrategia de carga los bloques «Para código TypeScript», «Para código C# / .NET» y «Para estructura de proyectos de API C#»: dependían de los archivos inexistentes.
+- Los siete archivos listados restantes se verificaron contra el disco.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con referencias a `typescript.md`, `csharp.md` y `csharp-project-structure.md` (quedaron como histórico; no existen en el disco).

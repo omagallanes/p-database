@@ -1,4 +1,4 @@
-<!-- Context: development/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: development/navigation | Priority: critical | Version: 2.0 | Updated: 2026-08-08 -->
 
 # Development Navigation
 
@@ -11,53 +11,54 @@
 ```
 development/
 ├── navigation.md
-├── ui-navigation.md           # Specialized
-├── backend-navigation.md      # Specialized
-├── fullstack-navigation.md    # Specialized
+├── ui-navigation.md           # Navegación rápida de interfaz
+├── backend-navigation.md      # Navegación rápida de backend
+├── fullstack-navigation.md    # Navegación de desarrollo completo
 │
-├── principles/                # Universal (language-agnostic)
+├── principles/                # Principios universales (independientes del lenguaje)
 │   ├── navigation.md
 │   ├── clean-code.md
 │   └── api-design.md
 │
-├── frameworks/                # Full-stack frameworks
-│   ├── navigation.md
-│   └── tanstack-start/
+├── frameworks/                # Marcos de trabajo completos
+│   └── navigation.md
 │
-├── ai/                        # AI & Agents
+├── ai/                        # Inteligencia artificial y agentes
 │   ├── navigation.md
 │   └── mastra-ai/
+│       ├── concepts/          # Conceptos del marco
+│       ├── errors/            # Errores frecuentes
+│       ├── examples/          # Ejemplos funcionales
+│       ├── guides/            # Guías paso a paso
+│       └── lookup/            # Referencia rápida
 │
-├── frontend/                  # Client-side
+├── frontend/                  # Lado del cliente
 │   ├── navigation.md
-│   ├── when-to-delegate.md    # When to use frontend-specialist
-│   └── react/
-│       ├── navigation.md
-│       └── react-patterns.md
+│   ├── when-to-delegate.md    # Cuándo delegar en la especialista de interfaz
+│   └── concepts/              # Patrones de formularios, filtros, tema, preferencias
 │
-├── backend/                   # Server-side (future)
+├── backend/                   # Lado del servidor
 │   ├── navigation.md
-│   ├── api-patterns/
-│   ├── nodejs/
-│   ├── python/
-│   └── authentication/
+│   ├── concepts/              # Patrones de API, autenticación, aislamiento
+│   ├── examples/              # Ejemplos de extremos
+│   ├── guides/                # Guías de Prisma
+│   ├── lookup/                # Rutas de API y campos de búsqueda
+│   └── errors/                # Errores comunes de API
 │
-├── data/                      # Data layer (future)
+├── data/                      # Capa de datos
 │   ├── navigation.md
-│   ├── sql-patterns/
-│   ├── nosql-patterns/
-│   └── orm-patterns/
+│   ├── concepts/              # Patrones de Prisma y tablas de catálogo
+│   ├── lookup/                # Prisma de referencia rápida
+│   └── errors/                # Errores comunes de Prisma
 │
-├── integration/               # Connecting systems (future)
+├── integration/               # Intercambio de datos
 │   ├── navigation.md
-│   ├── package-management/
-│   ├── api-integration/
-│   └── third-party-services/
+│   └── concepts/              # Exportación e importación
 │
-└── infrastructure/            # DevOps (future)
+└── infrastructure/            # Operaciones y despliegue
     ├── navigation.md
-    ├── docker/
-    └── ci-cd/
+    ├── concepts/              # Despliegue en Vercel
+    └── guides/                # Desarrollo local con Docker
 ```
 
 ---
@@ -66,25 +67,31 @@ development/
 
 | Task | Path |
 |------|------|
-| **UI/Frontend** | `ui-navigation.md` |
-| **When to delegate frontend** | `frontend/when-to-delegate.md` |
-| **Backend/API** | `backend-navigation.md` |
-| **Full-stack** | `fullstack-navigation.md` |
-| **Clean code** | `principles/clean-code.md` |
-| **API design** | `principles/api-design.md` |
+| **Interfaz** | `ui-navigation.md` |
+| **Cuándo delegar la interfaz** | `frontend/when-to-delegate.md` |
+| **Backend y API** | `backend-navigation.md` |
+| **Desarrollo completo** | `fullstack-navigation.md` |
+| **Código limpio** | `principles/clean-code.md` |
+| **Diseño de API** | `principles/api-design.md` |
+| **Backend en detalle** | `backend/navigation.md` |
+| **Capa de datos** | `data/navigation.md` |
+| **Integración** | `integration/navigation.md` |
+| **Infraestructura** | `infrastructure/navigation.md` |
+| **Inteligencia artificial** | `ai/navigation.md` |
+| **Marcos de trabajo** | `frameworks/navigation.md` |
 
 ---
 
 ## By Concern
 
-**Principles** → Universal development practices
-**Frameworks** → Full-stack frameworks (Tanstack Start, Next.js)
-**AI** → AI frameworks and agent runtimes (MAStra AI)
-**Frontend** → React patterns and component design
-**Backend** → APIs, Node.js, Python, auth (future)
-**Data** → SQL, NoSQL, ORMs (future)
-**Integration** → Packages, APIs, services (future)
-**Infrastructure** → Docker, CI/CD (future)
+**Principles** → Prácticas universales de desarrollo (código limpio, diseño de API)
+**Frameworks** → Marcos de trabajo completos (sin marcos documentados por ahora)
+**AI** → Inteligencia artificial y agentes (MAStra AI)
+**Frontend** → Patrones de interfaz y componentes
+**Backend** → API de Next.js, autenticación, aislamiento por fila
+**Data** → Prisma y PostgreSQL
+**Integration** → Exportación, importación y consumo de API externas
+**Infrastructure** → Despliegue en Vercel y desarrollo local con Docker
 
 ---
 
@@ -92,3 +99,17 @@ development/
 
 - **Core Standards** → `../core/standards/navigation.md`
 - **UI Patterns** → `../ui/navigation.md`
+
+---
+
+## Nota de versión
+
+### Versión 2.0 — 2026-08-08
+- Reconstruido el árbol con la estructura real del disco. Eliminadas las ramas inexistentes: `frameworks/tanstack-start/`, `frontend/react/`, `backend/` con `api-patterns/`, `nodejs/`, `python/` y `authentication/`, `data/` con `sql-patterns/`, `nosql-patterns/` y `orm-patterns/`, `integration/` con `package-management/`, `api-integration/` y `third-party-services/`, e `infrastructure/` con `docker/` y `ci-cd/`.
+- La estructura real por área es `concepts/`, `examples/`, `errors/`, `guides/` y `lookup/` (backend, data, frontend) o `concepts/` y `guides/` (infrastructure, integration).
+- Añadidas las sub-navegaciones existentes: `principles/`, `frameworks/`, `ai/` (con `mastra-ai/`), `frontend/` (con `when-to-delegate.md`), `backend/`, `data/`, `integration/` e `infrastructure/`.
+- Incluidos los archivos raíz: `backend-navigation.md`, `ui-navigation.md` y `fullstack-navigation.md`.
+- Actualizadas las rutas rápidas y la sección «By Concern» con los archivos verificados en el disco.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con ramas planificadas que no existían en el disco: `frameworks/tanstack-start/`, `frontend/react/`, `backend/` con `api-patterns/`, `nodejs/`, `python/` y `authentication/` (futuro), `data/` con `sql-patterns/`, `nosql-patterns/` y `orm-patterns/` (futuro), `integration/` con `package-management/`, `api-integration/` y `third-party-services/` (futuro), e `infrastructure/` con `docker/` y `ci-cd/` (futuro). Queda como histórico.

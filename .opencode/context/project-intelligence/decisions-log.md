@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/decisions | Priority: high | Version: 3.1 | Updated: 2026-08-06 (18 entradas; #1–#11 archivadas en lookup/decision-archive.md; referencias de #12–#16 corregidas a docs/reference/) -->
+<!-- Context: project-intelligence/decisions | Priority: high | Version: 3.2 | Updated: 2026-08-08 (18 entradas; #1–#11 archivadas en lookup/decision-archive.md; referencias de #12–#16 corregidas a docs/reference/, incluidos aislamiento-por-fila.md y errores-comunes-api.md creados el 2026-08-08) -->
 
 # Decisions Log
 
@@ -30,7 +30,7 @@
 
 **Impact**: ✅ Implementado y verificado en código (getPrompts(userId), GET /api/prompts con auth+401, usage con ownership, detalle filtrado, tests nuevos). ⚠️ Validación final (test/tsc/lint/build) y deploy sin documentar.
 
-**Related**: patrones de aislamiento por fila y de errores comunes de API → pendientes de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
+**Related**: `docs/reference/aislamiento-por-fila.md` (patrón de aislamiento por fila; creado el 2026-08-08) · `docs/reference/errores-comunes-api.md` (errores comunes de API; creado el 2026-08-08)
 
 ---
 
@@ -40,7 +40,7 @@
 
 **Impact**: ✅ 7 subtareas, implementado y verificado (schema isActive, authorize, ProfileUsersTab.tsx, i18n paridad). ⚠️ Validación final + deploy sin documentar.
 
-**Related**: `docs/reference/seguridad-autenticacion.md` (endurecimiento de autenticación, tokenVersion; creado el 2026-08-06) · patrón de errores comunes de API → pendiente de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
+**Related**: `docs/reference/seguridad-autenticacion.md` (endurecimiento de autenticación, tokenVersion; creado el 2026-08-06) · `docs/reference/errores-comunes-api.md` (errores comunes de API; creado el 2026-08-08)
 
 ---
 
@@ -50,7 +50,7 @@
 
 **Impact**: ✅ 10 subtareas, implementado y verificado (schema isShared + 3 catálogos, `/api/shared/prompts`, `/shared`, `/taxonomy/*`). ⚠️ Validación final + deploy sin documentar.
 
-**Related**: `docs/reference/taxonomia-catalogos.md` (patrón de catálogos; creado el 2026-08-06) · `docs/reference/prompts-compartidos.md` (compartir prompts; creado el 2026-08-06) · patrón de aislamiento por fila (excepción compartidos) → pendiente de creación en `docs/reference/` (destino sin asignar, 2026-08-06)
+**Related**: `docs/reference/taxonomia-catalogos.md` (patrón de catálogos; creado el 2026-08-06) · `docs/reference/prompts-compartidos.md` (compartir prompts; creado el 2026-08-06) · `docs/reference/aislamiento-por-fila.md` (aislamiento por fila con la excepción de compartidos; creado el 2026-08-08)
 
 ---
 
@@ -82,4 +82,5 @@
 
 ## Evolución
 
+- **v3.2 (2026-08-08)**: corregidas las referencias pendientes de las decisiones 14, 15 y 16: el patrón de aislamiento por fila y el de errores comunes de API apuntan ahora a los documentos creados en `docs/reference/` el 2026-08-08 (`aislamiento-por-fila.md` y `errores-comunes-api.md`). No se han borrado decisiones previas: el texto original de #14–#16 se conserva y el estado anterior (pendientes de creación) queda como histórico de esta entrada.
 - **v3.1 (2026-08-06)**: añadidas las decisiones 17 (límite de intentos por dirección IP con la tabla `IpAttempt`, activo sin Upstash) y 18 (página de error de autenticación internacionalizada + filtro de tipo + umbrales de cobertura). Corregidas las referencias rotas de las decisiones 12 a 16: las de preferencias de interfaz, tema y acento, endurecimiento de autenticación y patrón de catálogos apuntan ahora a los archivos creados en `docs/reference/` (preferencias-interfaz.md, taxonomia-catalogos.md, prompts-compartidos.md, seguridad-autenticacion.md); las de aislamiento por fila y errores comunes de API quedan marcadas como pendientes de creación. No se han borrado decisiones previas: el texto original de #12–#16 se conserva y #1–#11 permanecen en `lookup/decision-archive.md`.

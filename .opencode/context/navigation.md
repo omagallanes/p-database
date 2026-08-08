@@ -1,4 +1,4 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/navigation | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Context Navigation
 
@@ -10,14 +10,17 @@
 
 ```
 .opencode/context/
-├── core/                   # Universal standards & workflows
-├── openagents-repo/        # OpenAgents Control repository work
-├── development/            # Software development (all stacks)
-├── ui/                     # Visual design & UX
-├── content-creation/       # Content creation (all formats)
-├── data/                   # Data engineering & analytics
-├── product/                # Product management
-└── learning/               # Educational content
+├── content-creation/         # Content creation (all formats)
+├── core/                     # Universal standards & workflows
+├── data/                     # Data engineering & analytics
+├── development/              # Software development (all stacks)
+├── learning/                 # Educational content
+├── openagents-repo/          # OpenAgents Control repository work
+├── product/                  # Product management
+├── project/                  # Project-specific context
+├── project-intelligence/     # Project intelligence (business & technical)
+├── system-builder-templates/ # Templates for orchestrator and subagent files
+└── ui/                       # Visual design & UX
 ```
 
 ---
@@ -31,7 +34,7 @@
 | **Write docs** | `core/standards/documentation.md` |
 | **Review code** | `core/workflows/code-review.md` |
 | **Delegate task** | `core/workflows/task-delegation-basics.md` |
-| **Add agent** | `openagents-repo/guides/adding-agent.md` |
+| **Add agent** | `openagents-repo/guides/adding-agent-basics.md` |
 | **UI development** | `development/ui-navigation.md` |
 | **API development** | `development/backend-navigation.md` |
 
@@ -47,3 +50,18 @@
 **data/** - Data engineering → `data/navigation.md`
 **product/** - Product management → `product/navigation.md`
 **learning/** - Educational → `learning/navigation.md`
+**project/** - Project-specific context → `project/navigation.md`
+**project-intelligence/** - Project intelligence → `project-intelligence/navigation.md`
+**system-builder-templates/** - Agent templates → `system-builder-templates/navigation.md`
+
+---
+
+## Nota de versión
+
+### Versión 1.1 — 2026-08-08
+- Añadidas las tres zonas reales omitidas: `project/`, `project-intelligence/` y `system-builder-templates/` (árbol y sección Por categoría).
+- Corregida la ruta rota `openagents-repo/guides/adding-agent.md` → `openagents-repo/guides/adding-agent-basics.md` (el archivo real se llama `adding-agent-basics.md`).
+- Reordenado el árbol en orden alfabético para facilitar el escaneo; las ocho zonas originales se mantienen.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con las ocho zonas iniciales.

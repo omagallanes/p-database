@@ -1,10 +1,10 @@
-<!-- Context: ui/navigation | Priority: critical | Version: 2.0 | Updated: 2026-07-14 -->
+<!-- Context: ui/navigation | Priority: critical | Version: 2.1 | Updated: 2026-08-08 -->
 
 # Web UI Context
 
 **Purpose**: Web-based UI patterns, animations, styling standards, and React component design
 
-**Last Updated**: 2026-07-14
+**Last Updated**: 2026-08-08
 
 ---
 
@@ -15,8 +15,6 @@ ui/web/
 ├── navigation.md
 ├── concepts/         # What it is
 ├── examples/         # Working code
-├── guides/           # How to do it
-├── lookup/           # Quick reference
 └── design/           # Advanced design patterns
 ```
 
@@ -40,18 +38,6 @@ ui/web/
 | `examples/animation-chat.md` | Chat UI and message animations | medium |
 | `examples/animation-forms.md` | Form input and validation animations | medium |
 | `examples/animation-loading.md` | Skeleton, spinner, progress animations | medium |
-
-### Guides
-| File | Description | Priority |
-|------|-------------|----------|
-| `guides/images-guide.md` | Placeholder and responsive images | medium |
-| `guides/icons-guide.md` | Icon systems (Lucide, Heroicons) | medium |
-| `guides/fonts-guide.md` | Font loading and optimization | medium |
-
-### Lookup
-| File | Description | Priority |
-|------|-------------|----------|
-| `lookup/cdn-resources.md` | CDN libraries and resources | medium |
 
 ### Subcategories
 | Subcategory | Description | Path |
@@ -84,3 +70,16 @@ ui/web/
 - `ui/terminal/` - Terminal UI patterns
 - `development/frontend/` - Frontend development patterns
 - `development/` - General development patterns
+
+---
+
+## Nota de versión
+
+### Versión 2.1 — 2026-08-08
+- Eliminada la sección "Guides": la carpeta `ui/web/guides/` no existe en el disco (referencias fantasma a `guides/images-guide.md`, `guides/icons-guide.md` y `guides/fonts-guide.md`).
+- Eliminada la sección "Lookup": la carpeta `ui/web/lookup/` no existe en el disco (referencia fantasma a `lookup/cdn-resources.md`).
+- Corregido el árbol de estructura: `ui/web/` contiene únicamente `concepts/`, `examples/` y `design/`.
+- Actualizada la fecha de última modificación.
+
+### Versión 2.0 — 2026-07-14
+- Versión anterior con referencias a `guides/` (3 archivos) y `lookup/` (1 archivo) que no existen en el disco.

@@ -80,5 +80,5 @@ Key Design Decisions:
 - [Overview](./design-iteration-overview.md)
 - [Stage 1: Layout](./design-iteration-stage-layout.md)
 - [Stage 3: Animation](./design-iteration-stage-animation.md)
-- [Design Systems Context](../../ui/web/design-systems.md)
-- [UI Styling Standards](../../ui/web/ui-styling-standards.md)
+- [Design Systems Context](../../ui/web/concepts/design-systems.md)
+- [UI Styling Standards](../../ui/web/concepts/ui-styling.md)

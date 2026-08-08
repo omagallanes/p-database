@@ -1,4 +1,4 @@
-<!-- Context: development/navigation | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: development/backend-navigation | Priority: high | Version: 2.0 | Updated: 2026-08-08 -->
 
 # Backend Development Navigation
 
@@ -9,33 +9,22 @@
 ## Structure
 
 ```
-development/backend/           # [future]
+backend/
 ├── navigation.md
-│
-├── api-patterns/              # Approach-based
-│   ├── rest-design.md
-│   ├── graphql-design.md
-│   ├── grpc-patterns.md
-│   └── websocket-patterns.md
-│
-├── nodejs/                    # Tech-specific
-│   ├── express-patterns.md
-│   ├── fastify-patterns.md
-│   └── error-handling.md
-│
-├── python/
-│   ├── fastapi-patterns.md
-│   └── django-patterns.md
-│
-├── authentication/            # Functional concern
-│   ├── jwt-patterns.md
-│   ├── oauth-patterns.md
-│   └── session-management.md
-│
-└── middleware/
-    ├── logging.md
-    ├── rate-limiting.md
-    └── cors.md
+├── concepts/
+│   ├── nextjs-api-patterns.md         # Patrón de API en Next.js (Auth→Zod→Prisma→Response)
+│   ├── nextauth-setup.md              # Configuración de NextAuth + JWT
+│   ├── auth-hardening-pattern.md      # Límite de peticiones en BD + revocación de tokenVersion
+│   └── row-level-isolation-pattern.md # where.userId en toda consulta (aislamiento)
+├── examples/
+│   └── temp-admin-bulk-op.md          # Extremo de administración temporal para operaciones masivas
+├── guides/
+│   └── prisma-nm-and-filters.md       # Patrón de filtro N:M con AND en Prisma
+├── lookup/
+│   ├── api-routes.md                  # Referencia rápida de rutas de API
+│   └── searchable-fields-dimensions.md # Campos de búsqueda y dimensiones de filtro
+└── errors/
+    └── api-common-errors.md           # Problemas comunes de API y soluciones
 ```
 
 ---
@@ -44,36 +33,43 @@ development/backend/           # [future]
 
 | Task | Path |
 |------|------|
-| **REST API** | `backend/api-patterns/rest-design.md` [future] |
-| **GraphQL** | `backend/api-patterns/graphql-design.md` [future] |
-| **API design principles** | `principles/api-design.md` |
-| **Node.js** | `backend/nodejs/express-patterns.md` [future] |
-| **Python** | `backend/python/fastapi-patterns.md` [future] |
-| **Auth (JWT)** | `backend/authentication/jwt-patterns.md` [future] |
+| **Patrón de código de API** | `backend/concepts/nextjs-api-patterns.md` |
+| **Configuración de autenticación** | `backend/concepts/nextauth-setup.md` |
+| **Refuerzo de autenticación** | `backend/concepts/auth-hardening-pattern.md` |
+| **Aislamiento por fila** | `backend/concepts/row-level-isolation-pattern.md` |
+| **Extremo de administración temporal** | `backend/examples/temp-admin-bulk-op.md` |
+| **Filtro N:M con AND** | `backend/guides/prisma-nm-and-filters.md` |
+| **Rutas de API en tabla** | `backend/lookup/api-routes.md` |
+| **Campos de búsqueda y dimensiones** | `backend/lookup/searchable-fields-dimensions.md` |
+| **Errores comunes** | `backend/errors/api-common-errors.md` |
 
 ---
 
-## By Approach
-
-**REST** → `backend/api-patterns/rest-design.md` [future]
-**GraphQL** → `backend/api-patterns/graphql-design.md` [future]
-**gRPC** → `backend/api-patterns/grpc-patterns.md` [future]
-
-## By Language
-
-**Node.js** → `backend/nodejs/` [future]
-**Python** → `backend/python/` [future]
-
 ## By Concern
 
-**Authentication** → `backend/authentication/` [future]
-**Middleware** → `backend/middleware/` [future]
-**Data layer** → `data/` [future]
+**API** → `backend/concepts/nextjs-api-patterns.md`
+**Autenticación** → `backend/concepts/nextauth-setup.md`, `backend/concepts/auth-hardening-pattern.md`
+**Aislamiento de datos** → `backend/concepts/row-level-isolation-pattern.md`
+**Base de datos** → `data/navigation.md`
+**Guías y referencias** → `backend/guides/`, `backend/lookup/`
+**Errores** → `backend/errors/api-common-errors.md`
 
 ---
 
 ## Related Context
 
 - **API Design Principles** → `principles/api-design.md`
+- **Data Patterns** → `data/navigation.md`
 - **Core Standards** → `../core/standards/code-quality.md`
-- **Data Patterns** → `data/navigation.md` [future]
+
+---
+
+## Nota de versión
+
+### Versión 2.0 — 2026-08-08
+- Reconciliado con la estructura real del disco: la navegación apunta ahora a los archivos existentes de `backend/` (concepts/, examples/, guides/, lookup/, errors/).
+- Eliminadas las entradas «[futuro]» y las ramas inexistentes (`api-patterns/`, `nodejs/`, `python/`, `authentication/`, `middleware/`).
+- Actualizadas las rutas rápidas y la sección «By Concern» con los archivos verificados.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con ramas planificadas inexistentes: `api-patterns/` (rest-design, graphql-design, grpc-patterns, websocket-patterns), `nodejs/` (express-patterns, fastify-patterns, error-handling), `python/` (fastapi-patterns, django-patterns), `authentication/` (jwt-patterns, oauth-patterns, session-management) y `middleware/` (logging, rate-limiting, cors). Queda como histórico.

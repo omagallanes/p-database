@@ -164,9 +164,9 @@ Before presenting each stage:
 
 ## References
 
-- [Design Systems Context](../../ui/web/design-systems.md)
-- [UI Styling Standards](../../ui/web/ui-styling-standards.md)
-- [Animation Basics](../../ui/web/animation-basics.md)
+- [Design Systems Context](../../ui/web/concepts/design-systems.md)
+- [UI Styling Standards](../../ui/web/concepts/ui-styling.md)
+- [Animation Basics](../../ui/web/concepts/animation-basics.md)
 - [ASCII Art Generator](https://www.asciiart.eu/)
 - [WCAG Contrast Checker](https://webaim.org/resources/contrastchecker/)
 

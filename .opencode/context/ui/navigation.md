@@ -1,10 +1,10 @@
-<!-- Context: ui/navigation | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: ui/navigation | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
 
 # UI Context
 
 **Purpose**: User interface design patterns, standards, and best practices across all platforms
 
-**Last Updated**: 2026-01-07
+**Last Updated**: 2026-08-08
 
 ---
 
@@ -73,10 +73,22 @@ This category covers:
 
 - `development/` - General development patterns (backend, APIs, clean code)
 - `product/` - Product design and UX strategy
-- `content/` - Content design and copywriting
+- `content-creation/` - Content design and copywriting
 
 ---
 
 ## Used By
 
 **Agents**: frontend-specialist, design-specialist, ui-developer, animation-expert
+
+---
+
+## Nota de versión
+
+### Versión 1.1 — 2026-08-08
+- Verificadas las subcarpetas reales de `ui/` contra el disco: `terminal/` y `web/` (ambas con `navigation.md` existente); el árbol de subcategorías no necesitaba cambios.
+- Corregida la categoría relacionada `content/` → `content-creation/`: la carpeta `ui/../content/` no existe en el disco; la categoría real se llama `content-creation/`.
+- Actualizada la fecha de última modificación.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con la categoría relacionada `content/` que no existe en el disco (la carpeta real se llama `content-creation/`).

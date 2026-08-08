@@ -132,6 +132,6 @@ overlay: 300ms ease-out [α0→1, blur0→4px]
 
 ## Related Files
 
-- [Animation Basics](./animation-basics.md) - Fundamentals
+- [Animation Basics](../concepts/animation-basics.md) - Fundamentals
 - [Chat Animations](./animation-chat.md) - Message patterns
 - [Loading Animations](./animation-loading.md) - Loading states

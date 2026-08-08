@@ -1,4 +1,4 @@
-<!-- Context: core/context-system | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/context-system | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Context System
 
@@ -157,7 +157,7 @@ Follow MVI when extracting. Keep files focused on one topic each.
 
 ## Related Documentation
 
-- `guides/navigation-design.md` — Creating navigation files
+- `guides/navigation-design-basics.md` — Creating navigation files
 - `guides/organizing-context.md` — Choosing organizational pattern
 - `examples/navigation-examples.md` — Good navigation examples
 - `standards/templates.md` — File templates for each type
@@ -179,3 +179,10 @@ Follow MVI when extracting. Keep files focused on one topic each.
 /context map [category]       # View structure
 /context validate             # Check integrity, references, sizes
 ```
+
+---
+
+## Notas de versión
+
+- **v1.1 (2026-08-08)**: se corrige la referencia `guides/navigation-design.md` por `guides/navigation-design-basics.md`, ruta real verificada en el disco. Las demás rutas de la sección de documentación relacionada (`guides/organizing-context.md`, `examples/navigation-examples.md`, `standards/templates.md`) se verificaron y son válidas.
+- **v1.0 (2026-02-15)**: versión original del documento maestro del sistema de contexto; incluía la referencia a la guía de diseño de navegación con un nombre de archivo inexistente.

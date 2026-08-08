@@ -23,11 +23,8 @@ Guidelines and troubleshooting.
 - [Best Practices](./reference/best-practices.md): Message injection workarounds, security, and performance.
 
 ### 🧩 Claude Code Plugins (External)
-Claude Code plugin system documentation (harvested from external docs).
-- [Concepts: Plugin Architecture](./concepts/plugin-architecture.md): Core concepts and structure
-- [Guides: Creating Plugins](./guides/creating-plugins.md): Step-by-step creation
-- [Guides: Migrating to Plugins](./guides/migrating-to-plugins.md): Convert standalone to plugin
-- [Lookup: Plugin Structure](./lookup/plugin-structure.md): Directory reference
+Documentación externa de plugins de Claude Code prevista pero aún no cosechada en este repositorio (histórico desde 2026-08-08: las subcarpetas concepts/, guides/ y lookup/ no existen en el disco; los enlaces se retiraron para no dejar referencias rotas).
+- *Pendiente de cosecha externa*: arquitectura de plugins, guías de creación, guía de migración y estructura de directorios.
 
 ## 🚀 How to use this library
 If you are asking an AI to build a new feature:

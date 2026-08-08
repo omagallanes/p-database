@@ -1,4 +1,4 @@
-<!-- Context: development/frontend/nav | Priority: high | Version: 1.4 | Updated: 2026-08-06 -->
+<!-- Context: development/frontend/nav | Priority: high | Version: 1.5 | Updated: 2026-08-08 -->
 
 # Frontend Development
 
@@ -12,16 +12,13 @@
 frontend/
 ├── navigation.md
 ├── when-to-delegate.md
-├── concepts/
-│   ├── form-patterns.md         # Segment form (PromptForm 3 sections)
-│   ├── filter-patterns.md       # URL-driven multi-dimension filters
-│   ├── search-clear-pattern.md  # Clear button for search inputs
-│   ├── view-mode-pattern.md     # Card/list toggle with persistence
-│   ├── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
-│   └── theme-accent-pattern.md  # Dark mode + accent color (CSS vars, anti-FOUC)
-└── react/
-    ├── navigation.md
-    └── react-patterns.md
+└── concepts/
+    ├── form-patterns.md         # Segment form (PromptForm 3 sections)
+    ├── filter-patterns.md       # URL-driven multi-dimension filters
+    ├── search-clear-pattern.md  # Clear button for search inputs
+    ├── view-mode-pattern.md     # Card/list toggle with persistence
+    ├── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
+    └── theme-accent-pattern.md  # Dark mode + accent color (CSS vars, anti-FOUC)
 ```
 
 ---
@@ -37,14 +34,25 @@ frontend/
 | **UI preferences (en cuenta)** | `concepts/ui-preferences-pattern.md` |
 | **Theme + accent color** | `concepts/theme-accent-pattern.md` |
 | **When to delegate** | `when-to-delegate.md` |
-| **React patterns** | `react/react-patterns.md` |
 
 ---
 
 ## Related Context
 
 - **UI Navigation** → `../../ui/navigation.md`
+- **React patterns** → `../../ui/web/concepts/react-patterns.md`
 - **Backend API patterns** → `../backend/concepts/nextjs-api-patterns.md`
 - **N:M AND filter guide** → `../backend/guides/prisma-nm-and-filters.md`
 - **Searchable fields reference** → `../backend/lookup/searchable-fields-dimensions.md`
 - **Core Standards** → `../../core/standards/code-quality.md`
+
+---
+
+## Nota de versión
+
+### Versión 1.5 — 2026-08-08
+- Eliminada la rama `react/` del árbol y la ruta `react/react-patterns.md` de las rutas rápidas: no existe en el disco.
+- Corregida la referencia de patrones de React a su ubicación real: `../../ui/web/concepts/react-patterns.md`.
+
+### Versión 1.4 — 2026-08-06
+- Versión anterior con la rama `react/` y la ruta `react/react-patterns.md` (inexistentes). Queda como histórico.

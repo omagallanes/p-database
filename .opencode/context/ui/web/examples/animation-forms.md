@@ -116,6 +116,6 @@ scrollHint: 800ms ∞×3 [Y±5]
 
 ## Related Files
 
-- [Animation Basics](./animation-basics.md) - Fundamentals
+- [Animation Basics](../concepts/animation-basics.md) - Fundamentals
 - [Animation Components](./animation-components.md) - Common UI patterns
 - [Loading Animations](./animation-loading.md) - Loading states

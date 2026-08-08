@@ -1,4 +1,4 @@
-<!-- Context: core/task-schema | Priority: critical | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/task-schema | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Standard: Task JSON Schema
 
@@ -23,7 +23,7 @@ Location: `.tmp/tasks/{feature-slug}/` (at project root)
 This document describes the **base schema** (v1.0) that all task files must follow.
 
 For **enhanced features** (line-number precision, domain modeling, contracts, ADRs, prioritization):
-- See `enhanced-task-schema.md` for extended fields
+- Extended fields are documented in this document itself (see "Migration to Enhanced Schema" below)
 - All enhanced fields are **optional** and backward compatible
 - Use enhanced schema for multi-stage orchestration workflows
 
@@ -175,7 +175,18 @@ Both formats work. Agents handle both automatically.
 
 ## Related
 
-- `enhanced-task-schema.md` — Extended schema with advanced features
 - `../guides/splitting-tasks.md` — How to decompose features
 - `../guides/managing-tasks.md` — Lifecycle workflow
 - `../lookup/task-commands.md` — CLI reference
+
+---
+
+## Nota de versión
+
+### Versión 1.1 — 2026-08-08
+- Sustituida la referencia a `enhanced-task-schema.md` (no existe en el disco) por una nota que indica que los campos ampliados se documentan en este mismo esquema, en la sección «Migración al esquema ampliado».
+- Eliminada la entrada de `enhanced-task-schema.md` de la sección «Relacionados».
+- Las rutas restantes de la sección «Relacionados» se verificaron contra el disco.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con referencia a `enhanced-task-schema.md` (queda como histórico; no existe en el disco).

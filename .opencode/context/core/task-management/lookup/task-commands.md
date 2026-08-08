@@ -1,4 +1,4 @@
-<!-- Context: core/task-commands | Priority: high | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: core/task-commands | Priority: high | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Lookup: Task CLI Commands
 
@@ -155,7 +155,7 @@ The CLI fully supports the enhanced task schema (v2.0) with:
 - **ADR references** — Architecture decision records
 - **Prioritization** — RICE/WSJF scores
 
-All enhanced fields are optional and backward compatible. See `../standards/enhanced-task-schema.md`.
+All enhanced fields are optional and backward compatible. See `../standards/task-schema.md` for the schema reference.
 
 ---
 
@@ -171,13 +171,24 @@ For multi-stage orchestration workflows, use these planning agents before task c
 | **ContractManager** | API contract definition | `.tmp/contracts/{service}.json` |
 | **ADRManager** | Architecture decision records | `docs/adr/` |
 
-These agents populate enhanced schema fields (bounded_context, contracts, related_adrs, rice_score) automatically. See `../workflows/multi-stage-orchestration.md`.
+These agents populate the extended schema fields (bounded_context, contracts, related_adrs, rice_score) automatically.
 
 ---
 
 ## Related
 
 - `../standards/task-schema.md` — Base JSON schema reference
-- `../standards/enhanced-task-schema.md` — Extended schema with advanced features
 - `../guides/managing-tasks.md` — Workflow guide
-- `../workflows/multi-stage-orchestration.md` — Planning workflow
+
+---
+
+## Nota de versión
+
+### Versión 1.1 — 2026-08-08
+- Sustituida la referencia a `../standards/enhanced-task-schema.md` (no existe en el disco) por la del esquema real `../standards/task-schema.md`.
+- Eliminada la referencia a `../workflows/multi-stage-orchestration.md` (no existe en el disco); la frase sobre los agentes que pueblan los campos ampliados queda como nota genérica sin enlazar a archivo inexistente.
+- Eliminadas las entradas de `enhanced-task-schema.md` y de `multi-stage-orchestration.md` de la sección «Relacionados».
+- Las rutas restantes se verificaron contra el disco.
+
+### Versión 1.0 — 2026-02-15
+- Versión original con referencias a `enhanced-task-schema.md` y a `multi-stage-orchestration.md` (quedan como histórico; no existen en el disco).
