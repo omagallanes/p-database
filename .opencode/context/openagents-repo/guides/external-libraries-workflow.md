@@ -116,7 +116,7 @@ Fetched docs are cached in `.opencode/external-context/{package-name}/`. Docs >7
 
 ### When Adding an Agent
 
-1. Read: `guides/adding-agent.md` to understand agent creation workflow
+1. Read: `guides/adding-agent-basics.md` to understand agent creation workflow
 2. If agent uses external packages: Use ExternalScout to fetch current docs, document package dependencies in agent metadata (frontmatter), add to registry with correct versions
 3. Test: `guides/testing-agent.md` to verify implementation
 
@@ -165,7 +165,7 @@ Before implementing with external libraries:
 
 ## Related Guides
 
-- `guides/adding-agent.md` - Creating new agents
+- `guides/adding-agent-basics.md` - Creating new agents
 - `guides/adding-skill.md` - Creating new skills
 - `guides/debugging.md` - Troubleshooting
 - `guides/updating-registry.md` - Registry management

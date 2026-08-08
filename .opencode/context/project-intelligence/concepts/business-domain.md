@@ -82,7 +82,7 @@ See project maintainers (not documented in project files).
 
 - `technical-domain.md` - How this business need is solved technically
 - `business-tech-bridge.md` - Mapping between business and technical
-- `decisions-log.md` - Business decisions with context
+- `../lookup/decisions-log.md` - Business decisions with context
 
 ## Evolución
 

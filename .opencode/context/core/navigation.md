@@ -1,4 +1,4 @@
-<!-- Context: core/navigation | Priority: critical | Version: 1.1 | Updated: 2026-08-08 -->
+<!-- Context: core/navigation | Priority: critical | Version: 1.2 | Updated: 2026-08-08 -->
 
 # Core Context Navigation
 
@@ -11,9 +11,10 @@
 ```
 core/
 ├── navigation.md
-├── context-system.md
-├── essential-patterns.md
-├── visual-development.md
+├── concepts/
+│   ├── context-system.md
+│   ├── essential-patterns.md
+│   └── visual-development.md
 │
 ├── config/
 │   ├── navigation.md
@@ -40,7 +41,6 @@ core/
 │   ├── external-libraries-scenarios.md
 │   ├── external-libraries-faq.md
 │   ├── feature-breakdown.md
-│   ├── review.md
 │   ├── session-management.md
 │   ├── task-delegation-basics.md
 │   ├── task-delegation-caching.md
@@ -101,12 +101,12 @@ core/
 | **Delegate task** | `workflows/task-delegation-basics.md` |
 | **Break down feature** | `workflows/feature-breakdown.md` |
 | **External context** | `workflows/external-context-integration.md` |
-| **Essential patterns** | `essential-patterns.md` |
-| **Visual development** | `visual-development.md` |
+| **Essential patterns** | `concepts/essential-patterns.md` |
+| **Visual development** | `concepts/visual-development.md` |
 | **Manage tasks** | `task-management/navigation.md` |
 | **Task CLI commands** | `task-management/lookup/task-commands.md` |
 | **Context paths** | `system/context-paths.md` |
-| **Context system** | `context-system.md` |
+| **Context system** | `concepts/context-system.md` |
 
 ---
 
@@ -130,6 +130,10 @@ core/
 ---
 
 ## Nota de versión
+
+### Versión 1.2 — 2026-08-08
+- Organizados los archivos planos de la raíz en `concepts/`: `context-system.md`, `essential-patterns.md` y `visual-development.md` ahora viven en `core/concepts/`.
+- Actualizadas las rutas rápidas y el árbol de estructura.
 
 ### Versión 1.1 — 2026-08-08
 - Eliminado el bloque `guides/` del árbol: la carpeta `core/guides/` no existe en el disco.

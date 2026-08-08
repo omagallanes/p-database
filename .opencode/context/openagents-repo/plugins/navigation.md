@@ -24,7 +24,7 @@ openagents-repo/plugins/
 |------|------|
 | **Context plugin** | `./context/` |
 | **View plugins** | `./` |
-| **Guides** | `../guides/navigation.md` |
+| **Guides** | `../guides/` |
 
 ---
 
@@ -38,5 +38,5 @@ openagents-repo/plugins/
 ## Related Context
 
 - **OpenAgents Navigation** → `../navigation.md`
-- **Guides** → `../guides/navigation.md`
-- **Core Concepts** → `../core-concepts/navigation.md`
+- **Guides** → `../guides/` (adding-agent-basics, testing-agent, debugging, etc.)
+- **Core Concepts** → `../core-concepts/` (agents, evals, registry, categories)

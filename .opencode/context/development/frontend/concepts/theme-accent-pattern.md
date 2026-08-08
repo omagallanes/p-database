@@ -27,4 +27,4 @@ export function hexToHsl(hex: string): { h: number; s: number; l: number }
 
 **Reference**: `contexts/UIContext.tsx` · `lib/color.ts` · `app/layout.tsx` · `app/globals.css` · `tailwind.config.ts`
 
-**Related**: `concepts/ui-preferences-pattern.md` (persistencia) · `project-intelligence/decisions-log.md` #12 · `../backend/concepts/auth-hardening-pattern.md` (seguridad auth)
+**Related**: `concepts/ui-preferences-pattern.md` (persistencia) · `../../project-intelligence/lookup/decisions-log.md` #12 · `../backend/concepts/auth-hardening-pattern.md` (seguridad auth)

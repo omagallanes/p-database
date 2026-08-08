@@ -28,4 +28,4 @@ integration/
 ## Related Context
 
 - **Backend API patterns** → `../backend/navigation.md`
-- **Technical domain** → `../../project-intelligence/technical-domain.md`
+- **Technical domain** → `../../project-intelligence/concepts/technical-domain.md`

@@ -38,6 +38,6 @@ development/
 
 ## Related
 
-- `technical-domain.md` — Code Patterns, Standards, Commands (updated with Plan C learnings)
-- `errors/tech-knowledge.md` — Error catalog (testing errors extended with Plan C)
-- `decisions-log.md` — Plan C decision entry
+- `../concepts/technical-domain.md` — Code Patterns, Standards, Commands (updated with Plan C learnings)
+- `errors/tech-knowledge.md` — Error catalog index (13 thematic files; testing errors in `testing-errors.md` / `testing-mock-errors.md`)
+- `../lookup/decisions-log.md` — Plan C decision entry

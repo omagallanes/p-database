@@ -1,27 +1,8 @@
-<!-- Context: openagents-repo/navigation | Priority: critical | Version: 2.0 | Updated: 2026-08-08 -->
+<!-- Context: openagents-repo/navigation | Priority: critical | Version: 2.1 | Updated: 2026-08-08 -->
 
 # OpenAgents Control Repository Context
 
 **Purpose**: Context files specific to the OpenAgents Control repository
-
-**Last Updated**: 2026-08-08
-
----
-
-## Quick Navigation
-
-| Function | Files | Purpose |
-|----------|-------|---------|
-| **Blueprints** | 1 file | Reusable architecture templates |
-| **Concepts** | 1 file | Core ideas and principles |
-| **Core Concepts** | 5 files | Foundational repository knowledge |
-| **Errors** | 1 file | Common issues + solutions |
-| **Examples** | 2 files | Working code samples |
-| **Guides** | 18 files | Step-by-step workflows |
-| **Lookup** | 4 files | Quick reference tables |
-| **Plugins** | 8 files | Context plugin architecture and capabilities |
-| **Quality** | 1 file | Dependency quality checks |
-| **Templates** | 1 file | Ready-to-use file templates |
 
 ---
 
@@ -29,30 +10,21 @@
 
 ```
 openagents-repo/
-├── navigation.md
 ├── quick-start.md
-├── blueprints/
-│   ├── navigation.md
-│   └── context-bundle-template.md
 ├── concepts/
-│   ├── navigation.md
 │   └── subagent-testing-modes.md
 ├── core-concepts/
-│   ├── navigation.md
 │   ├── agent-metadata.md
 │   ├── agents.md
 │   ├── categories.md
 │   ├── evals.md
 │   └── registry.md
 ├── errors/
-│   ├── navigation.md
 │   └── tool-permission-errors.md
 ├── examples/
-│   ├── navigation.md
 │   ├── context-bundle-example.md
 │   └── subagent-prompt-structure.md
 ├── guides/
-│   ├── navigation.md
 │   ├── adding-agent-basics.md
 │   ├── adding-agent-testing.md
 │   ├── adding-skill-basics.md
@@ -72,15 +44,12 @@ openagents-repo/
 │   ├── testing-subagents.md
 │   └── updating-registry.md
 ├── lookup/
-│   ├── navigation.md
 │   ├── commands.md
 │   ├── file-locations.md
 │   ├── subagent-framework-maps.md
 │   └── subagent-test-commands.md
 ├── plugins/
-│   ├── navigation.md
 │   └── context/
-│       ├── context-overview.md
 │       ├── architecture/
 │       │   ├── lifecycle.md
 │       │   └── overview.md
@@ -92,58 +61,20 @@ openagents-repo/
 │       └── reference/
 │           └── best-practices.md
 ├── quality/
-│   ├── navigation.md
 │   └── registry-dependencies.md
 └── templates/
-    ├── navigation.md
     └── context-bundle-template.md
 ```
 
 ---
 
-## Quick Routes
-
-| Task | Path |
-|------|------|
-| **Add agent** | `guides/adding-agent-basics.md` |
-| **Test agent** | `guides/testing-agent.md` |
-| **Add skill** | `guides/adding-skill-basics.md` |
-| **Test subagents** | `guides/testing-subagents.md` |
-| **Invoke subagents** | `guides/subagent-invocation.md` |
-| **Publish to npm** | `guides/npm-publishing.md` |
-| **Create release** | `guides/creating-release.md` |
-| **Debug issues** | `guides/debugging.md` |
-| **Update registry** | `guides/updating-registry.md` |
-| **Commands reference** | `lookup/commands.md` |
-| **File locations** | `lookup/file-locations.md` |
-| **Subagent test commands** | `lookup/subagent-test-commands.md` |
-| **Context plugin overview** | `plugins/context/context-overview.md` |
-| **Context bundle template** | `blueprints/context-bundle-template.md` |
-| **Repo orientation** | `quick-start.md` |
-
----
-
 ## By Type
-
-### Blueprints
-
-| File | Topic | Priority |
-|------|-------|----------|
-| `blueprints/context-bundle-template.md` | Reusable context bundle blueprint | ⭐⭐⭐ |
-
-**When to read**: When planning a new context bundle
-
----
 
 ### Concepts
 
 | File | Topic | Priority |
 |------|-------|----------|
 | `concepts/subagent-testing-modes.md` | Standalone vs delegation testing | ⭐⭐⭐⭐⭐ |
-
-**When to read**: Before testing any subagent
-
----
 
 ### Core Concepts
 
@@ -155,19 +86,11 @@ openagents-repo/
 | `core-concepts/categories.md` | How organization works | ⭐⭐⭐ |
 | `core-concepts/agent-metadata.md` | Agent metadata fields | ⭐⭐⭐ |
 
-**When to read**: First time working in this repo
-
----
-
 ### Errors
 
 | File | Topic | Priority |
 |------|-------|----------|
 | `errors/tool-permission-errors.md` | Tool permission issues | ⭐⭐⭐⭐⭐ |
-
-**When to read**: When tests fail with permission errors
-
----
 
 ### Examples
 
@@ -175,10 +98,6 @@ openagents-repo/
 |------|-------|----------|
 | `examples/subagent-prompt-structure.md` | Optimized subagent prompt template | ⭐⭐⭐⭐ |
 | `examples/context-bundle-example.md` | Context bundle usage example | ⭐⭐⭐ |
-
-**When to read**: When optimizing prompts or building bundles
-
----
 
 ### Guides
 
@@ -203,10 +122,6 @@ openagents-repo/
 | `guides/building-cli-compact.md` | Building compact CLI tools | ⭐⭐ |
 | `guides/creating-release.md` | How to create releases | ⭐⭐ |
 
-**When to read**: When performing specific tasks
-
----
-
 ### Lookup
 
 | File | Topic | Priority |
@@ -216,15 +131,11 @@ openagents-repo/
 | `lookup/commands.md` | Available slash commands | ⭐⭐⭐ |
 | `lookup/subagent-framework-maps.md` | Subagent framework mappings | ⭐⭐⭐ |
 
-**When to read**: Quick command lookups and file references
-
----
-
 ### Plugins
 
 | File | Topic | Priority |
 |------|-------|----------|
-| `plugins/context/context-overview.md` | Context plugin system overview | ⭐⭐⭐⭐⭐ |
+| `plugins/context/navigation.md` | Context plugin system overview | ⭐⭐⭐⭐⭐ |
 | `plugins/context/architecture/overview.md` | Plugin architecture overview | ⭐⭐⭐⭐ |
 | `plugins/context/architecture/lifecycle.md` | Plugin lifecycle stages | ⭐⭐⭐⭐ |
 | `plugins/context/capabilities/agents.md` | Agent capabilities | ⭐⭐⭐⭐ |
@@ -233,19 +144,11 @@ openagents-repo/
 | `plugins/context/capabilities/tools.md` | Tool capabilities | ⭐⭐⭐⭐ |
 | `plugins/context/reference/best-practices.md` | Plugin best practices | ⭐⭐⭐ |
 
-**When to read**: When working with the context plugin system
-
----
-
 ### Quality
 
 | File | Topic | Priority |
 |------|-------|----------|
 | `quality/registry-dependencies.md` | Registry dependency checks | ⭐⭐⭐ |
-
-**When to read**: When validating registry dependencies
-
----
 
 ### Templates
 
@@ -253,63 +156,21 @@ openagents-repo/
 |------|-------|----------|
 | `templates/context-bundle-template.md` | Ready-to-use context bundle template | ⭐⭐⭐⭐ |
 
-**When to read**: When creating a context bundle
-
 ---
 
 ## Loading Strategy
 
-### For Subagent Testing:
-1. Load `concepts/subagent-testing-modes.md` (understand modes)
-2. Load `guides/testing-subagents.md` (step-by-step)
-3. Reference `lookup/subagent-test-commands.md` (commands)
-4. If errors: Load `errors/tool-permission-errors.md`
+**Subagent testing**: `concepts/subagent-testing-modes.md` → `guides/testing-subagents.md` → `lookup/subagent-test-commands.md` → `errors/tool-permission-errors.md` (si falla)
 
-### For Agent Creation:
-1. Load `core-concepts/agents.md` (understand system)
-2. Load `core-concepts/agent-metadata.md` (metadata fields)
-3. Load `guides/adding-agent-basics.md` (step-by-step)
-4. **If using external libraries**: Load `guides/external-libraries-workflow.md` (fetch docs)
-5. Load `examples/subagent-prompt-structure.md` (if subagent)
-6. Load `guides/testing-agent.md` (validate)
+**Agent creation**: `core-concepts/agents.md` → `core-concepts/agent-metadata.md` → `guides/adding-agent-basics.md` → `guides/external-libraries-workflow.md` (si librerías externas) → `examples/subagent-prompt-structure.md` (si subagent) → `guides/testing-agent.md`
 
-### For Skill Creation:
-1. Load `guides/adding-skill-basics.md` (step-by-step)
-2. Load `guides/adding-skill-implementation.md` (implementation)
-3. Load `guides/adding-skill-example.md` (example)
+**Skill creation**: `guides/adding-skill-basics.md` → `guides/adding-skill-implementation.md` → `guides/adding-skill-example.md`
 
-### For Issue Management:
-1. Load `guides/github-issues-workflow.md` (understand workflow)
-2. Create issues with proper labels and templates
-3. Add to project board for tracking
-4. Process requests systematically
+**Issue management**: `guides/github-issues-workflow.md` → crear issues con labels y templates → añadir al project board
 
-### For Debugging:
-1. Load `guides/debugging.md` (general approach)
-2. Load specific error file from `errors/`
-3. Reference `lookup/file-locations.md` (find files)
+**Debugging**: `guides/debugging.md` → error específico en `errors/` → `lookup/file-locations.md`
 
-### For Publishing:
-1. Load `guides/updating-registry.md` (update registry)
-2. Load `guides/npm-publishing.md` (publish to npm)
-3. Load `guides/creating-release.md` (create release)
-
----
-
-## File Size Compliance
-
-All files follow MVI principle (<200 lines):
-
-- ✅ Blueprints: <100 lines
-- ✅ Concepts: <100 lines
-- ✅ Core Concepts: <100 lines
-- ✅ Examples: <100 lines
-- ✅ Guides: <150 lines
-- ✅ Lookup: <100 lines
-- ✅ Errors: <150 lines
-- ✅ Plugins: <150 lines
-- ✅ Quality: <100 lines
-- ✅ Templates: <100 lines
+**Publishing**: `guides/updating-registry.md` → `guides/npm-publishing.md` → `guides/creating-release.md`
 
 ---
 
@@ -318,25 +179,17 @@ All files follow MVI principle (<200 lines):
 - `../core/` - Core system context (standards, patterns)
 - `../core/context-system/` - Context management system
 - `quick-start.md` - 2-minute repo orientation
-- `../content-creation/navigation.md` - Content creation principles
 - `plugins/navigation.md` - Plugin system context
 
 ---
 
 ## Nota de versión
 
+### Versión 2.1 — 2026-08-08
+Compactado a MVI (<200 líneas): eliminados "Quick Navigation" (redundante con Structure), "Quick Routes" (redundante con By Type), "When to read" repetitivos y "File Size Compliance".
+
 ### Versión 2.0 — 2026-08-08
-Reconstrucción completa de la navegación contra el disco real (recorrido con `find`). Se retiran como histórico las referencias a archivos y carpetas inexistentes:
+Reconstrucción contra el disco real: retiradas referencias a inexistentes (standards/, concepts/compatibility-layer, examples/baseadapter-pattern, lookup/tool-feature-parity, errors/skills-errors, features/); incorporados huérfanos (blueprints/context-bundle-template, core-concepts/agent-metadata, examples/context-bundle-example, guías adding-skill-*/building-cli-compact/profile-validation/subagent-invocation/testing-subagents-approval, lookup/subagent-framework-maps, plugins/context/, quality/registry-dependencies, templates/context-bundle-template).
 
-- Carpeta `standards/` completa: `standards/agent-frontmatter.md` y `standards/subagent-structure.md`.
-- Conceptos: `concepts/compatibility-layer.md`, `concepts/hooks-system.md`, `concepts/agent-skills.md` y `concepts/subagents-system.md`.
-- Ejemplos: `examples/baseadapter-pattern.md` y `examples/zod-schema-migration.md`.
-- Guías: `guides/compatibility-layer-workflow.md`, `guides/creating-skills.md` y `guides/creating-subagents.md`.
-- Búsquedas: `lookup/tool-feature-parity.md`, `lookup/compatibility-layer-structure.md`, `lookup/hook-events.md`, `lookup/skill-metadata.md`, `lookup/skills-comparison.md`, `lookup/builtin-subagents.md` y `lookup/subagent-frontmatter.md`.
-- Errores: `errors/skills-errors.md`.
-- Carpetas inexistentes: `features/` y `plugins/context/navigation.md` (el índice real de plugins es `plugins/navigation.md`).
-
-Se incorporan los archivos reales que faltaban (huérfanos): `blueprints/context-bundle-template.md`, `core-concepts/agent-metadata.md`, `examples/context-bundle-example.md`, las guías `adding-skill-example.md`, `adding-skill-implementation.md`, `building-cli-compact.md`, `profile-validation.md`, `subagent-invocation.md` y `testing-subagents-approval.md`, la búsqueda `lookup/subagent-framework-maps.md`, el subárbol completo de `plugins/context/` (ocho archivos), `quality/registry-dependencies.md`, `templates/context-bundle-template.md` y los índices `navigation.md` de cada subcarpeta.
-
-### Versión 1.0 — 2026-02-15
-Versión original de la navegación con referencias a archivos inexistentes.
+### Histórico
+**v1.0 (2026-02-15)**: versión original con referencias a archivos inexistentes.

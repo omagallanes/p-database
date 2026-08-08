@@ -1,4 +1,4 @@
-<!-- Context: project/nav | Priority: low | Version: 1.0 | Updated: 2026-07-14 -->
+<!-- Context: project/nav | Priority: low | Version: 1.1 | Updated: 2026-08-08 -->
 
 # Project Context
 
@@ -10,7 +10,7 @@
 
 | File | Description | Priority |
 |------|-------------|----------|
-| `project-context.md` | Project overview and context (DEPRECATED since 2026-01-12) | low |
+| *(ninguno — contenido movido a `project-intelligence/`)* | — | — |
 
 ---
 

@@ -171,7 +171,7 @@ dependencies: ["Optional - e.g., 'subagent:tester'"]
 
 ## Related Files
 
-- **Adding agents**: `guides/adding-agent.md`
+- **Adding agents**: `guides/adding-agent-basics.md`
 - **Testing agents**: `guides/testing-agent.md`
 - **Category system**: `core-concepts/categories.md`
 - **File locations**: `lookup/file-locations.md`

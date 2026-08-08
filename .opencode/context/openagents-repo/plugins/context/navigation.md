@@ -1,4 +1,4 @@
-<!-- Context: openagents-repo/context-overview | Priority: low | Version: 1.0 | Updated: 2026-02-15 -->
+<!-- Context: openagents-repo/plugins/context/navigation | Priority: low | Version: 1.1 | Updated: 2026-08-08 -->
 
 # OpenCode Plugin Context Library
 

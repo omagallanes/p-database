@@ -27,4 +27,4 @@
 
 **Ownership model**: GET prompts list = all users' prompts. GET/PUT/DELETE by ID = owner or admin. Admin routes: `/api/users`, `/api/users/[id]`.
 
-**Reference**: `app/api/` directory, `technical-domain.md` API Routes section
+**Reference**: `app/api/` directory, `../../project-intelligence/concepts/technical-domain.md` API Routes section

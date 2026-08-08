@@ -1,4 +1,4 @@
-<!-- Context: development/navigation | Priority: critical | Version: 2.0 | Updated: 2026-08-08 -->
+<!-- Context: development/navigation | Priority: critical | Version: 2.1 | Updated: 2026-08-08 -->
 
 # Development Navigation
 
@@ -17,8 +17,9 @@ development/
 │
 ├── principles/                # Principios universales (independientes del lenguaje)
 │   ├── navigation.md
-│   ├── clean-code.md
-│   └── api-design.md
+│   └── concepts/
+│       ├── clean-code.md
+│       └── api-design.md
 │
 ├── frameworks/                # Marcos de trabajo completos
 │   └── navigation.md
@@ -34,8 +35,8 @@ development/
 │
 ├── frontend/                  # Lado del cliente
 │   ├── navigation.md
-│   ├── when-to-delegate.md    # Cuándo delegar en la especialista de interfaz
-│   └── concepts/              # Patrones de formularios, filtros, tema, preferencias
+│   ├── concepts/              # Patrones de formularios, filtros, tema, preferencias
+│   └── guides/                # Cuándo delegar en la especialista de interfaz
 │
 ├── backend/                   # Lado del servidor
 │   ├── navigation.md
@@ -68,24 +69,22 @@ development/
 | Task | Path |
 |------|------|
 | **Interfaz** | `ui-navigation.md` |
-| **Cuándo delegar la interfaz** | `frontend/when-to-delegate.md` |
+| **Cuándo delegar la interfaz** | `frontend/guides/when-to-delegate.md` |
 | **Backend y API** | `backend-navigation.md` |
 | **Desarrollo completo** | `fullstack-navigation.md` |
-| **Código limpio** | `principles/clean-code.md` |
-| **Diseño de API** | `principles/api-design.md` |
+| **Código limpio** | `principles/concepts/clean-code.md` |
+| **Diseño de API** | `principles/concepts/api-design.md` |
 | **Backend en detalle** | `backend/navigation.md` |
 | **Capa de datos** | `data/navigation.md` |
 | **Integración** | `integration/navigation.md` |
 | **Infraestructura** | `infrastructure/navigation.md` |
 | **Inteligencia artificial** | `ai/navigation.md` |
-| **Marcos de trabajo** | `frameworks/navigation.md` |
 
 ---
 
 ## By Concern
 
 **Principles** → Prácticas universales de desarrollo (código limpio, diseño de API)
-**Frameworks** → Marcos de trabajo completos (sin marcos documentados por ahora)
 **AI** → Inteligencia artificial y agentes (MAStra AI)
 **Frontend** → Patrones de interfaz y componentes
 **Backend** → API de Next.js, autenticación, aislamiento por fila
@@ -103,6 +102,10 @@ development/
 ---
 
 ## Nota de versión
+
+### Versión 2.1 — 2026-08-08
+- Organización por función: `principles/` ahora usa `concepts/` (api-design.md, clean-code.md) y `frontend/` usa `guides/` (when-to-delegate.md).
+- Actualizadas las rutas rápidas y el árbol de estructura.
 
 ### Versión 2.0 — 2026-08-08
 - Reconstruido el árbol con la estructura real del disco. Eliminadas las ramas inexistentes: `frameworks/tanstack-start/`, `frontend/react/`, `backend/` con `api-patterns/`, `nodejs/`, `python/` y `authentication/`, `data/` con `sql-patterns/`, `nosql-patterns/` y `orm-patterns/`, `integration/` con `package-management/`, `api-integration/` y `third-party-services/`, e `infrastructure/` con `docker/` y `ci-cd/`.

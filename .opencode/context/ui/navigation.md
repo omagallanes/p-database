@@ -21,10 +21,10 @@ This category contains UI/UX patterns, design systems, and interface standards f
 | Subcategory | Description | Path |
 |-------------|-------------|------|
 | **web/** | Web UI patterns, animations, styling, React components | [web/navigation.md](web/navigation.md) |
-| **terminal/** | Terminal UI (TUI) patterns for CLI applications | [terminal/navigation.md](terminal/navigation.md) |
 
 ### Future Subcategories
 
+- **terminal/** - Terminal UI (TUI) patterns (planned)
 - **mobile/** - React Native, Flutter patterns (planned)
 - **desktop/** - Electron, Tauri patterns (planned)
 
@@ -40,7 +40,7 @@ This category contains UI/UX patterns, design systems, and interface standards f
 - Scroll-linked animations (scrollytelling)
 
 ### Terminal UI
-- CLI/TUI patterns (planned)
+- CLI/TUI patterns (planned — carpeta `terminal/` retirada, sin contenido)
 - Ink, Blessed component patterns (planned)
 - Terminal animations and progress indicators (planned)
 
@@ -50,7 +50,7 @@ This category contains UI/UX patterns, design systems, and interface standards f
 
 **Web development**: Navigate to `web/` for browser-based UI patterns
 
-**CLI/TUI development**: Navigate to `terminal/` for terminal interface patterns
+**CLI/TUI development**: (pendiente — carpeta `terminal/` retirada por falta de contenido)
 
 **Cross-platform**: Consider patterns from multiple subcategories
 
@@ -72,8 +72,7 @@ This category covers:
 ## Related Categories
 
 - `development/` - General development patterns (backend, APIs, clean code)
-- `product/` - Product design and UX strategy
-- `content-creation/` - Content design and copywriting
+- `openagents-repo/` - Content design and copywriting for the repo
 
 ---
 
@@ -84,6 +83,12 @@ This category covers:
 ---
 
 ## Nota de versión
+
+### Versión 1.3 — 2026-08-08
+- Eliminada la subcategoría `terminal/` (placeholder vacío sin contenido desde 2026-01-07); movida a "Future Subcategories".
+
+### Versión 1.2 — 2026-08-08
+- Eliminadas las categorías relacionadas `product/` y `content-creation/` (categorías vacías retiradas del sistema de contexto).
 
 ### Versión 1.1 — 2026-08-08
 - Verificadas las subcarpetas reales de `ui/` contra el disco: `terminal/` y `web/` (ambas con `navigation.md` existente); el árbol de subcategorías no necesitaba cambios.

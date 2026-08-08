@@ -179,4 +179,4 @@ This shows: detected global files, local file status, any conflicts, and what th
 
 - `/add-context` — Create new project intelligence (interactive wizard)
 - `/context harvest` — Extract knowledge from summaries
-- Context path resolution: `standards/context-paths.md`
+- Context path resolution: `../../system/context-paths.md`

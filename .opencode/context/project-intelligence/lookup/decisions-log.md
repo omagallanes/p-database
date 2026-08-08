@@ -2,7 +2,7 @@
 
 # Decisions Log
 
-**Vivo**: entradas #12–#18 (2026-08-06). Histórico #1–#11 en `lookup/decision-archive.md` · alternatives en `lookup/decision-details.md`.
+**Vivo**: entradas #12–#18 (2026-08-06). Histórico #1–#11 en `decision-archive.md` · alternatives en `decision-details.md`.
 
 ---
 
@@ -76,11 +76,11 @@
 
 ## Reference
 
-- `lookup/decision-archive.md` — Histórico #1–#11 (2026-04 → 2026-07)
-- `lookup/decision-details.md` — Alternatives tables, deprecated decisions + related commits
-- `technical-domain.md` — Technical implementation · `business-tech-bridge.md` — Business impact
+- `decision-archive.md` — Histórico #1–#11 (2026-04 → 2026-07)
+- `decision-details.md` — Alternatives tables, deprecated decisions + related commits
+- `../concepts/technical-domain.md` — Technical implementation · `../concepts/business-tech-bridge.md` — Business impact
 
 ## Evolución
 
 - **v3.2 (2026-08-08)**: corregidas las referencias pendientes de las decisiones 14, 15 y 16: el patrón de aislamiento por fila y el de errores comunes de API apuntan ahora a los documentos creados en `docs/reference/` el 2026-08-08 (`aislamiento-por-fila.md` y `errores-comunes-api.md`). No se han borrado decisiones previas: el texto original de #14–#16 se conserva y el estado anterior (pendientes de creación) queda como histórico de esta entrada.
-- **v3.1 (2026-08-06)**: añadidas las decisiones 17 (límite de intentos por dirección IP con la tabla `IpAttempt`, activo sin Upstash) y 18 (página de error de autenticación internacionalizada + filtro de tipo + umbrales de cobertura). Corregidas las referencias rotas de las decisiones 12 a 16: las de preferencias de interfaz, tema y acento, endurecimiento de autenticación y patrón de catálogos apuntan ahora a los archivos creados en `docs/reference/` (preferencias-interfaz.md, taxonomia-catalogos.md, prompts-compartidos.md, seguridad-autenticacion.md); las de aislamiento por fila y errores comunes de API quedan marcadas como pendientes de creación. No se han borrado decisiones previas: el texto original de #12–#16 se conserva y #1–#11 permanecen en `lookup/decision-archive.md`.
+- **v3.1 (2026-08-06)**: añadidas las decisiones 17 (límite de intentos por dirección IP con la tabla `IpAttempt`, activo sin Upstash) y 18 (página de error de autenticación internacionalizada + filtro de tipo + umbrales de cobertura). Corregidas las referencias rotas de las decisiones 12 a 16: las de preferencias de interfaz, tema y acento, endurecimiento de autenticación y patrón de catálogos apuntan ahora a los archivos creados en `docs/reference/` (preferencias-interfaz.md, taxonomia-catalogos.md, prompts-compartidos.md, seguridad-autenticacion.md); las de aislamiento por fila y errores comunes de API quedan marcadas como pendientes de creación. No se han borrado decisiones previas: el texto original de #12–#16 se conserva y #1–#11 permanecen en `decision-archive.md`.

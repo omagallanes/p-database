@@ -24,4 +24,4 @@ await prisma.prompt.update({ where: { id: params.id, userId: session.user.id }, 
 
 **Reference**: `app/(app)/prompts/page.tsx` · `app/api/prompts/route.ts` · `app/api/prompts/[id]/usage/route.ts` · `app/api/prompts/[id]/route.ts`
 
-**Related**: `errors/api-common-errors.md` (usage sin auth) · `project-intelligence/decisions-log.md` #14 · `concepts/nextjs-api-patterns.md`
+**Related**: `errors/api-common-errors.md` (usage sin auth) · `../../project-intelligence/lookup/decisions-log.md` #14 · `concepts/nextjs-api-patterns.md`

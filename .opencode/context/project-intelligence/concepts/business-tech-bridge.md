@@ -68,8 +68,8 @@ The preference persists across sessions — a logged-in user who prefers list vi
 
 ## Related Files
 
-- `project-intelligence/technical-domain.md` - Technical implementation details
-- `project-intelligence/decisions-log.md` - Decisions made with full context
+- `technical-domain.md` - Technical implementation details
+- `../lookup/decisions-log.md` - Decisions made with full context
 
 ## Evolución
 

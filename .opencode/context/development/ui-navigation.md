@@ -11,14 +11,15 @@
 ```
 Frontend Code (development/frontend/):
 ├── navigation.md
-├── when-to-delegate.md
-└── concepts/
-    ├── form-patterns.md          # Formulario de segmentos (PromptForm, 3 secciones)
-    ├── filter-patterns.md        # Filtros multidimensionales dirigidos por URL
-    ├── search-clear-pattern.md   # Botón de limpiar en campos de búsqueda
-    ├── view-mode-pattern.md      # Alternancia tarjeta/lista con persistencia
-    ├── ui-preferences-pattern.md # Preferencias de interfaz en la cuenta
-    └── theme-accent-pattern.md   # Modo oscuro + color de acento (variables CSS)
+├── concepts/
+│   ├── form-patterns.md          # Formulario de segmentos (PromptForm, 3 secciones)
+│   ├── filter-patterns.md        # Filtros multidimensionales dirigidos por URL
+│   ├── search-clear-pattern.md   # Botón de limpiar en campos de búsqueda
+│   ├── view-mode-pattern.md      # Alternancia tarjeta/lista con persistencia
+│   ├── ui-preferences-pattern.md # Preferencias de interfaz en la cuenta
+│   └── theme-accent-pattern.md   # Modo oscuro + color de acento (variables CSS)
+└── guides/
+    └── when-to-delegate.md       # Cuándo delegar en la especialista de interfaz
 
 Visual Design (ui/web/):
 ├── navigation.md
@@ -50,7 +51,7 @@ Visual Design (ui/web/):
 | **Sistemas de diseño** | `../ui/web/concepts/design-systems.md` |
 | **Patrones de formulario** | `frontend/concepts/form-patterns.md` |
 | **Patrones de filtro** | `frontend/concepts/filter-patterns.md` |
-| **Cuándo delegar** | `frontend/when-to-delegate.md` |
+| **Cuándo delegar** | `frontend/guides/when-to-delegate.md` |
 
 ---
 
@@ -60,7 +61,7 @@ Visual Design (ui/web/):
 
 ## By Concern
 
-**Code patterns** → `frontend/` (concepts/, when-to-delegate.md)
+**Code patterns** → `frontend/` (concepts/, guides/)
 **Visual design** → `../ui/web/` (concepts/, examples/, design/)
 
 ---

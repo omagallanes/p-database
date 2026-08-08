@@ -38,5 +38,5 @@ data/
 ## Related Context
 
 - **Backend API patterns** → `../backend/concepts/nextjs-api-patterns.md`
-- **Technical domain** → `../../project-intelligence/technical-domain.md`
+- **Technical domain** → `../../project-intelligence/concepts/technical-domain.md`
 - **Core Standards** → `../../core/standards/code-quality.md`

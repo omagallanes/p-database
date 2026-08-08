@@ -42,7 +42,7 @@ core/context-system/
 
 | Task | Path |
 |------|------|
-| **Understand context system** | `../context-system.md` |
+| **Understand context system** | `../concepts/context-system.md` |
 | **Design navigation files** | `guides/navigation-design-basics.md` |
 | **Use navigation templates** | `guides/navigation-templates.md` |
 | **Harvest knowledge** | `operations/harvest.md` |
@@ -72,7 +72,7 @@ core/context-system/
 - **Core Navigation** → `../navigation.md`
 - **Core Standards** → `../standards/navigation.md`
 - **Core System** → `../system/navigation.md`
-- **Context System Overview** → `../context-system.md`
+- **Context System Overview** → `../concepts/context-system.md`
 
 ---
 

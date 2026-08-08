@@ -172,7 +172,7 @@ This ensures that any PR that adds a new agent without updating profiles will fa
 
 - **Registry concepts**: `core-concepts/registry.md`
 - **Updating registry**: `guides/updating-registry.md`
-- **Adding agents**: `guides/adding-agent.md`
+- **Adding agents**: `guides/adding-agent-basics.md`
 
 ---
 

@@ -56,7 +56,6 @@ ai/
 
 ## Related Context
 
-- **Frameworks** → `../frameworks/navigation.md`
 - **Core Standards** → `../../core/standards/navigation.md`
 
 ---

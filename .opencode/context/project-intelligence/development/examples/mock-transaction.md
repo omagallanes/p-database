@@ -32,4 +32,4 @@ expect(mockTx.promptTag.deleteMany).toHaveBeenCalledWith({ where: { promptId } }
 
 **Related**:
 - examples/mock-entity-upsert.md
-- errors/tech-knowledge.md (§2.5)
+- errors/prisma-junction-errors.md (§2.5)

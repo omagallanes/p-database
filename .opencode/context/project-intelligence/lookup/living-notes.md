@@ -12,7 +12,7 @@
 
 ### Resolved (2026-08-06, Pulido)
 - ~~Hardcoded credentials in seed~~ → `prisma/seed.ts` ahora usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (decisión #13).
-- ~~Rate limiting not implemented~~ → implementado sin Upstash (BD): límite por cuenta (`failedLoginAttempts` + `lockoutUntil`, 5 fallos → 15 min) en login y cambio de contraseña, y límite por dirección IP (tabla `IpAttempt`, 5 fallos → 15 min, tolerante a fallos en BD, tiempos igualados); revocación de sesiones con `tokenVersion`; campo `isActive`. Ver `development/backend/concepts/auth-hardening-pattern.md`.
+- ~~Rate limiting not implemented~~ → implementado sin Upstash (BD): límite por cuenta (`failedLoginAttempts` + `lockoutUntil`, 5 fallos → 15 min) en login y cambio de contraseña, y límite por dirección IP (tabla `IpAttempt`, 5 fallos → 15 min, tolerante a fallos en BD, tiempos igualados); revocación de sesiones con `tokenVersion`; campo `isActive`. Ver `../development/backend/concepts/auth-hardening-pattern.md`.
 - ~~Missing `/auth/error` page~~ → página creada e internacionalizada (2026-08-06) en `app/(auth)/auth/error/`; los fallos de autenticación muestran la página propia (sección histórica más abajo).
 
 ### Legacy String Fields on Prompt Model
@@ -67,10 +67,10 @@
 | Project | Goal | Timeline |
 |---------|------|----------|
 | Production deployment to Vercel | Deployed (2026-04/07) — smoke tests verified, 22 static pages built | Done |
-| Fase A — Interfaz (sidebar colapsable, filtros ocultables, preferencias en cuenta) | Implementado 2026-08-06 — ver `development/frontend/concepts/ui-preferences-pattern.md` | Done |
-| Fase B — Perfil en pestañas + personalización (idioma, tema, color, orden filtros, columnas) | Implementado 2026-08-06 — ver `development/frontend/concepts/theme-accent-pattern.md` | Done |
-| Pulido — Seguridad (rate limiting, revocación tokenVersion, anti-FOUC, seed seguro) | Implementado 2026-08-06 — ver `development/backend/concepts/auth-hardening-pattern.md` | Done |
-| Fase D — Aislamiento por usuario (row-level ownership) | **Completado 2026-08-06** (decisión #14) — ver `development/backend/concepts/row-level-isolation-pattern.md`; verificado: 388 pruebas, 40 suites, 100 % superadas, cobertura 79.63 % de líneas | Done |
+| Fase A — Interfaz (sidebar colapsable, filtros ocultables, preferencias en cuenta) | Implementado 2026-08-06 — ver `../development/frontend/concepts/ui-preferences-pattern.md` | Done |
+| Fase B — Perfil en pestañas + personalización (idioma, tema, color, orden filtros, columnas) | Implementado 2026-08-06 — ver `../development/frontend/concepts/theme-accent-pattern.md` | Done |
+| Pulido — Seguridad (rate limiting, revocación tokenVersion, anti-FOUC, seed seguro) | Implementado 2026-08-06 — ver `../development/backend/concepts/auth-hardening-pattern.md` | Done |
+| Fase D — Aislamiento por usuario (row-level ownership) | **Completado 2026-08-06** (decisión #14) — ver `../development/backend/concepts/row-level-isolation-pattern.md`; verificado: 388 pruebas, 40 suites, 100 % superadas, cobertura 79.63 % de líneas | Done |
 | Fase C — Pestaña Usuarios (admin) | **Completado 2026-08-06** (decisión #15) — isActive, protección último admin, borrado transaccional; verificado: 388 pruebas, 40 suites, 100 % superadas | Done |
 | Etapa final — Taxonomía + Compartir | **Completado 2026-08-06** (decisión #16) — 3 catálogos, /taxonomy/*, /shared; verificado: 388 pruebas, 40 suites, 100 % superadas | Done |
 
@@ -102,6 +102,6 @@ Detalle completo (riesgo, motivo de exclusión y cómo abordarlas) en `docs/dodp
 ## Related Files
 
 - `decisions-log.md` — Past decisions that inform current state
-- `business-domain.md` — Business context for current priorities
-- `technical-domain.md` — Technical context and architecture
-- `business-tech-bridge.md` — Context for current trade-offs
+- `../concepts/business-domain.md` — Business context for current priorities
+- `../concepts/technical-domain.md` — Technical context and architecture
+- `../concepts/business-tech-bridge.md` — Context for current trade-offs

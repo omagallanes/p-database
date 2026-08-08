@@ -27,4 +27,4 @@ await prisma.platform.delete({ where: { id } }) // junctions se limpian solas
 
 **Reference**: `prisma/schema.prisma` · `app/(app)/taxonomy/*` · `app/api/{platforms,use-cases,model-hints,client-projects}/route.ts`
 
-**Related**: `concepts/prisma-junction-tables.md` · `project-intelligence/decisions-log.md` #16 · `../frontend/concepts/form-patterns.md`
+**Related**: `concepts/prisma-junction-tables.md` · `../../project-intelligence/lookup/decisions-log.md` #16 · `../frontend/concepts/form-patterns.md`

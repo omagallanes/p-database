@@ -157,10 +157,10 @@ Follow MVI when extracting. Keep files focused on one topic each.
 
 ## Related Documentation
 
-- `guides/navigation-design-basics.md` — Creating navigation files
-- `guides/organizing-context.md` — Choosing organizational pattern
-- `examples/navigation-examples.md` — Good navigation examples
-- `standards/templates.md` — File templates for each type
+- `../context-system/guides/navigation-design-basics.md` — Creating navigation files
+- `../context-system/guides/organizing-context.md` — Choosing organizational pattern
+- `../context-system/examples/navigation-examples.md` — Good navigation examples
+- `../context-system/standards/templates.md` — File templates for each type
 
 ---
 

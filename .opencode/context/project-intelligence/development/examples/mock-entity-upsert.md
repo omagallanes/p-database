@@ -33,4 +33,4 @@ category: {
 **Related**:
 - lookup/mock-coverage-table.md (per-entity method list)
 - examples/mock-transaction.md
-- errors/tech-knowledge.md (§Testing — M-01)
+- errors/testing-mock-errors.md (§M-01)

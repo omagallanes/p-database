@@ -28,4 +28,4 @@ if (!user && token.tokenVersion !== undefined && token.id) {
 
 **Reference**: `lib/auth.ts` · `app/api/user/password/route.ts` · `prisma/schema.prisma` · `types/next-auth.d.ts`
 
-**Related**: `concepts/nextauth-setup.md` (config base) · `errors/api-common-errors.md` · `project-intelligence/decisions-log.md` #13 · `project-intelligence/living-notes.md` (debt resuelto)
+**Related**: `concepts/nextauth-setup.md` (config base) · `errors/api-common-errors.md` · `../../project-intelligence/lookup/decisions-log.md` #13 · `../../project-intelligence/lookup/living-notes.md` (debt resuelto)

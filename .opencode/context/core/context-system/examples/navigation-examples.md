@@ -31,7 +31,7 @@ openagents-repo/
 | Task | Path |
 |------|------|
 | **New here** | `quick-start.md` |
-| **Add agent** | `guides/adding-agent.md` |
+| **Add agent** | `guides/adding-agent-basics.md` |
 | **Debug issue** | `guides/debugging-issues.md` |
 | **Fix error** | `errors/tool-permission-errors.md` |
 ## By Type: **Concepts** → Foundational | **Guides** → Step-by-step | **Lookup** → Reference | **Errors** → Fixes
@@ -180,6 +180,6 @@ Optional: Common Workflows for specialized navigation files, showing multi-step 
 
 ## Related
 
-- `../guides/navigation-design.md` — Creating navigation files
+- `../guides/navigation-design-basics.md` — Creating navigation files
 - `../guides/organizing-context.md` — Choosing organizational pattern
 - `../standards/mvi.md` — Minimal Viable Information principle

@@ -19,7 +19,7 @@
 
 ## Update Existing Files
 
-**When**: Business changes → Update `business-domain.md` | New decision → Add to `decisions-log.md` | New issues → Update `living-notes.md` | Feature launch → Update `business-tech-bridge.md` | Stack changes → Update `technical-domain.md`
+**When**: Business changes → Update `concepts/business-domain.md` | New decision → Add to `lookup/decisions-log.md` | New issues → Update `lookup/living-notes.md` | Feature launch → Update `concepts/business-tech-bridge.md` | Stack changes → Update `concepts/technical-domain.md`
 
 **Process**:
 1. Edit the file

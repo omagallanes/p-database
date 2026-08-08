@@ -34,4 +34,4 @@ NEXT_PUBLIC_BASE_PATH=""  # Root deployment
 - Serverless cold starts add latency to first request
 - Prisma binary targets must match Vercel runtime (linux-musl-openssl-3.0.x)
 
-**Reference**: `vercel.json`, `next.config.js`, `.env.vercel`, `project-intelligence/decisions-log.md`
+**Reference**: `vercel.json`, `next.config.js`, `.env.vercel`, `../../project-intelligence/lookup/decisions-log.md`

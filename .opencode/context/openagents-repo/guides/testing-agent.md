@@ -175,7 +175,7 @@ expectations:
 
 - **Eval concepts**: `core-concepts/evals.md`
 - **Debugging guide**: `guides/debugging.md`
-- **Adding agents**: `guides/adding-agent.md`
+- **Adding agents**: `guides/adding-agent-basics.md`
 
 ---
 

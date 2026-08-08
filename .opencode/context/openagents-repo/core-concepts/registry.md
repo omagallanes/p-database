@@ -181,7 +181,7 @@ Validate on PRs (`validate-registry.yml`), auto-update on merge (`update-registr
 ## Related Files
 
 - **Updating registry**: `guides/updating-registry.md`
-- **Adding agents**: `guides/adding-agent.md`
+- **Adding agents**: `guides/adding-agent-basics.md`
 - **Categories**: `core-concepts/categories.md`
 
 ---

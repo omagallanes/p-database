@@ -127,7 +127,7 @@ development/
 |------|------|
 | **UI/Frontend** | `ui-navigation.md` |
 | **Backend/API** | `backend-navigation.md` |
-| **Clean code** | `principles/clean-code.md` |
+| **Clean code** | `principles/concepts/clean-code.md` |
 
 ---
 

@@ -45,4 +45,4 @@ export function parseUIPreferences(value: unknown): UIPreferences {
 
 **Reference**: `contexts/UIContext.tsx` · `lib/ui-preferences.ts` · `app/api/user/preferences/route.ts`
 
-**Related**: `concepts/theme-accent-pattern.md` (tema + color acento) · `concepts/view-mode-pattern.md` — caso escalar legacy (`promptListViewPreference`) previo al JSON `uiPreferences`; `project-intelligence/decisions-log.md` #11, #12 — decisiones "en cuenta, nunca localStorage".
+**Related**: `concepts/theme-accent-pattern.md` (tema + color acento) · `concepts/view-mode-pattern.md` — caso escalar legacy (`promptListViewPreference`) previo al JSON `uiPreferences`; `../../project-intelligence/lookup/decisions-log.md` #11, #12 — decisiones "en cuenta, nunca localStorage".

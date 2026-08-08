@@ -1,4 +1,4 @@
-<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.7 | Updated: 2026-08-06 -->
+<!-- Context: project-intelligence/technical | Priority: critical | Version: 2.8 | Updated: 2026-08-08 -->
 
 # Technical Domain
 
@@ -24,21 +24,15 @@
 
 ## Features
 
-| Feature | Estado | Feature | Estado |
-|---------|--------|---------|--------|
-| CRUD de Prompts | ✅ Completo | Tracking de uso | ✅ Completo |
-| Categorías jerárquicas | ✅ Completo | Favoritos | ✅ Completo |
-| Etiquetas (M:N) | ✅ Completo | Versionado de prompts | ✅ Completo |
-| Búsqueda full-text | ✅ Completo | Export/Import JSON v2.0 | ✅ Completo |
-| Filtros multi-selección | ✅ (lógica AND) | Copiar al portapapeles | ✅ Completo |
-| Autenticación + Roles (USER/ADMIN) | ✅ Completo | Duplicar prompts | ✅ Completo |
-| Vista cards/lista persistente | ✅ Completo | Preferencia de usuario | ✅ Completo (UI + perfil) |
-| Perfil con pestañas (Cuenta/Escritorio) | ✅ Completo | Idioma en cuenta con prioridad | ✅ Completo |
-| Tema claro/oscuro + color de acento | ✅ Completo | Orden de filtros y columnas | ✅ Completo |
-| Panel de filtros ocultable + MLI colapsable | ✅ Completo | Favoritos en barra superior | ✅ Completo |
-| Panel de administración (usuarios) | ✅ Completo | Taxonomía (7 elementos CRUD admin) | ✅ Completo |
-| Compartir prompts (isShared + /shared) | ✅ Completo | Multidioma (i18n) | ✅ en-GB base + es-ES completo (8 pendientes) |
-| Filtro de tipo (catálogo Type) | ✅ Completo | Página de error de autenticación (/auth/error) | ✅ Completo |
+| Feature | Estado | Feature | Estado | Feature | Estado | Feature | Estado |
+|---------|--------|---------|--------|---------|--------|---------|--------|
+| CRUD de Prompts | ✅ | Tracking de uso | ✅ | Favoritos | ✅ | Versionado | ✅ |
+| Categorías jerárquicas | ✅ | Etiquetas (M:N) | ✅ | Búsqueda full-text | ✅ | Export/Import v2.0 | ✅ |
+| Filtros multi-selección (AND) | ✅ | Copiar al portapapeles | ✅ | Duplicar prompts | ✅ | Preferencia de usuario | ✅ |
+| Autenticación + Roles | ✅ | Vista cards/lista | ✅ | Perfil con pestañas | ✅ | Idioma en cuenta | ✅ |
+| Tema claro/oscuro + acento | ✅ | Orden filtros/columnas | ✅ | Panel filtros + MLI | ✅ | Favoritos barra sup. | ✅ |
+| Panel admin (usuarios) | ✅ | Taxonomía (7 CRUD) | ✅ | Compartir (isShared) | ✅ | Multidioma (i18n) | ✅ en-GB + es-ES (8 pend.) |
+| Filtro de tipo (Type) | ✅ | Página /auth/error | ✅ | | | | |
 
 ## Arquitectura
 
@@ -62,15 +56,14 @@ middleware.ts
 
 ## Code Patterns
 
-- **API**: Auth → Zod → Prisma → Response; errores `{ error }` JSON. Ejemplo: `app/api/prompts/route.ts`. Ver `development/concepts/api-response-standards.md`.
+- **API**: Auth → Zod → Prisma → Response; errores `{ error }` JSON. Ejemplo: `app/api/prompts/route.ts`. Ver `../development/concepts/api-response-standards.md`.
 - **Preferencias de interfaz**: `User.uiPreferences` (JSON) con schema compartido `lib/ui-preferences.ts`; `UIContext` (patrón ViewModeContext) con persistencia PATCH `/api/user/preferences`; todo guardado en la cuenta, sin localStorage. Incluye tema claro/oscuro, color de acento, orden de filtros (8 cajas) y columnas configurables; Fase A: sidebarCollapsed, filtersVisible.
-- **Catálogos de taxonomía**: modelos `Type`, `Status` y `Language` sembrados (3/3/12) con CRUD solo administrador en las páginas `/taxonomy/*`; el formulario y los filtros leen los catálogos; filtro de tipo en la página de prompts. Ver decisión #16 de `decisions-log.md`.
-- **Prompts compartidos**: campo `isShared` en `Prompt` + página `/shared` (solo prompts de otros, con búsqueda, sin filtros, sin favoritos ni edición, 8 columnas); detalle en solo lectura con copiado que incrementa el contador de usos; edición y borrado exigen propiedad. Ver decisión #16 de `decisions-log.md`.
-- **Componentes**: Server Components por defecto; `"use client"` solo con interactividad. Props tipadas `{Name}Props`.
-- **Refactor en segmentos**: orquestador + segmentos por funcionalidad; verificar `npx tsc --noEmit` tras cada extracción. Ver `development/concepts/component-refactor-pattern.md`.
-- **Upsert de entidades globales**: normalizar (trim+uppercase) → upsert por slug. Ver `development/concepts/upsert-entity-pattern.md`.
-- **Delegación de tareas**: CodeReviewer gate entre subtareas; mismo archivo → mismo batch. Ver `development/concepts/task-delegation-workflow.md`.
-- **i18n**: next-intl v4 sin enrutado; locale por `accept-language` (helper puro `lib/locale.ts`); API routes con `getTranslations({ locale, namespace: "Api" })`. Ver `development/concepts/i18n-next-intl-pattern.md`.
+- **Catálogos de taxonomía**: modelos `Type`, `Status` y `Language` sembrados (3/3/12) con CRUD solo administrador en las páginas `/taxonomy/*`; el formulario y los filtros leen los catálogos; filtro de tipo en la página de prompts. Ver decisión #16 de `../lookup/decisions-log.md`.
+- **Prompts compartidos**: campo `isShared` en `Prompt` + página `/shared` (solo prompts de otros, con búsqueda, sin filtros, sin favoritos ni edición, 8 columnas); detalle en solo lectura con copiado que incrementa el contador de usos; edición y borrado exigen propiedad. Ver decisión #16 de `../lookup/decisions-log.md`.
+- **Componentes**: Server Components por defecto; `"use client"` solo con interactividad. Props tipadas `{Name}Props`. **Refactor en segmentos**: orquestador + segmentos por funcionalidad; verificar `npx tsc --noEmit` tras cada extracción. Ver `../development/concepts/component-refactor-pattern.md`.
+- **Upsert de entidades globales**: normalizar (trim+uppercase) → upsert por slug. Ver `../development/concepts/upsert-entity-pattern.md`.
+- **Delegación de tareas**: CodeReviewer gate entre subtareas; mismo archivo → mismo batch. Ver `../development/concepts/task-delegation-workflow.md`.
+- **i18n**: next-intl v4 sin enrutado; locale por `accept-language` (helper puro `lib/locale.ts`); API routes con `getTranslations({ locale, namespace: "Api" })`. Ver `../development/concepts/i18n-next-intl-pattern.md`.
 
 ## Naming Conventions
 
@@ -121,9 +114,7 @@ middleware.ts
 
 ## Autenticación (NextAuth.js)
 
-- NextAuth.js v5 (JWT, Prisma adapter, credentials + bcryptjs); handlers en `/api/auth/[...nextauth]`.
-- Rutas de autenticación en `app/(auth)/auth/`: `signin`, `signup` y `error`.
-- ✅ **Página `/auth/error` creada e internacionalizada (2026-08-06)** — antes no existía (referenciada en `lib/auth.ts:13` y `middleware.ts:12` sin estar creada); ahora los fallos de autenticación muestran la página propia. Ver `errors/tech-knowledge.md` (1.6).
+NextAuth.js v5 (JWT, Prisma adapter, credentials + bcryptjs); handlers en `/api/auth/[...nextauth]`; rutas en `app/(auth)/auth/` (signin, signup, error). ✅ Página `/auth/error` creada e internacionalizada (2026-08-06) — antes referenciada sin existir (`lib/auth.ts:13`, `middleware.ts:12`). Ver `../errors/auth-errors.md` (1.6).
 
 ## API Routes
 
@@ -137,7 +128,7 @@ middleware.ts
 | Preferencias | `/api/user/preferences` |
 | Usuarios | `/api/users` · `/api/users/[id]` (Admin) |
 
-**Filtrado AND**: cada valor seleccionado añade `{ entity: { some: { entityId } } }` a la matriz de condiciones; todos deben coincidir (verificado en `app/api/prompts/route.ts`; detalle en `errors/tech-knowledge.md` §5).
+**Filtrado AND**: cada valor seleccionado añade `{ entity: { some: { entityId } } }` a la matriz de condiciones; todos deben coincidir (verificado en `app/api/prompts/route.ts`; detalle en `../errors/filter-state-errors.md`).
 
 ## Commands (package.json)
 
@@ -168,8 +159,7 @@ middleware.ts
 
 ## Docker
 
-- `Dockerfile` multi-stage (node:20-alpine, output standalone) · `Dockerfile.dev` + `docker-compose.dev.yml` (hot-reload + PostgreSQL 14)
-- `docker-compose.yml` producción con Traefik (legacy, no usado)
+`Dockerfile` multi-stage (node:20-alpine, output standalone) · `Dockerfile.dev` + `docker-compose.dev.yml` (hot-reload + PostgreSQL 14) · `docker-compose.yml` producción con Traefik (legacy, no usado)
 
 ## Environment Variables
 
@@ -184,10 +174,10 @@ middleware.ts
 
 ## Deuda Técnica Conocida
 
-- ~~🔴 **Credenciales visibles en `prisma/seed.ts` líneas 12 y 30**~~ → **Resuelto (2026-08-06)**: el seed usa `process.env.SEED_ADMIN_PASSWORD` / `SEED_USER_PASSWORD` (decisión #13). Pendiente real: **P-01 — rotar las contraseñas reales del historial de git** (ver `docs/dodp.md`).
-- ~~⚠️ Página `/auth/error` referenciada pero no creada~~ → **Resuelto (2026-08-06)**: página creada e internacionalizada (ver Autenticación).
-- **P-02 — 8 idiomas declarados sin traducir** (es-MX, ca, ca-ES-valencia, gl, pt-PT, fr, ru, zh-CN; ver `docs/plan-traduccion-i18n.md` y `docs/dodp.md`). El selector de idioma ya existe en el perfil (pestaña Cuenta) con prioridad sobre el navegador.
-- **P-03 — rotar el token de Vercel** descargado al entorno local (ver `docs/dodp.md`).
+- ~~🔴 Credenciales en `prisma/seed.ts`~~ → **Resuelto (2026-08-06)**: usa `SEED_ADMIN_PASSWORD`/`SEED_USER_PASSWORD` (decisión #13). Pendiente real: **P-01 — rotar contraseñas reales del historial de git** (ver `docs/dodp.md`).
+- ~~⚠️ Página `/auth/error` referenciada sin crear~~ → **Resuelto (2026-08-06)**: creada e internacionalizada (ver Autenticación).
+- **P-02 — 8 idiomas sin traducir** (es-MX, ca, ca-ES-valencia, gl, pt-PT, fr, ru, zh-CN; `docs/plan-traduccion-i18n.md`, `docs/dodp.md`). Selector de idioma ya existe en el perfil con prioridad sobre el navegador.
+- **P-03 — rotar el token de Vercel** descargado al entorno local (`docs/dodp.md`).
 
 ## 📂 Codebase References
 
@@ -206,8 +196,4 @@ middleware.ts
 
 ## Related Files
 
-- `business-domain.md` — contexto de negocio
-- `decisions-log.md` — decisiones (SQLite→PG, Railway→Vercel, i18n next-intl)
-- `living-notes.md` — deuda y preguntas abiertas
-- `errors/tech-knowledge.md` — catálogo completo de errores con código
-- `development/concepts/*.md` — patrones: refactor, API response, upsert, delegación, i18n
+- `business-domain.md` · `../lookup/decisions-log.md` (SQLite→PG, Railway→Vercel, i18n) · `../lookup/living-notes.md` (deuda) · `../errors/tech-knowledge.md` (índice de errores con código) · `../development/concepts/*.md` (patrones: refactor, API response, upsert, delegación, i18n)

@@ -8,21 +8,23 @@
 
 ## Files
 
+### Concepts
+
 | File | Topic | Priority | Load When |
 |------|-------|----------|-----------|
-| `clean-code.md` | Clean code practices | ⭐⭐⭐⭐ | Writing any code |
-| `api-design.md` | API design principles | ⭐⭐⭐⭐ | Designing APIs |
+| `concepts/clean-code.md` | Clean code practices | ⭐⭐⭐⭐ | Writing any code |
+| `concepts/api-design.md` | API design principles | ⭐⭐⭐⭐ | Designing APIs |
 
 ---
 
 ## Loading Strategy
 
 **For general development**:
-1. Load `clean-code.md` (high)
+1. Load `concepts/clean-code.md` (high)
 2. Also load: `../../core/standards/code-quality.md` (critical)
 
 **For API development**:
-1. Load `api-design.md` (high)
+1. Load `concepts/api-design.md` (high)
 2. Also load: `../../core/standards/code-quality.md` (critical)
 
 ---

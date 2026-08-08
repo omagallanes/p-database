@@ -58,7 +58,7 @@ backend/
 
 ## Related Context
 
-- **API Design Principles** → `principles/api-design.md`
+- **API Design Principles** → `principles/concepts/api-design.md`
 - **Data Patterns** → `data/navigation.md`
 - **Core Standards** → `../core/standards/code-quality.md`
 

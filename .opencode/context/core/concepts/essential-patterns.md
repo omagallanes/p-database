@@ -19,11 +19,11 @@
 ## Overview
 
 This file provides essential development patterns that apply across all programming languages. For detailed standards, see:
-- `standards/code-quality.md` - Modular, functional code patterns
-- `standards/security-patterns.md` - Language-agnostic patterns
-- `standards/test-coverage.md` - Testing standards
-- `standards/documentation.md` - Documentation standards
-- `standards/code-analysis.md` - Analysis framework
+- `../standards/code-quality.md` - Modular, functional code patterns
+- `../standards/security-patterns.md` - Language-agnostic patterns
+- `../standards/test-coverage.md` - Testing standards
+- `../standards/documentation.md` - Documentation standards
+- `../standards/code-analysis.md` - Analysis framework
 
 ---
 
@@ -183,9 +183,9 @@ Before committing code, verify:
 ## Additional Resources
 
 For more detailed guidelines, see:
-- `standards/code-quality.md` - Comprehensive code standards
-- `standards/security-patterns.md` - Detailed pattern catalog
-- `standards/test-coverage.md` - Testing best practices
-- `standards/documentation.md` - Documentation guidelines
-- `standards/code-analysis.md` - Code analysis framework
-- `workflows/code-review.md` - Code review process
+- `../standards/code-quality.md` - Comprehensive code standards
+- `../standards/security-patterns.md` - Detailed pattern catalog
+- `../standards/test-coverage.md` - Testing best practices
+- `../standards/documentation.md` - Documentation guidelines
+- `../standards/code-analysis.md` - Code analysis framework
+- `../workflows/code-review.md` - Code review process

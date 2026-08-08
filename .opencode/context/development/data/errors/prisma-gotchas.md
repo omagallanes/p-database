@@ -45,4 +45,4 @@ Binary targets include `linux-musl-openssl-3.0.x` and `debian-openssl-3.0.x`. If
 
 **Fix**: Verify OpenSSL version on target platform and add/remove binary targets accordingly.
 
-**Reference**: `prisma/schema.prisma`, `project-intelligence/living-notes.md`
+**Reference**: `prisma/schema.prisma`, `../../project-intelligence/lookup/living-notes.md`

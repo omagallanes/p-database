@@ -178,6 +178,5 @@ The agent prompt should follow this pattern:
 ## References
 
 - Context bundle template: `.opencode/context/openagents-repo/templates/context-bundle-template.md`
-- Context bundle blueprint: `.opencode/context/openagents-repo/blueprints/context-bundle-template.md`
 
 **Note**: This is an example context bundle for illustration purposes.

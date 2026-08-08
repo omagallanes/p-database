@@ -48,6 +48,6 @@ backend/
 ## Related Context
 
 - **Data Layer** → `../data/navigation.md`
-- **API Design Principles** → `../principles/api-design.md`
-- **Project technical domain** → `../../project-intelligence/technical-domain.md`
+- **API Design Principles** → `../principles/concepts/api-design.md`
+- **Project technical domain** → `../../project-intelligence/concepts/technical-domain.md`
 - **Core Standards** → `../../core/standards/code-quality.md`

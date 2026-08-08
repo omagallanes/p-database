@@ -24,7 +24,7 @@
 | GET devuelve prompts de todos | `findMany` sin `where.userId` (página y API) | Añadir `where.userId = session.user.id`; exigir sesión (401) |
 | Contadores globales | `_count.prompts` cuenta todos los usuarios | `_count: { select: { prompts: { where: { userId } } } }` |
 
-**Reference**: `concepts/row-level-isolation-pattern.md`, `project-intelligence/living-notes.md`, `project-intelligence/technical-domain.md` Known Pitfalls
+**Reference**: `concepts/row-level-isolation-pattern.md`, `../../project-intelligence/lookup/living-notes.md`, `../../project-intelligence/concepts/technical-domain.md` Known Pitfalls
 
 ---
 
@@ -56,4 +56,4 @@
 | Junction table FK violation | Referencing non-existent entity ID | All relations use `connect` or `create` within Prisma transactions |
 | DELETE user fails (FK) | User has prompts → FK constraint blocks `user.delete` | `prisma.$transaction([prisma.prompt.deleteMany({ where: { userId } }), prisma.user.delete({ where: { id } })])` (Fase C) |
 
-**Reference**: `project-intelligence/living-notes.md`, `project-intelligence/technical-domain.md` Known Pitfalls
+**Reference**: `../../project-intelligence/lookup/living-notes.md`, `../../project-intelligence/concepts/technical-domain.md` Known Pitfalls

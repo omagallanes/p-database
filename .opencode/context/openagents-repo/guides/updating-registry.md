@@ -175,7 +175,7 @@ Then validate: `./scripts/registry/validate-registry.sh`
 ## Related Files
 
 - **Registry concepts**: `core-concepts/registry.md`
-- **Adding agents**: `guides/adding-agent.md`
+- **Adding agents**: `guides/adding-agent-basics.md`
 - **Debugging**: `guides/debugging.md`
 
 ---

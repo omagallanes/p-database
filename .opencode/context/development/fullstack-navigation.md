@@ -10,7 +10,7 @@
 
 ### Proyecto (Next.js + Prisma + PostgreSQL)
 ```
-Frontend: frontend/ (concepts/, when-to-delegate.md) + ui/web/ (concepts/, examples/)
+Frontend: frontend/ (concepts/, guides/) + ui/web/ (concepts/, examples/)
 Backend:  backend/ (concepts/, examples/, guides/, lookup/, errors/)
 Data:     data/ (concepts/, lookup/, errors/)
 API:      backend/concepts/nextjs-api-patterns.md
@@ -29,7 +29,6 @@ Auth:     backend/concepts/nextauth-setup.md, backend/concepts/auth-hardening-pa
 | **Integration** | `integration/navigation.md` |
 | **Infrastructure** | `infrastructure/navigation.md` |
 | **AI** | `ai/navigation.md` |
-| **Frameworks** | `frameworks/navigation.md` |
 | **Principles** | `principles/navigation.md` |
 
 ---
@@ -37,7 +36,7 @@ Auth:     backend/concepts/nextauth-setup.md, backend/concepts/auth-hardening-pa
 ## Common Workflows
 
 **New API endpoint**:
-1. `principles/api-design.md` (principios)
+1. `principles/concepts/api-design.md` (principios)
 2. `backend/concepts/nextjs-api-patterns.md` (patrón Auth→Zod→Prisma→Response)
 3. `backend/errors/api-common-errors.md` (errores conocidos)
 
@@ -63,8 +62,8 @@ Auth:     backend/concepts/nextauth-setup.md, backend/concepts/auth-hardening-pa
 
 ## Related Context
 
-- **Clean Code** → `principles/clean-code.md`
-- **API Design** → `principles/api-design.md`
+- **Clean Code** → `principles/concepts/clean-code.md`
+- **API Design** → `principles/concepts/api-design.md`
 - **Core Standards** → `../core/standards/navigation.md`
 
 ---

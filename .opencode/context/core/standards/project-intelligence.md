@@ -10,11 +10,11 @@
 
 | What You Need | File | Description |
 |---------------|------|-------------|
-| Understand the "why" | `business-domain.md` | Problem, users, value |
-| Understand the "how" | `technical-domain.md` | Stack, architecture |
-| See the connection | `business-tech-bridge.md` | Business → technical mapping |
-| Know the context | `decisions-log.md` | Why decisions were made |
-| Current state | `living-notes.md` | Active issues, debt, questions |
+| Understand the "why" | `concepts/business-domain.md` | Problem, users, value |
+| Understand the "how" | `concepts/technical-domain.md` | Stack, architecture |
+| See the connection | `concepts/business-tech-bridge.md` | Business → technical mapping |
+| Know the context | `lookup/decisions-log.md` | Why decisions were made |
+| Current state | `lookup/living-notes.md` | Active issues, debt, questions |
 
 ## Why This Exists
 
@@ -32,11 +32,14 @@ This ensures **business and technical domains speak the same language**.
 .opencode/context/
 ├── project-intelligence/              # Project-specific context
 │   ├── navigation.md                  # Quick overview & routes
-│   ├── business-domain.md             # Business context, problems solved
-│   ├── technical-domain.md            # Stack, architecture, decisions
-│   ├── business-tech-bridge.md        # How business needs → solutions
-│   ├── decisions-log.md               # Decisions with rationale
-│   └── living-notes.md                # Active issues, technical debt
+│   ├── concepts/                      # What it is
+│   │   ├── business-domain.md         # Business context, problems solved
+│   │   ├── technical-domain.md        # Stack, architecture, decisions
+│   │   └── business-tech-bridge.md    # How business needs → solutions
+│   ├── lookup/                        # Quick reference
+│   │   ├── decisions-log.md           # Decisions with rationale
+│   │   └── living-notes.md            # Active issues, technical debt
+│   └── development/                   # Development knowledge
 └── core/                              # Universal standards
 ```
 
@@ -45,22 +48,22 @@ This ensures **business and technical domains speak the same language**.
 For new team members or agents:
 
 - [ ] Read `navigation.md` (this file)
-- [ ] Read `business-domain.md` to understand the "why"
-- [ ] Read `technical-domain.md` to understand the "how"
-- [ ] Review `business-tech-bridge.md` to see the connection
-- [ ] Check `decisions-log.md` for context on key choices
-- [ ] Review `living-notes.md` for current state
+- [ ] Read `concepts/business-domain.md` to understand the "why"
+- [ ] Read `concepts/technical-domain.md` to understand the "how"
+- [ ] Review `concepts/business-tech-bridge.md` to see the connection
+- [ ] Check `lookup/decisions-log.md` for context on key choices
+- [ ] Review `lookup/living-notes.md` for current state
 - [ ] Explore codebase with this context loaded
 
 ## How to Keep This Alive
 
 | Trigger | Action |
 |---------|--------|
-| Business direction shifts | Update `business-domain.md` |
-| New technical decision | Add to `decisions-log.md` |
-| New issues or debt | Update `living-notes.md` |
-| Feature launch | Update `business-tech-bridge.md` |
-| Stack changes | Update `technical-domain.md` |
+| Business direction shifts | Update `concepts/business-domain.md` |
+| New technical decision | Add to `lookup/decisions-log.md` |
+| New issues or debt | Update `lookup/living-notes.md` |
+| Feature launch | Update `concepts/business-tech-bridge.md` |
+| Stack changes | Update `concepts/technical-domain.md` |
 
 **Full Management Guide**: See `.opencode/context/core/standards/project-intelligence-management.md`
 
@@ -68,10 +71,10 @@ For new team members or agents:
 
 - **Lazy Loading**: Load project intelligence first when joining a project
 - **Layering**: Then load standards and specific context as needed
-- **Reference**: See `.opencode/context/core/context-system.md` for system overview
+- **Reference**: See `.opencode/context/core/concepts/context-system.md` for system overview
 
 ## Related Files
 
 - **Management Guide**: `.opencode/context/core/standards/project-intelligence-management.md`
-- **Context System**: `.opencode/context/core/context-system.md`
+- **Context System**: `.opencode/context/core/concepts/context-system.md`
 - **Standards Index**: `.opencode/context/core/standards/navigation.md`

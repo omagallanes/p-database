@@ -11,10 +11,10 @@
 |-----------|-------------|----------|
 | **Generate/edit image, diagram** | This file | Image Specialist |
 | **UI mockup (static)** | This file | Image Specialist |
-| **Interactive UI design** | `workflows/design-iteration-overview.md` | - |
-| **Design system** | `ui/web/design-systems.md` | - |
-| **UI standards** | `ui/web/ui-styling-standards.md` | - |
-| **Animation patterns** | `ui/web/animation-patterns.md` | - |
+| **Interactive UI design** | `../workflows/design-iteration-overview.md` | - |
+| **Design system** | `../../ui/web/concepts/design-systems.md` | - |
+| **UI standards** | `../../ui/web/concepts/ui-styling.md` | - |
+| **Animation patterns** | `../../ui/web/concepts/animation-basics.md` | - |
 
 ---
 
@@ -159,12 +159,12 @@ After receiving: [ ] Image meets requirements | [ ] Correct dimensions/format | 
 
 ## Related Context
 
-- **UI Design Workflow**: `core/workflows/design-iteration-overview.md`
-- **Design Systems**: `ui/web/design-systems.md`
-- **UI Styling Standards**: `ui/web/ui-styling-standards.md`
-- **Animation Patterns**: `ui/web/animation-basics.md`, `ui/web/animation-advanced.md`
-- **Subagent Invocation**: `openagents-repo/guides/subagent-invocation.md`
-- **Agent Capabilities**: `openagents-repo/core-concepts/agents.md`
+- **UI Design Workflow**: `../workflows/design-iteration-overview.md`
+- **Design Systems**: `../../ui/web/concepts/design-systems.md`
+- **UI Styling Standards**: `../../ui/web/concepts/ui-styling.md`
+- **Animation Patterns**: `../../ui/web/concepts/animation-basics.md`, `../../ui/web/concepts/animation-advanced.md`
+- **Subagent Invocation**: `../../openagents-repo/guides/subagent-invocation.md`
+- **Agent Capabilities**: `../../openagents-repo/core-concepts/agents.md`
 
 ---
 

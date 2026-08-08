@@ -11,14 +11,15 @@
 ```
 frontend/
 ├── navigation.md
-├── when-to-delegate.md
-└── concepts/
-    ├── form-patterns.md         # Segment form (PromptForm 3 sections)
-    ├── filter-patterns.md       # URL-driven multi-dimension filters
-    ├── search-clear-pattern.md  # Clear button for search inputs
-    ├── view-mode-pattern.md     # Card/list toggle with persistence
-    ├── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
-    └── theme-accent-pattern.md  # Dark mode + accent color (CSS vars, anti-FOUC)
+├── concepts/
+│   ├── form-patterns.md         # Segment form (PromptForm 3 sections)
+│   ├── filter-patterns.md       # URL-driven multi-dimension filters
+│   ├── search-clear-pattern.md  # Clear button for search inputs
+│   ├── view-mode-pattern.md     # Card/list toggle with persistence
+│   ├── ui-preferences-pattern.md # UI prefs en cuenta (UIContext, User.uiPreferences)
+│   └── theme-accent-pattern.md  # Dark mode + accent color (CSS vars, anti-FOUC)
+└── guides/
+    └── when-to-delegate.md      # Cuándo delegar en la especialista de interfaz
 ```
 
 ---
@@ -33,7 +34,7 @@ frontend/
 | **View mode toggle** | `concepts/view-mode-pattern.md` |
 | **UI preferences (en cuenta)** | `concepts/ui-preferences-pattern.md` |
 | **Theme + accent color** | `concepts/theme-accent-pattern.md` |
-| **When to delegate** | `when-to-delegate.md` |
+| **When to delegate** | `guides/when-to-delegate.md` |
 
 ---
 

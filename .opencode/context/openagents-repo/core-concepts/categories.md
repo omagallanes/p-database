@@ -174,7 +174,7 @@ Loading: `<!-- Context: development/react-patterns | Priority: high -->`
 
 ---
 
-## Related Files: `guides/adding-agent.md` | `core-concepts/agents.md` | `lookup/file-locations.md`
+## Related Files: `guides/adding-agent-basics.md` | `core-concepts/agents.md` | `lookup/file-locations.md`
 
 ---
 

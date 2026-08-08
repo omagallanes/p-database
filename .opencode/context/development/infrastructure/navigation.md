@@ -30,6 +30,6 @@ infrastructure/
 
 ## Related Context
 
-- **Technical domain** → `../../project-intelligence/technical-domain.md`
+- **Technical domain** → `../../project-intelligence/concepts/technical-domain.md`
 - **Backend** → `../backend/navigation.md`
 - **Core Standards** → `../../core/standards/code-quality.md`

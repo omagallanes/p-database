@@ -72,9 +72,9 @@ For simple delegation (no session needed):
 ```javascript
 task(subagent_type="frontend-specialist", description="Create landing page design",
   prompt="Context to load:
-  - .opencode/context/ui/web/design-systems.md
-  - .opencode/context/ui/web/ui-styling-standards.md
-  - .opencode/context/ui/web/animation-basics.md
+  - .opencode/context/ui/web/concepts/design-systems.md
+  - .opencode/context/ui/web/concepts/ui-styling.md
+  - .opencode/context/ui/web/concepts/animation-basics.md
 
   Task: Create a landing page with:
   - Hero section with headline, subheadline, CTA button
@@ -99,7 +99,7 @@ For complex delegation (with session), create session context first then delegat
 **Task**: Create landing page with hero, features grid, and CTA
 **Approach**: Delegate to frontend-specialist subagent
 **Why**: Requires design system implementation, responsive layout, animations
-**Context Needed**: design-systems.md, ui-styling-standards.md, animation-patterns.md
+**Context Needed**: design-systems.md, ui-styling.md, animation-basics.md
 **Approval needed before proceeding.**
 ```
 
@@ -135,11 +135,11 @@ For complex delegation (with session), create session context first then delegat
 
 ## Context Files (Auto-loaded via ContextScout)
 
-- `ui/web/design-systems.md` — Theme templates, color systems
-- `ui/web/ui-styling-standards.md` — Tailwind, Flowbite, responsive design
-- `ui/web/design-assets.md` — Images, icons, fonts
-- `ui/web/animation-patterns.md` — Animation syntax, micro-interactions
-- `development/frontend/react/react-patterns.md` — React patterns
+- `ui/web/concepts/design-systems.md` — Theme templates, color systems
+- `ui/web/concepts/ui-styling.md` — Tailwind, Flowbite, responsive design
+- `ui/web/examples/animation-components.md` — Animation examples (images, icons, fonts)
+- `ui/web/concepts/animation-basics.md` — Animation syntax, micro-interactions
+- `ui/web/concepts/react-patterns.md` — React patterns
 - `core/workflows/design-iteration-overview.md` — Design iteration workflow
 
 ---
@@ -180,8 +180,8 @@ For complex delegation (with session), create session context first then delegat
 ## Related Context
 
 - **Frontend Specialist Agent** → `../../../agent/subagents/development/frontend-specialist.md`
-- **Design Systems** → `../../ui/web/design-systems.md`
-- **UI Styling Standards** → `../../ui/web/ui-styling-standards.md`
-- **Animation Patterns** → `../../ui/web/animation-patterns.md`
+- **Design Systems** → `../../ui/web/concepts/design-systems.md`
+- **UI Styling Standards** → `../../ui/web/concepts/ui-styling.md`
+- **Animation Patterns** → `../../ui/web/concepts/animation-basics.md`
 - **Delegation Workflow** → `../../core/workflows/task-delegation-basics.md`
-- **React Patterns** → `react/react-patterns.md`
+- **React Patterns** → `../../ui/web/concepts/react-patterns.md`

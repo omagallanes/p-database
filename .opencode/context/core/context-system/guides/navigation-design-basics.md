@@ -78,7 +78,7 @@ openagents-repo/
 
 | Task | Path |
 |------|------|
-| **Add agent** | `guides/adding-agent.md` |
+| **Add agent** | `guides/adding-agent-basics.md` |
 | **Test agent** | `guides/testing-agent.md` |
 | **Find files** | `lookup/file-locations.md` |
 ```
